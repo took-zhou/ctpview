@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package ctpview_market;
+
+message message
+{
+    oneof MessageType
+    {
+        LoginControl     login_control        = 1;
+        CheckStrategyAlive check_alive        = 2;
+    }
+}
+
+message LoginControl
+{
+    enum Command
+    {
+        reserve = 0;
+        login   = 1;
+        logout = 2;
+    }
+    Command command = 1;
+}
+
+message CheckStrategyAlive
+{
+    string  check  = 1;
+}

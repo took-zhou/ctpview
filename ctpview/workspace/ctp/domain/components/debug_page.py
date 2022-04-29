@@ -1,0 +1,65 @@
+import streamlit as st
+
+from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
+from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
+from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
+
+class debug():
+    def __init__(self):
+        pass
+
+    def update(self):
+        mode_str = ['Login Control', 'Check Strategy Alive']
+        debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
+
+        if debug_mode == 'Login Control':
+            self.login_control()
+        elif debug_mode == 'Check Strategy Alive':
+            self.check_alive()
+
+    def login_control(self):
+        contain = st.container()
+        col1,col2 = contain.columns(2)
+
+        if col1.button('market login'):
+            topic = "ctpview_market.LoginControl"
+            msg = cmp.message()
+            mlc = msg.login_control
+            mlc.command = cmp.LoginControl.Command.login
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col2.button('market logout'):
+            topic = "ctpview_market.LoginControl"
+            msg = cmp.message()
+            mlc = msg.login_control
+            mlc.command = cmp.LoginControl.Command.logout
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col1.button('trader login'):
+            topic = "ctpview_trader.LoginControl"
+            msg = ctp.message()
+            mlc = msg.login_control
+            mlc.command = ctp.LoginControl.Command.login
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col2.button('trader logout'):
+            topic = "ctpview_trader.LoginControl"
+            msg = ctp.message()
+            mlc = msg.login_control
+            mlc.command = ctp.LoginControl.Command.logout
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+    def check_alive(self):
+        if st.button('check'):
+            topic = "ctpview_market.CheckStrategyAlive"
+            msg = cmp.message()
+            mlc = msg.check_alive
+            mlc.check = "yes"
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+debug_page = debug()
