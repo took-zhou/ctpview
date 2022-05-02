@@ -50,9 +50,10 @@ class parameter:
                     else:
                         pass
             fp.close()
-            f_d = open('/home/tsaodai/config/config.json', 'w', encoding="utf-8")
-            json.dump(read_json, f_d, indent=4)
-            f_d.close()
+            if self.disable_write == False:
+                f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
+                json.dump(read_json, f_d, indent=4)
+                f_d.close()
         except:
             pass
 
@@ -78,9 +79,10 @@ class parameter:
                         title = st.text_input('%s(%s): '%(item, 'market'), market_json[item])
                         read_json["market"][item] = title
             fp.close()
-            f_d = open('/home/tsaodai/config/config.json', 'w', encoding="utf-8")
-            json.dump(read_json, f_d, indent=4)
-            f_d.close()
+            if self.disable_write == False:
+                f_d = open('%s/config/config.json'(os.environ.get('HOME')), 'w', encoding="utf-8")
+                json.dump(read_json, f_d, indent=4)
+                f_d.close()
         except:
             pass
 
@@ -101,9 +103,10 @@ class parameter:
                         title = st.text_input('%s(%s): '%(item, 'trader'), trader_json[item])
                         read_json["trader"][item] = title
             fp.close()
-            f_d = open('/home/tsaodai/config/config.json', 'w', encoding="utf-8")
-            json.dump(read_json, f_d, indent=4)
-            f_d.close()
+            if self.disable_write == False:
+                f_d = open('%s/config/config.json'(os.environ.get('HOME')), 'w', encoding="utf-8")
+                json.dump(read_json, f_d, indent=4)
+                f_d.close()
         except:
             pass
 
@@ -113,6 +116,10 @@ class parameter:
             process_id = self.checkprocess(item)
             if isinstance(process_id, int):
                 self.disable_write = True
+                return
+
+        self.disable_write = False
+        return
 
     def checkprocess(self, processname):
         # --获取进程信息--

@@ -19,7 +19,7 @@ class debug():
 
     def login_control(self):
         contain = st.container()
-        col1,col2 = contain.columns(2)
+        col1,col2,col3 = contain.columns(3)
 
         if col1.button('market login'):
             topic = "ctpview_market.LoginControl"
@@ -37,6 +37,14 @@ class debug():
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 
+        if col3.button('market reserve'):
+            topic = "ctpview_market.LoginControl"
+            msg = cmp.message()
+            mlc = msg.login_control
+            mlc.command = cmp.LoginControl.Command.reserve
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
         if col1.button('trader login'):
             topic = "ctpview_trader.LoginControl"
             msg = ctp.message()
@@ -50,6 +58,14 @@ class debug():
             msg = ctp.message()
             mlc = msg.login_control
             mlc.command = ctp.LoginControl.Command.logout
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col3.button('trader reserve'):
+            topic = "ctpview_trader.LoginControl"
+            msg = ctp.message()
+            mlc = msg.login_control
+            mlc.command = ctp.LoginControl.Command.reserve
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 
