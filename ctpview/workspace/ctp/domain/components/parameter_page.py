@@ -19,7 +19,7 @@ class parameter:
     def update_common_para(self):
         st.header('%s'%("common:"))
 
-        common_needshow_para = ['PubAddPort', 'SubAddPort', 'PrintNetworkDelay']
+        common_needshow_para = ['PrintNetworkDelay']
         email_needshow_para = ['redipients']
         email_receivers = ['zhoufan@cdsslh.com', 'cuiwenhong@cdsslh.com']
         try:
@@ -80,7 +80,7 @@ class parameter:
                         read_json["market"][item] = title
             fp.close()
             if self.disable_write == False:
-                f_d = open('%s/config/config.json'(os.environ.get('HOME')), 'w', encoding="utf-8")
+                f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
         except:
@@ -104,7 +104,7 @@ class parameter:
                         read_json["trader"][item] = title
             fp.close()
             if self.disable_write == False:
-                f_d = open('%s/config/config.json'(os.environ.get('HOME')), 'w', encoding="utf-8")
+                f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
         except:

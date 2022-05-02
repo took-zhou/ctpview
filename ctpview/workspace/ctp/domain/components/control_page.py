@@ -47,12 +47,13 @@ class control:
         contain = st.container()
         col1,col2 = contain.columns(2)
         if col1.button('start', key='%s1'%(_name)) and not(isinstance(self.checkprocess(_name), int)):
-            os.system('nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &'%(_name, _name, os.environ.get('HOME'), _name))
-            time.sleep(1)
+            command = 'nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &'%(_name, os.environ.get('HOME'), _name, _name)
+            os.system(command)
+            time.sleep(0.1)
 
         if col2.button('stop', key='%s2'%(_name)) and isinstance(self.checkprocess(_name), int):
             os.system('kill -9 %d'%(self.checkprocess(_name)))
-            time.sleep(1)
+            time.sleep(0.1)
 
         if isinstance(self.checkprocess(_name), int):
             status = 'start'

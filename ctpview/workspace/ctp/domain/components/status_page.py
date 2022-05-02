@@ -47,9 +47,10 @@ class status():
 
         subscribe_list = []
         try:
-            st.write('market veriosn: `%s`'%(jsonconfig.get('market', 'version')))
-            st.write('trader version: `%s`'%(jsonconfig.get('trader', 'version')))
-            with open(jsonconfig.get('market', 'ControlParaFilePath'), 'r', encoding='utf8') as fp:
+            st.write()
+            st.write('market veriosn: `%s`'%(jsonconfig.get_config('market', 'version')))
+            st.write('trader version: `%s`'%(jsonconfig.get_config('trader', 'version')))
+            with open(jsonconfig.get_config('market', 'ControlParaFilePath'), 'r', encoding='utf8') as fp:
                 control_json = json.load(fp)
                 fp.close()
                 for item in control_json.keys():
@@ -58,6 +59,7 @@ class status():
         except:
             pass
 
+        subscribe_list = list(set(subscribe_list))
         st.write('subscribe instrument number from strategy: `%d`'%(len(subscribe_list)))
         st.write(subscribe_list)
 

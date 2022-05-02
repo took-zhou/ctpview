@@ -1,10 +1,24 @@
 import streamlit as st
 import time
 import os
+import psutil
 
 class setting():
     def __init__(self):
         pass
+
+    def checkprocess(self, processname):
+        # --获取进程信息--
+        pl = psutil.pids()  #所有的进程列出来
+
+        for pid in pl:
+            try:
+                if psutil.Process(pid).name() == processname:
+                    return pid
+            except:
+                continue
+
+        return ''
 
     def update(self):
         if st.button('clear process'):
@@ -17,17 +31,15 @@ class setting():
             self.clear_log()
 
     def clear_process(self,):
-        id = self.checkprocess("proxy")
+        id = self.checkprocess("market")
         if isinstance(id, int):
-            os.system("kill -9 %d"%(self.checkprocess("proxy")))
+            os.system("kill -9 %d"%(id))
             time.sleep(1)
-        id = self.checkprocess("proxy")
-        if isinstance(self.checkprocess("market"), int):
-            os.system("kill -9 %d"%(self.checkprocess("market")))
+
+        id = self.checkprocess("trader")
+        if isinstance(id, int):
+            os.system("kill -9 %d"%(id))
             time.sleep(1)
-        id = self.checkprocess("proxy")
-        if isinstance(self.checkprocess("trader"), int):
-            os.system("kill -9 %d"%(self.checkprocess("trader")))
 
     def clear_record(self):
         data_path = '%s/data/'%(os.environ.get('HOME'))
