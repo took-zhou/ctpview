@@ -9,13 +9,15 @@ class debug():
         pass
 
     def update(self):
-        mode_str = ['Login Control', 'Check Strategy Alive']
+        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation']
         debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
 
         if debug_mode == 'Login Control':
             self.login_control()
         elif debug_mode == 'Check Strategy Alive':
             self.check_alive()
+        elif debug_mode == 'Block Quotation':
+            self.block_quotation()
 
     def login_control(self):
         contain = st.container()
@@ -75,6 +77,26 @@ class debug():
             msg = cmp.message()
             mlc = msg.check_alive
             mlc.check = "yes"
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+    def block_quotation(self):
+        contain = st.container()
+        col1,col2 = contain.columns(2)
+
+        if col1.button('block'):
+            topic = "ctpview_market.BlockControl"
+            msg = cmp.message()
+            mlc = msg.block_control
+            mlc.command = cmp.BlockControl.Command.block
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col2.button('unblock'):
+            topic = "ctpview_market.BlockControl"
+            msg = cmp.message()
+            mlc = msg.block_control
+            mlc.command = cmp.BlockControl.Command.unblock
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 

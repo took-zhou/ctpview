@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14\x63tpview-trader.proto\x12\x0e\x63tpview_trader\"\x84\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_trader.LoginControlH\x00\x12\x33\n\nsend_email\x18\x02 \x01(\x0b\x32\x1d.ctpview_trader.SendTestEmailH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_trader.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"\x1c\n\rSendTestEmail\x12\x0b\n\x03req\x18\x01 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x14\x63tpview-trader.proto\x12\x0e\x63tpview_trader\"O\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_trader.LoginControlH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_trader.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\x62\x06proto3'
 )
 
 
@@ -49,8 +49,8 @@ _LOGINCONTROL_COMMAND = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=246,
-  serialized_end=291,
+  serialized_start=192,
+  serialized_end=237,
 )
 _sym_db.RegisterEnumDescriptor(_LOGINCONTROL_COMMAND)
 
@@ -66,13 +66,6 @@ _MESSAGE = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='login_control', full_name='ctpview_trader.message.login_control', index=0,
       number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='send_email', full_name='ctpview_trader.message.send_email', index=1,
-      number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -94,8 +87,8 @@ _MESSAGE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=41,
-  serialized_end=173,
+  serialized_start=40,
+  serialized_end=119,
 )
 
 
@@ -127,55 +120,18 @@ _LOGINCONTROL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=175,
-  serialized_end=291,
-)
-
-
-_SENDTESTEMAIL = _descriptor.Descriptor(
-  name='SendTestEmail',
-  full_name='ctpview_trader.SendTestEmail',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='req', full_name='ctpview_trader.SendTestEmail.req', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=293,
-  serialized_end=321,
+  serialized_start=121,
+  serialized_end=237,
 )
 
 _MESSAGE.fields_by_name['login_control'].message_type = _LOGINCONTROL
-_MESSAGE.fields_by_name['send_email'].message_type = _SENDTESTEMAIL
 _MESSAGE.oneofs_by_name['MessageType'].fields.append(
   _MESSAGE.fields_by_name['login_control'])
 _MESSAGE.fields_by_name['login_control'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
-_MESSAGE.oneofs_by_name['MessageType'].fields.append(
-  _MESSAGE.fields_by_name['send_email'])
-_MESSAGE.fields_by_name['send_email'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
 _LOGINCONTROL.fields_by_name['command'].enum_type = _LOGINCONTROL_COMMAND
 _LOGINCONTROL_COMMAND.containing_type = _LOGINCONTROL
 DESCRIPTOR.message_types_by_name['message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['LoginControl'] = _LOGINCONTROL
-DESCRIPTOR.message_types_by_name['SendTestEmail'] = _SENDTESTEMAIL
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 message = _reflection.GeneratedProtocolMessageType('message', (_message.Message,), {
@@ -191,13 +147,6 @@ LoginControl = _reflection.GeneratedProtocolMessageType('LoginControl', (_messag
   # @@protoc_insertion_point(class_scope:ctpview_trader.LoginControl)
   })
 _sym_db.RegisterMessage(LoginControl)
-
-SendTestEmail = _reflection.GeneratedProtocolMessageType('SendTestEmail', (_message.Message,), {
-  'DESCRIPTOR' : _SENDTESTEMAIL,
-  '__module__' : 'ctpview_trader_pb2'
-  # @@protoc_insertion_point(class_scope:ctpview_trader.SendTestEmail)
-  })
-_sym_db.RegisterMessage(SendTestEmail)
 
 
 # @@protoc_insertion_point(module_scope)

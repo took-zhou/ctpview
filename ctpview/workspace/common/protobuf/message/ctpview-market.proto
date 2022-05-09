@@ -8,6 +8,7 @@ message message
     {
         LoginControl     login_control        = 1;
         CheckStrategyAlive check_alive        = 2;
+        BlockControl block_control        = 3;
     }
 }
 
@@ -25,4 +26,15 @@ message LoginControl
 message CheckStrategyAlive
 {
     string  check  = 1;
+}
+
+message BlockControl
+{
+    enum Command
+    {
+        reserve = 0;
+        block   = 1;
+        unblock = 2;
+    }
+    Command command = 1;
 }

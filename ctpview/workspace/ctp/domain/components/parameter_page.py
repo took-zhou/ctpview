@@ -72,8 +72,8 @@ class parameter:
                         title = st.selectbox('LoginMode: ', ['normal', '7x24'], key='market')
                         read_json["market"][item] = title
                     elif item == 'SubscribeMarketDataFrom':
-                        title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'trader'], \
-                            ['local', 'strategy', 'trader'].index(read_json["market"][item]), key='datafrom')
+                        title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'market', 'trader'], \
+                            ['local', 'strategy', 'market', 'trader'].index(read_json["market"][item]), key='datafrom')
                         read_json["market"][item] = title
                     else:
                         title = st.text_input('%s(%s): '%(item, 'market'), market_json[item])

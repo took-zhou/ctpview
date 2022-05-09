@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\x8a\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x39\n\x0b\x63heck_alive\x18\x02 \x01(\x0b\x32\".ctpview_market.CheckStrategyAliveH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xc1\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x39\n\x0b\x63heck_alive\x18\x02 \x01(\x0b\x32\".ctpview_market.CheckStrategyAliveH\x00\x12\x35\n\rblock_control\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\t\"u\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\x62\x06proto3'
 )
 
 
@@ -49,10 +49,40 @@ _LOGINCONTROL_COMMAND = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=252,
-  serialized_end=297,
+  serialized_start=307,
+  serialized_end=352,
 )
 _sym_db.RegisterEnumDescriptor(_LOGINCONTROL_COMMAND)
+
+_BLOCKCONTROL_COMMAND = _descriptor.EnumDescriptor(
+  name='Command',
+  full_name='ctpview_market.BlockControl.Command',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='reserve', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='block', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='unblock', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=462,
+  serialized_end=508,
+)
+_sym_db.RegisterEnumDescriptor(_BLOCKCONTROL_COMMAND)
 
 
 _MESSAGE = _descriptor.Descriptor(
@@ -77,6 +107,13 @@ _MESSAGE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='block_control', full_name='ctpview_market.message.block_control', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -95,7 +132,7 @@ _MESSAGE = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=41,
-  serialized_end=179,
+  serialized_end=234,
 )
 
 
@@ -127,8 +164,8 @@ _LOGINCONTROL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=181,
-  serialized_end=297,
+  serialized_start=236,
+  serialized_end=352,
 )
 
 
@@ -159,23 +196,63 @@ _CHECKSTRATEGYALIVE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=299,
-  serialized_end=334,
+  serialized_start=354,
+  serialized_end=389,
+)
+
+
+_BLOCKCONTROL = _descriptor.Descriptor(
+  name='BlockControl',
+  full_name='ctpview_market.BlockControl',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='command', full_name='ctpview_market.BlockControl.command', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BLOCKCONTROL_COMMAND,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=391,
+  serialized_end=508,
 )
 
 _MESSAGE.fields_by_name['login_control'].message_type = _LOGINCONTROL
 _MESSAGE.fields_by_name['check_alive'].message_type = _CHECKSTRATEGYALIVE
+_MESSAGE.fields_by_name['block_control'].message_type = _BLOCKCONTROL
 _MESSAGE.oneofs_by_name['MessageType'].fields.append(
   _MESSAGE.fields_by_name['login_control'])
 _MESSAGE.fields_by_name['login_control'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
 _MESSAGE.oneofs_by_name['MessageType'].fields.append(
   _MESSAGE.fields_by_name['check_alive'])
 _MESSAGE.fields_by_name['check_alive'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
+_MESSAGE.oneofs_by_name['MessageType'].fields.append(
+  _MESSAGE.fields_by_name['block_control'])
+_MESSAGE.fields_by_name['block_control'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
 _LOGINCONTROL.fields_by_name['command'].enum_type = _LOGINCONTROL_COMMAND
 _LOGINCONTROL_COMMAND.containing_type = _LOGINCONTROL
+_BLOCKCONTROL.fields_by_name['command'].enum_type = _BLOCKCONTROL_COMMAND
+_BLOCKCONTROL_COMMAND.containing_type = _BLOCKCONTROL
 DESCRIPTOR.message_types_by_name['message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['LoginControl'] = _LOGINCONTROL
 DESCRIPTOR.message_types_by_name['CheckStrategyAlive'] = _CHECKSTRATEGYALIVE
+DESCRIPTOR.message_types_by_name['BlockControl'] = _BLOCKCONTROL
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 message = _reflection.GeneratedProtocolMessageType('message', (_message.Message,), {
@@ -198,6 +275,13 @@ CheckStrategyAlive = _reflection.GeneratedProtocolMessageType('CheckStrategyAliv
   # @@protoc_insertion_point(class_scope:ctpview_market.CheckStrategyAlive)
   })
 _sym_db.RegisterMessage(CheckStrategyAlive)
+
+BlockControl = _reflection.GeneratedProtocolMessageType('BlockControl', (_message.Message,), {
+  'DESCRIPTOR' : _BLOCKCONTROL,
+  '__module__' : 'ctpview_market_pb2'
+  # @@protoc_insertion_point(class_scope:ctpview_market.BlockControl)
+  })
+_sym_db.RegisterMessage(BlockControl)
 
 
 # @@protoc_insertion_point(module_scope)
