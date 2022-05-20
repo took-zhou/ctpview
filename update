@@ -1,0 +1,208 @@
+#!/usr/bin/python
+#coding=utf-8
+'''
+程序升级命令
+'''
+import os
+import sys
+import time
+import configparser
+import psutil
+
+def checkprocess(processname):
+    # --获取进程信息--
+    pl = psutil.pids()  #所有的进程列出来
+
+    for pid in pl:
+        try:
+            if psutil.Process(pid).name() == processname:
+                return pid
+        except:
+            continue
+    return ''
+
+cf = configparser.ConfigParser()
+cf.read("%s/.marktrade.conf"%(os.environ.get('HOME')))
+
+#目的路径地址
+LD_DST_PATH = '/usr/lib/marktrade/'
+EXEC_DST_PATH = '/bin/'
+CONFIG_DST_PATH = '%s/config/'%(os.environ.get('HOME'))
+SCRIPT_DST_PATH = '%s/script/'%(os.environ.get('HOME'))
+
+os.system('mkdir -p %s'%(CONFIG_DST_PATH))
+os.system('mkdir -p %s'%(SCRIPT_DST_PATH))
+
+def dispense(target=''):
+    #将动态链接库拷贝到/usr/lib/marktrade/目录下
+    if target == '':
+        temp = cf.get('global', 'PROJPATH')
+    else:
+        temp = target
+    if temp.endswith('.tar'):
+        command_str = 'tar -xf %s -C %s'%(temp, os.path.split(temp)[0])
+        print(command_str)
+        os.system(command_str)
+        project_path = temp.split('.')[0]
+    else:
+        project_path = temp
+
+    command_str = 'sudo cp %s/lib/* %s'%(project_path, LD_DST_PATH)
+    print(command_str)
+    os.system(command_str)
+
+    #将配置文件拷贝到/home/tsaodai/config/目录下
+    if os.path.exists('%s/config.json'%(CONFIG_DST_PATH)) == False:
+        command_str = 'cp -rf %s/config/* %s'%(project_path, CONFIG_DST_PATH)
+        print(command_str)
+        os.system(command_str)
+
+    #将脚本文件拷贝到/home/tsaodai/script/目录下
+    command_str = 'cp -rf %s/script/* %s'%(project_path, SCRIPT_DST_PATH)
+    print(command_str)
+    os.system(command_str)
+
+    #将可执行文件拷贝到/bin/目录下
+    command_str = 'sudo cp %s/exec/* %s'%(project_path, EXEC_DST_PATH)
+    print(command_str)
+    os.system(command_str)
+
+    if not os.path.exists('%s/log/market'%(os.environ.get('HOME'))):
+        os.makedirs('%s/log/market'%(os.environ.get('HOME')))
+
+    if not os.path.exists('%s/log/trader'%(os.environ.get('HOME'))):
+        os.makedirs('%s/log/trader'%(os.environ.get('HOME')))
+
+    os.system('sudo ldconfig')
+
+def install():
+    if not os.path.exists('%s/package'):
+        os.system('mkdir -p %s/package'%(os.environ.get('HOME')))
+
+    command = 'rm %s/package/file.txt; wget -P %s/package/ http://%s:%s/pack/file.txt'%(os.environ.get('HOME'), os.environ.get('HOME'), \
+        os.environ.get('http_ip'), os.environ.get('http_port'))
+    os.system(command)
+    f = open('%s/package/file.txt'%(os.environ.get('HOME')))
+    lines = f.readlines()
+    f.close()
+    pack_list = [item.split('.')[0] for item in lines]
+    pack_list.sort()
+    newest_name = pack_list[-1]
+
+    if cf.has_option('global', 'PROJPATH'):
+        command = 'rm -rf %s/package/%s*; wget -P %s/package/ http://%s:%s/pack/%s.tar'%(os.environ.get('HOME'), newest_name, \
+            os.environ.get('HOME'), os.environ.get('http_ip'), \
+            os.environ.get('http_port'), newest_name)
+        print(command)
+        os.system(command)
+        cf.set('global', 'PROJPATH', '%s/package/%s.tar'%(os.environ.get('HOME'), newest_name))
+        os.system('sudo chmod 777 %s/.marktrade.conf'%(os.environ.get('HOME')))
+        cf.write(open("%s/.marktrade.conf"%(os.environ.get('HOME')), "w"))
+        dispense()
+    else:
+        command = 'rm -rf %s/package/%s*; wget -P %s/package/ http://%s:%s/pack/%s.tar'%(os.environ.get('HOME'), newest_name, \
+            os.environ.get('HOME'), os.environ.get('http_ip'), \
+            os.environ.get('http_port'), newest_name)
+        os.system(command)
+        if os.path.exists('%s/.marktrade.conf'%(os.environ.get('HOME'))):
+            os.system('rm %s/.marktrade.conf'%(os.environ.get('HOME')))
+
+        os.system('echo [global] >> %s/.marktrade.conf'%(os.environ.get('HOME')))
+        os.system('echo PROJPATH=%s/package/%s.tar >> %s/.marktrade.conf'%(os.environ.get('HOME'), newest_name, os.environ.get('HOME')))
+        dispense('%s/package/%s.tar'%(os.environ.get('HOME'), newest_name))
+
+def install_special():
+    if not os.path.exists('%s/package'):
+        os.system('mkdir -p %s/package'%(os.environ.get('HOME')))
+
+    special_pack = ''
+    if len(sys.argv) == 3:
+        special_pack = (sys.argv[2].split('==')[-1]).split('.')[0]
+    elif len(sys.argv) == 5:
+        special_pack = (sys.argv[4]).split('.')[0]
+    else:
+        print('para error')
+        return
+
+    command = 'rm %s/package/file.txt; wget -P %s/package/ http://%s:%s/pack/file.txt'%(os.environ.get('HOME'), os.environ.get('HOME'), \
+        os.environ.get('http_ip'), os.environ.get('http_port'))
+    os.system(command)
+    f = open('%s/package/file.txt'%(os.environ.get('HOME')))
+    lines = f.readlines()
+    f.close()
+    pack_list = [item.split('.')[0] for item in lines]
+
+    if special_pack in pack_list:
+        if cf.has_option('global', 'PROJPATH'):
+            installed_pack = cf.get('global', 'PROJPATH')
+            pack_name = installed_pack.split('.')[0].split('/')[-1]
+
+            if pack_name == special_pack:
+                print('ackage is same, not need reinstalled')
+            else:
+                command = 'rm -rf %s/package/%s*; wget -P %s/package/ http://%s:%s/pack/%s.tar'%(os.environ.get('HOME'), special_pack, \
+                    os.environ.get('HOME'), os.environ.get('http_ip'), \
+                    os.environ.get('http_port'), special_pack)
+                os.system(command)
+                cf.set('global', 'PROJPATH', '%s/package/%s.tar'%(os.environ.get('HOME'), special_pack))
+                os.system('sudo chmod 777 %s/.marktrade.conf'%(os.environ.get('HOME')))
+                cf.write(open("%s/.marktrade.conf"%(os.environ.get('HOME')), "w"))
+                dispense()
+        else:
+            command = 'rm -rf %s/package/%s*; wget -P %s/package/ http://%s:%s/pack/%s.tar'%(os.environ.get('HOME'), special_pack, \
+                os.environ.get('HOME'), os.environ.get('http_ip'), \
+                os.environ.get('http_port'), special_pack)
+            os.system(command)
+            if os.path.exists('%s/.marktrade.conf'%(os.environ.get('HOME'))):
+                os.system('rm %s/.marktrade.conf'%(os.environ.get('HOME')))
+
+            os.system('echo [global] >> %s/.marktrade.conf'%(os.environ.get('HOME')))
+            os.system('echo PROJPATH=%s/package/%s.tar >> %s/.marktrade.conf'%(os.environ.get('HOME'), special_pack, os.environ.get('HOME')))
+            dispense('%s/package/%s.tar'%(os.environ.get('HOME'), special_pack))
+    else:
+        print('do not has this version.')
+
+def install_debug(target=''):
+    if not os.path.exists('%s/package'):
+        os.system('mkdir -p %s/package'%(os.environ.get('HOME')))
+
+    if cf.has_option('global', 'PROJPATH'):
+        cf.set('global', 'PROJPATH', target)
+        os.system('sudo chmod 777 %s/.marktrade.conf'%(os.environ.get('HOME')))
+        cf.write(open("%s/.marktrade.conf"%(os.environ.get('HOME')), "w"))
+
+    dispense(target)
+
+def uninstall():
+    print('now is not support.')
+
+def update():
+    if not os.path.exists('%s/package'):
+        os.system('mkdir -p %s/package'%(os.environ.get('HOME')))
+
+    if cf.has_option('global', 'PROJPATH'):
+        install()
+    else:
+        print('marktrade is nor installed')
+
+def check_httpserver_connect():
+    command = 'wget -P /tmp/ http://%s:%s/pack/file.txt'%(os.environ.get('http_ip'), os.environ.get('http_port'))
+    return os.system(command)
+
+if __name__ == "__main__":
+    if check_httpserver_connect() == 0:
+        if len(sys.argv) <= 2:
+            print('need at least two para')
+        elif len(sys.argv) >= 3 and sys.argv[1] == "install":
+            if ('==' in sys.argv[2] and len(sys.argv) == 3) or (len(sys.argv) == 5 and sys.argv[3] == '=='):
+                install_special()
+            elif sys.argv[2][0] == '/' or sys.argv[2][0] == '.':
+                install_debug(sys.argv[2])
+            else:
+                install()
+        elif len(sys.argv) == 3 and sys.argv[1] == "uninstall":
+            uninstall()
+        elif len(sys.argv) == 3 and sys.argv[1] == "update":
+            update()
+    else:
+        print('can not collect to http server')
