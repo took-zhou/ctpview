@@ -10,6 +10,9 @@ then
 pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ctpview --trusted-host devpi.cdsslh.com;
 fi
 
+if [ -e $HOME/.local/coredump ]; then echo ".local/coredump existed"; else mkdir $HOME/.local/coredump; fi
+echo "$HOME/.local/coredump/core-%e-%p-%t"|sudo tee -a /proc/sys/kernel/core_pattern
+
 if [ -e $HOME/.streamlit ]; then echo ".streamlit existed"; else mkdir $HOME/.streamlit; fi
 
 if [ -e $HOME/.streamlit/config.toml ];

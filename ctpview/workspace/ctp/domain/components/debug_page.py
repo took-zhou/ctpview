@@ -9,7 +9,7 @@ class debug():
         pass
 
     def update(self):
-        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation']
+        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection']
         debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
 
         if debug_mode == 'Login Control':
@@ -18,6 +18,8 @@ class debug():
             self.check_alive()
         elif debug_mode == 'Block Quotation':
             self.block_quotation()
+        elif debug_mode == 'Bug Injection':
+            self.bug_injection()
 
     def login_control(self):
         contain = st.container()
@@ -97,6 +99,26 @@ class debug():
             msg = cmp.message()
             mlc = msg.block_control
             mlc.command = cmp.BlockControl.Command.unblock
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+    def bug_injection(self):
+        contain = st.container()
+        col1,col2 = contain.columns(2)
+
+        if col1.button('market: doublefree'):
+            topic = "ctpview_market.BugInjection"
+            msg = cmp.message()
+            mbi = msg.bug_injection
+            mbi.type = cmp.BugInjection.InjectionType.double_free
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col2.button('trader: doublefree'):
+            topic = "ctpview_trader.BugInjection"
+            msg = ctp.message()
+            mbi = msg.bug_injection
+            mbi.type = ctp.BugInjection.InjectionType.double_free
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 

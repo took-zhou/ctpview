@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ctpview",
-    version="1.1.2",
+    version="1.2.2",
     author="zhoufan",
     author_email="zhoufan@cdsslh.com",
 

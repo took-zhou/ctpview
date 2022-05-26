@@ -30,6 +30,9 @@ class setting():
         if st.button('clear log'):
             self.clear_log()
 
+        if st.button('clear coredump'):
+            self.clear_coredump()
+
     def clear_process(self,):
         id = self.checkprocess("market")
         if isinstance(id, int):
@@ -54,5 +57,12 @@ class setting():
         if os.path.exists(log_path):
             st.info('rm -rf %s'%(log_path))
             os.system('rm -rf %s'%(log_path))
+
+    def clear_coredump(self):
+        coredump_path = '%s/.local/coredump'%(os.environ.get('HOME'))
+
+        if os.path.exists(coredump_path):
+            st.info('rm -f %s/*'%(coredump_path))
+            os.system('rm -f %s/*'%(coredump_path))
 
 setting_page = setting()

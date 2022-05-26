@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14\x63tpview-trader.proto\x12\x0e\x63tpview_trader\"O\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_trader.LoginControlH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_trader.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\x62\x06proto3'
+  serialized_pb=b'\n\x14\x63tpview-trader.proto\x12\x0e\x63tpview_trader\"\x86\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_trader.LoginControlH\x00\x12\x35\n\rbug_injection\x18\x02 \x01(\x0b\x32\x1c.ctpview_trader.BugInjectionH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_trader.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_trader.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\x62\x06proto3'
 )
 
 
@@ -49,10 +49,35 @@ _LOGINCONTROL_COMMAND = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=192,
-  serialized_end=237,
+  serialized_start=248,
+  serialized_end=293,
 )
 _sym_db.RegisterEnumDescriptor(_LOGINCONTROL_COMMAND)
+
+_BUGINJECTION_INJECTIONTYPE = _descriptor.EnumDescriptor(
+  name='InjectionType',
+  full_name='ctpview_trader.BugInjection.InjectionType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='reserve', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='double_free', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=369,
+  serialized_end=414,
+)
+_sym_db.RegisterEnumDescriptor(_BUGINJECTION_INJECTIONTYPE)
 
 
 _MESSAGE = _descriptor.Descriptor(
@@ -66,6 +91,13 @@ _MESSAGE = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='login_control', full_name='ctpview_trader.message.login_control', index=0,
       number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='bug_injection', full_name='ctpview_trader.message.bug_injection', index=1,
+      number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -87,8 +119,8 @@ _MESSAGE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=40,
-  serialized_end=119,
+  serialized_start=41,
+  serialized_end=175,
 )
 
 
@@ -120,18 +152,58 @@ _LOGINCONTROL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=121,
-  serialized_end=237,
+  serialized_start=177,
+  serialized_end=293,
+)
+
+
+_BUGINJECTION = _descriptor.Descriptor(
+  name='BugInjection',
+  full_name='ctpview_trader.BugInjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='ctpview_trader.BugInjection.type', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BUGINJECTION_INJECTIONTYPE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=295,
+  serialized_end=414,
 )
 
 _MESSAGE.fields_by_name['login_control'].message_type = _LOGINCONTROL
+_MESSAGE.fields_by_name['bug_injection'].message_type = _BUGINJECTION
 _MESSAGE.oneofs_by_name['MessageType'].fields.append(
   _MESSAGE.fields_by_name['login_control'])
 _MESSAGE.fields_by_name['login_control'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
+_MESSAGE.oneofs_by_name['MessageType'].fields.append(
+  _MESSAGE.fields_by_name['bug_injection'])
+_MESSAGE.fields_by_name['bug_injection'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
 _LOGINCONTROL.fields_by_name['command'].enum_type = _LOGINCONTROL_COMMAND
 _LOGINCONTROL_COMMAND.containing_type = _LOGINCONTROL
+_BUGINJECTION.fields_by_name['type'].enum_type = _BUGINJECTION_INJECTIONTYPE
+_BUGINJECTION_INJECTIONTYPE.containing_type = _BUGINJECTION
 DESCRIPTOR.message_types_by_name['message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['LoginControl'] = _LOGINCONTROL
+DESCRIPTOR.message_types_by_name['BugInjection'] = _BUGINJECTION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 message = _reflection.GeneratedProtocolMessageType('message', (_message.Message,), {
@@ -147,6 +219,13 @@ LoginControl = _reflection.GeneratedProtocolMessageType('LoginControl', (_messag
   # @@protoc_insertion_point(class_scope:ctpview_trader.LoginControl)
   })
 _sym_db.RegisterMessage(LoginControl)
+
+BugInjection = _reflection.GeneratedProtocolMessageType('BugInjection', (_message.Message,), {
+  'DESCRIPTOR' : _BUGINJECTION,
+  '__module__' : 'ctpview_trader_pb2'
+  # @@protoc_insertion_point(class_scope:ctpview_trader.BugInjection)
+  })
+_sym_db.RegisterMessage(BugInjection)
 
 
 # @@protoc_insertion_point(module_scope)

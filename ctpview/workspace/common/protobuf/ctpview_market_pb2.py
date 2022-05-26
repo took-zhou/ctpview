@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xc1\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x39\n\x0b\x63heck_alive\x18\x02 \x01(\x0b\x32\".ctpview_market.CheckStrategyAliveH\x00\x12\x35\n\rblock_control\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\t\"u\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\x62\x06proto3'
+  serialized_pb=b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xf8\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x39\n\x0b\x63heck_alive\x18\x02 \x01(\x0b\x32\".ctpview_market.CheckStrategyAliveH\x00\x12\x35\n\rblock_control\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x12\x35\n\rbug_injection\x18\x04 \x01(\x0b\x32\x1c.ctpview_market.BugInjectionH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\t\"u\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_market.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\x62\x06proto3'
 )
 
 
@@ -49,8 +49,8 @@ _LOGINCONTROL_COMMAND = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=307,
-  serialized_end=352,
+  serialized_start=362,
+  serialized_end=407,
 )
 _sym_db.RegisterEnumDescriptor(_LOGINCONTROL_COMMAND)
 
@@ -79,10 +79,35 @@ _BLOCKCONTROL_COMMAND = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=462,
-  serialized_end=508,
+  serialized_start=517,
+  serialized_end=563,
 )
 _sym_db.RegisterEnumDescriptor(_BLOCKCONTROL_COMMAND)
+
+_BUGINJECTION_INJECTIONTYPE = _descriptor.EnumDescriptor(
+  name='InjectionType',
+  full_name='ctpview_market.BugInjection.InjectionType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='reserve', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='double_free', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=639,
+  serialized_end=684,
+)
+_sym_db.RegisterEnumDescriptor(_BUGINJECTION_INJECTIONTYPE)
 
 
 _MESSAGE = _descriptor.Descriptor(
@@ -114,6 +139,13 @@ _MESSAGE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='bug_injection', full_name='ctpview_market.message.bug_injection', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -132,7 +164,7 @@ _MESSAGE = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=41,
-  serialized_end=234,
+  serialized_end=289,
 )
 
 
@@ -164,8 +196,8 @@ _LOGINCONTROL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=236,
-  serialized_end=352,
+  serialized_start=291,
+  serialized_end=407,
 )
 
 
@@ -196,8 +228,8 @@ _CHECKSTRATEGYALIVE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=354,
-  serialized_end=389,
+  serialized_start=409,
+  serialized_end=444,
 )
 
 
@@ -229,13 +261,47 @@ _BLOCKCONTROL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=391,
-  serialized_end=508,
+  serialized_start=446,
+  serialized_end=563,
+)
+
+
+_BUGINJECTION = _descriptor.Descriptor(
+  name='BugInjection',
+  full_name='ctpview_market.BugInjection',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='ctpview_market.BugInjection.type', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BUGINJECTION_INJECTIONTYPE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=565,
+  serialized_end=684,
 )
 
 _MESSAGE.fields_by_name['login_control'].message_type = _LOGINCONTROL
 _MESSAGE.fields_by_name['check_alive'].message_type = _CHECKSTRATEGYALIVE
 _MESSAGE.fields_by_name['block_control'].message_type = _BLOCKCONTROL
+_MESSAGE.fields_by_name['bug_injection'].message_type = _BUGINJECTION
 _MESSAGE.oneofs_by_name['MessageType'].fields.append(
   _MESSAGE.fields_by_name['login_control'])
 _MESSAGE.fields_by_name['login_control'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
@@ -245,14 +311,20 @@ _MESSAGE.fields_by_name['check_alive'].containing_oneof = _MESSAGE.oneofs_by_nam
 _MESSAGE.oneofs_by_name['MessageType'].fields.append(
   _MESSAGE.fields_by_name['block_control'])
 _MESSAGE.fields_by_name['block_control'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
+_MESSAGE.oneofs_by_name['MessageType'].fields.append(
+  _MESSAGE.fields_by_name['bug_injection'])
+_MESSAGE.fields_by_name['bug_injection'].containing_oneof = _MESSAGE.oneofs_by_name['MessageType']
 _LOGINCONTROL.fields_by_name['command'].enum_type = _LOGINCONTROL_COMMAND
 _LOGINCONTROL_COMMAND.containing_type = _LOGINCONTROL
 _BLOCKCONTROL.fields_by_name['command'].enum_type = _BLOCKCONTROL_COMMAND
 _BLOCKCONTROL_COMMAND.containing_type = _BLOCKCONTROL
+_BUGINJECTION.fields_by_name['type'].enum_type = _BUGINJECTION_INJECTIONTYPE
+_BUGINJECTION_INJECTIONTYPE.containing_type = _BUGINJECTION
 DESCRIPTOR.message_types_by_name['message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['LoginControl'] = _LOGINCONTROL
 DESCRIPTOR.message_types_by_name['CheckStrategyAlive'] = _CHECKSTRATEGYALIVE
 DESCRIPTOR.message_types_by_name['BlockControl'] = _BLOCKCONTROL
+DESCRIPTOR.message_types_by_name['BugInjection'] = _BUGINJECTION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 message = _reflection.GeneratedProtocolMessageType('message', (_message.Message,), {
@@ -282,6 +354,13 @@ BlockControl = _reflection.GeneratedProtocolMessageType('BlockControl', (_messag
   # @@protoc_insertion_point(class_scope:ctpview_market.BlockControl)
   })
 _sym_db.RegisterMessage(BlockControl)
+
+BugInjection = _reflection.GeneratedProtocolMessageType('BugInjection', (_message.Message,), {
+  'DESCRIPTOR' : _BUGINJECTION,
+  '__module__' : 'ctpview_market_pb2'
+  # @@protoc_insertion_point(class_scope:ctpview_market.BugInjection)
+  })
+_sym_db.RegisterMessage(BugInjection)
 
 
 # @@protoc_insertion_point(module_scope)
