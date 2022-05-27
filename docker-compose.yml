@@ -4,6 +4,7 @@ services:
   debug:
     restart: always
     image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: marktrade_debug
     devices:
       - /dev/mem:/dev/mem
     environment:
@@ -27,6 +28,7 @@ services:
   citic_103201203:
     restart: always
     image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: marktrade_citic_103201203
     devices:
       - /dev/mem:/dev/mem
     environment:
@@ -49,6 +51,7 @@ services:
   zhonghui_6080857:
     restart: always
     image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: marktrade_zhonghui_6080857
     devices:
       - /dev/mem:/dev/mem
     environment:
@@ -71,6 +74,7 @@ services:
   sina_anonymous:
     restart: always
     image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
+    container_name: marktrade_sina_anonymous
     environment:
       - base_url=sina_anonymous
     ports:
@@ -85,6 +89,7 @@ services:
   akshare_debug:
     restart: always
     image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
+    container_name: marktrade_akshare_debug
     environment:
       - base_url=akshare_debug
     ports:
@@ -99,6 +104,7 @@ services:
   simnow_129080:
     restart: always
     image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: marktrade_simnow_129080
     devices:
       - /dev/mem:/dev/mem
     environment:

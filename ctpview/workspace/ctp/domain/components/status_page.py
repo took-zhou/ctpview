@@ -55,7 +55,7 @@ class status():
                 fp.close()
                 for item in control_json.keys():
                     for i in range(len(control_json[item]['instrument'])):
-                        subscribe_list.append(control_json[item]['instrument'][i]["id"]["ins"])
+                        subscribe_list.append(control_json[item]['instrument'][i]["ins"])
         except:
             pass
 
