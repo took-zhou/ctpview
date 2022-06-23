@@ -60,7 +60,7 @@ class parameter:
     def update_market_para(self):
         st.header('%s'%("market:"))
 
-        market_needshow_para = ['LoginMode', 'LogInTimeList', 'SubscribeMarketDataFrom']
+        market_needshow_para = ['LogInTimeList', 'SubscribeMarketDataFrom']
         try:
             with open('%s/config/config.json'%(os.environ.get('HOME')), 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
@@ -68,10 +68,7 @@ class parameter:
             market_json = read_json['market']
             for item in market_json:
                 if item in market_needshow_para:
-                    if item == 'LoginMode':
-                        title = st.selectbox('LoginMode: ', ['normal', '7x24'], key='market')
-                        read_json["market"][item] = title
-                    elif item == 'SubscribeMarketDataFrom':
+                    if item == 'SubscribeMarketDataFrom':
                         title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'market', 'trader'], \
                             ['local', 'strategy', 'market', 'trader'].index(read_json["market"][item]), key='datafrom')
                         read_json["market"][item] = title
@@ -87,7 +84,7 @@ class parameter:
             pass
 
     def update_trader_para(self):
-        trader_needshow_para = ['LoginMode', 'LogInTimeList']
+        trader_needshow_para = ['LogInTimeList']
         st.header('%s'%("trader:"))
         try:
             with open('%s/config/config.json'%(os.environ.get('HOME')), 'r', encoding='utf8') as fp:
@@ -96,12 +93,8 @@ class parameter:
             trader_json = read_json['trader']
             for item in trader_json:
                 if item in trader_needshow_para:
-                    if item == 'LoginMode':
-                        title = st.selectbox('LoginMode: ', ['normal', '7x24'], key='trader')
-                        read_json["trader"][item] = title
-                    else:
-                        title = st.text_input('%s(%s): '%(item, 'trader'), trader_json[item])
-                        read_json["trader"][item] = title
+                    title = st.text_input('%s(%s): '%(item, 'trader'), trader_json[item])
+                    read_json["trader"][item] = title
             fp.close()
             if self.disable_write == False:
                 f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
