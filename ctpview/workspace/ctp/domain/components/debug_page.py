@@ -1,15 +1,19 @@
-import streamlit as st
+import os
+import time
 
+import streamlit as st
 from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
 from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
 
+
 class debug():
+
     def __init__(self):
         pass
 
     def update(self):
-        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection']
+        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Network Disconnect']
         debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
 
         if debug_mode == 'Login Control':
@@ -20,10 +24,12 @@ class debug():
             self.block_quotation()
         elif debug_mode == 'Bug Injection':
             self.bug_injection()
+        elif debug_mode == 'Network Disconnect':
+            self.network_disconnect()
 
     def login_control(self):
         contain = st.container()
-        col1,col2,col3 = contain.columns(3)
+        col1, col2, col3 = contain.columns(3)
 
         if col1.button('market login'):
             topic = "ctpview_market.LoginControl"
@@ -84,7 +90,7 @@ class debug():
 
     def block_quotation(self):
         contain = st.container()
-        col1,col2 = contain.columns(2)
+        col1, col2 = contain.columns(2)
 
         if col1.button('block'):
             topic = "ctpview_market.BlockControl"
@@ -104,7 +110,7 @@ class debug():
 
     def bug_injection(self):
         contain = st.container()
-        col1,col2 = contain.columns(2)
+        col1, col2 = contain.columns(2)
 
         if col1.button('market: doublefree'):
             topic = "ctpview_market.BugInjection"
@@ -121,5 +127,14 @@ class debug():
             mbi.type = ctp.BugInjection.InjectionType.double_free
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+
+    def network_disconnect(self):
+        if st.button('network disconnect'):
+            command = 'sudo tc qdisc add dev eth0 root netem loss 100%'
+            os.system(command)
+            time.sleep(130)
+            command = 'sudo tc qdisc del dev eth0 root'
+            os.system(command)
+
 
 debug_page = debug()
