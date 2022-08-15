@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 
@@ -13,7 +14,9 @@ class debug():
         pass
 
     def update(self):
-        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Network Disconnect']
+        mode_str = [
+            'Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState', 'Network Disconnect'
+        ]
         debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
 
         if debug_mode == 'Login Control':
@@ -24,6 +27,8 @@ class debug():
             self.block_quotation()
         elif debug_mode == 'Bug Injection':
             self.bug_injection()
+        elif debug_mode == 'Simulate MarketState':
+            self.simulate_market_state()
         elif debug_mode == 'Network Disconnect':
             self.network_disconnect()
 
@@ -125,6 +130,49 @@ class debug():
             msg = ctp.message()
             mbi = msg.bug_injection
             mbi.type = ctp.BugInjection.InjectionType.double_free
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+    def get_newest_date(self):
+        if datetime.date.today().weekday() in [0, 1, 2, 3, 4]:
+            if datetime.datetime.now().hour <= 20:
+                select_date = st.date_input('select data', datetime.date.today())
+            else:
+                if datetime.date.today().weekday() == 4:
+                    select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=3))
+                else:
+                    select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=1))
+        elif datetime.date.today().weekday() == 5:
+            select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=2))
+        elif datetime.date.today().weekday() == 6:
+            select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=1))
+
+        datestr = '%04d%02d%02d' % (select_date.year, select_date.month, select_date.day)
+
+        return datestr
+
+    def simulate_market_state(self):
+        market_state = st.selectbox('market state', ['day_open', 'day_close', 'night_open', 'night_close'], key='market_state')
+        datestr = self.get_newest_date()
+        target = st.selectbox('target', ['strategy', 'manage'], key='target')
+
+        if st.button('send'):
+            topic = "ctpview_market.SimulateMarketState"
+            msg = cmp.message()
+            msms = msg.simulate_market_state
+            if market_state == 'day_open':
+                msms.market_state = cmp.SimulateMarketState.MarketState.day_open
+            elif market_state == 'day_close':
+                msms.market_state = cmp.SimulateMarketState.MarketState.day_close
+            elif market_state == 'night_open':
+                msms.market_state = cmp.SimulateMarketState.MarketState.night_open
+            elif market_state == 'night_close':
+                msms.market_state = cmp.SimulateMarketState.MarketState.night_close
+            else:
+                msms.market_state = cmp.SimulateMarketState.MarketState.reserve
+
+            msms.date = datestr
+            msms.target = target
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 

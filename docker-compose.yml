@@ -73,6 +73,29 @@ services:
       xizhou:
         ipv4_address: 192.168.16.9
 
+  ctp_tickdata:
+    restart: always
+    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: ctp_tickdata
+    devices:
+      - /dev/mem:/dev/mem
+    environment:
+      - http_ip=192.168.0.102
+      - http_port=8095
+      - base_url=ctp_tickdata
+      - run_mode=release
+    ports:
+      - "8203:8888"
+    volumes:
+      - /data/marktrade_ctp_tickdata:/home/tsaodai
+      - /run/udev:/run/udev
+    tty: true
+    stdin_open: true
+    privileged: true
+    networks:
+      xizhou:
+        ipv4_address: 192.168.16.13
+
   sina_anonymous:
     restart: always
     image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
