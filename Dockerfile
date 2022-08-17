@@ -27,13 +27,11 @@ RUN apt-get update && apt-get install -y libstdc++6 && apt-get install -y screen
   apt-get install -y vim && apt-get install -y net-tools && apt-get install -y sudo && \
   echo $user 'ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers &&\
   apt-get install -y iputils-ping && apt-get install -y udev && apt-get install -y dmidecode &&\
-  apt-get install -y wget &&\
-  pip install streamlit && pip install psutil && pip install ConfigParser && apt-get install -y iproute2
+  apt-get install -y wget && apt-get install -y iproute2
 
-# 只安装依赖
-RUN pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ctpview --trusted-host devpi.cdsslh.com && \
-  pip install -i https://pypi.tuna.tsinghua.edu.cn/simple ctpview && \
-  pip uninstall -y ctpview
+#安装私有python库
+COPY requirements.txt /root/requirements.txt
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /root/requirements.txt
 
 #设置环境变量
 ENV LC_ALL C.UTF-8

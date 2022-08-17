@@ -4,13 +4,13 @@ from setuptools import find_packages, setup
 
 setup(
     name="ctpview",
-    version="1.2.5",
+    version="1.3.5",
     author="zhoufan",
     author_email="zhoufan@cdsslh.com",
     keywords='presentation layer',
 
     # 项目的依赖库，读取的requirements.txt内容
-    install_requires=['streamlit==1.12.0', 'numpy>=1.19.5', 'psutil>=5.8.0', 'pandas>=1.1.5', 'zerorpc>=0.6.3'],
+    install_requires=['streamlit==1.12.0', 'numpy>=1.19.5', 'psutil>=5.8.0', 'pandas>=1.1.5', 'zerorpc==0.6.3'],
 
     # 项目主页
     url="http://devpi.cdsslh.com:8090",

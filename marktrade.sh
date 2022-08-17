@@ -7,7 +7,12 @@ echo 'shell /bin/bash' > $HOME/.screenrc
 
 if [ $run_mode = 'release' ];
 then
+if [ -e $HOME/.pip/pip.conf ];
+then
+pip install --no-deps ctpview;
+else
 pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ctpview --trusted-host devpi.cdsslh.com;
+fi
 fi
 
 if [ -e $HOME/.local/coredump ]; then echo ".local/coredump existed"; else mkdir $HOME/.local/coredump; fi
