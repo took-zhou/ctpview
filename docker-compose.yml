@@ -8,8 +8,6 @@ services:
     devices:
       - /dev/mem:/dev/mem
     environment:
-      - http_ip=192.168.0.102
-      - http_port=8095
       - base_url=debug
       - run_mode=debug
     ports:
@@ -27,129 +25,127 @@ services:
       xizhou:
         ipv4_address: 192.168.16.3
 
-  citic_103201203:
-    restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
-    container_name: marktrade_citic_103201203
-    devices:
-      - /dev/mem:/dev/mem
-    environment:
-      - http_ip=192.168.0.102
-      - http_port=8095
-      - base_url=citic_103201203
-      - run_mode=release
-    ports:
-      - "8107:8888"
-    volumes:
-      - /data/marktrade_citic_103201203:/home/tsaodai
-      - /run/udev:/run/udev
-    tty: true
-    stdin_open: true
-    privileged: true
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.7
+  # citic_103201203:
+  #   restart: always
+  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   container_name: marktrade_citic_103201203
+  #   devices:
+  #     - /dev/mem:/dev/mem
+  #   environment:
+  #     - http_ip=192.168.0.102
+  #     - http_port=8095
+  #     - base_url=citic_103201203
+  #     - run_mode=release
+  #   ports:
+  #     - "8107:8888"
+  #   volumes:
+  #     - /data/marktrade_citic_103201203:/home/tsaodai
+  #     - /run/udev:/run/udev
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.7
 
-  zhonghui_6080857:
-    restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
-    container_name: marktrade_zhonghui_6080857
-    devices:
-      - /dev/mem:/dev/mem
-    environment:
-      - http_ip=192.168.0.102
-      - http_port=8095
-      - base_url=zhonghui_6080857
-      - run_mode=release
-    ports:
-      - "8109:8888"
-    volumes:
-      - /data/marktrade_zhonghui_6080857:/home/tsaodai
-      - /run/udev:/run/udev
-    tty: true
-    stdin_open: true
-    privileged: true
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.9
+  # zhonghui_6080857:
+  #   restart: always
+  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   container_name: marktrade_zhonghui_6080857
+  #   devices:
+  #     - /dev/mem:/dev/mem
+  #   environment:
+  #     - http_ip=192.168.0.102
+  #     - http_port=8095
+  #     - base_url=zhonghui_6080857
+  #     - run_mode=release
+  #   ports:
+  #     - "8109:8888"
+  #   volumes:
+  #     - /data/marktrade_zhonghui_6080857:/home/tsaodai
+  #     - /run/udev:/run/udev
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.9
 
-  ctp_tickdata:
-    restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
-    container_name: ctp_tickdata
-    devices:
-      - /dev/mem:/dev/mem
-    environment:
-      - http_ip=192.168.0.102
-      - http_port=8095
-      - base_url=ctp_tickdata
-      - run_mode=release
-    ports:
-      - "8203:8888"
-    volumes:
-      - /data/marktrade_ctp_tickdata:/home/tsaodai
-      - /run/udev:/run/udev
-    tty: true
-    stdin_open: true
-    privileged: true
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.13
+  # ctp_tickdata:
+  #   restart: always
+  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   container_name: ctp_tickdata
+  #   devices:
+  #     - /dev/mem:/dev/mem
+  #   environment:
+  #     - http_ip=192.168.0.102
+  #     - http_port=8095
+  #     - base_url=ctp_tickdata
+  #     - run_mode=release
+  #   ports:
+  #     - "8203:8888"
+  #   volumes:
+  #     - /data/marktrade_ctp_tickdata:/home/tsaodai
+  #     - /run/udev:/run/udev
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.13
 
-  sina_anonymous:
-    restart: always
-    image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
-    container_name: marktrade_sina_anonymous
-    environment:
-      - base_url=sina_anonymous
-    ports:
-      - "8205:8888"
-    tty: true
-    stdin_open: true
-    privileged: true
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.13
+  # sina_anonymous:
+  #   restart: always
+  #   image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
+  #   container_name: marktrade_sina_anonymous
+  #   environment:
+  #     - base_url=sina_anonymous
+  #   ports:
+  #     - "8205:8888"
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.13
 
-  akshare_debug:
-    restart: always
-    image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
-    container_name: marktrade_akshare_debug
-    environment:
-      - base_url=akshare_debug
-    ports:
-      - "8207:8888"
-    tty: true
-    stdin_open: true
-    privileged: true
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.15
+  # akshare_debug:
+  #   restart: always
+  #   image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
+  #   container_name: marktrade_akshare_debug
+  #   environment:
+  #     - base_url=akshare_debug
+  #   ports:
+  #     - "8207:8888"
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.15
 
-  simnow_129080:
-    restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
-    container_name: marktrade_simnow_129080
-    devices:
-      - /dev/mem:/dev/mem
-    environment:
-      - http_ip=192.168.0.102
-      - http_port=8095
-      - base_url=simnow_129080
-      - run_mode=release
-    ports:
-      - "8209:8888"
-    volumes:
-      - /data/marktrade_simnow_129080:/home/tsaodai
-      - /run/udev:/run/udev
-    tty: true
-    stdin_open: true
-    privileged: true
-    cap_add: 
-      - NET_ADMIN
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.17
+  # simnow_129080:
+  #   restart: always
+  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   container_name: marktrade_simnow_129080
+  #   devices:
+  #     - /dev/mem:/dev/mem
+  #   environment:
+  #     - base_url=simnow_129080
+  #     - run_mode=release
+  #   ports:
+  #     - "8209:8888"
+  #   volumes:
+  #     - /data/marktrade_simnow_129080:/home/tsaodai
+  #     - /run/udev:/run/udev
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   cap_add: 
+  #     - NET_ADMIN
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.17
 
 #docker network create --subnet=192.168.16.0/24 xizhou
 networks:

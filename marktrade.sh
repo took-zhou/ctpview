@@ -4,7 +4,7 @@ echo "streamlit run ..."
 sudo chown 1000:1000 $HOME
 
 echo 'shell /bin/bash' > $HOME/.screenrc
-
+echo 'termcapinfo xterm* ti@:te@' >> $HOME/.screenrc
 if [ $run_mode = 'release' ];
 then
 if [ -e $HOME/.pip/pip.conf ];
@@ -30,8 +30,7 @@ if [ -e $HOME/.streamlit/config.toml ];
          echo enableXsrfProtection=false >> $HOME/.streamlit/config.toml;
 fi
 
-if [ -e $HOME/.marktrade.conf ]; then rm $HOME/.marktrade.conf ; fi
-cic install marktrade
+sudo apt-get install -y marktrade
 
 sudo chmod 777 /dev/mem
 sudo chmod 777 /sys/firmware/dmi/tables/smbios_entry_point

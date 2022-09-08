@@ -1,12 +1,14 @@
 import json
 import os
 
+
 class JsonConfig:
+
     def __init__(self):
         self.json_data = None
-        self.file_path = '%s/config/config.json'%(os.environ.get('HOME'))
+        self.file_path = '/etc/marktrade/config.json'
 
-    def get_config(self, module_name, sub_name, re_load = True):
+    def get_config(self, module_name, sub_name, re_load=True):
         self.reload()
         return self.json_data[module_name][sub_name]
 
@@ -25,6 +27,7 @@ class JsonConfig:
                 fp.close()
         except:
             self.json_data = None
+
 
 jsonconfig = JsonConfig()
 

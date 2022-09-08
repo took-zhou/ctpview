@@ -1,9 +1,12 @@
-import streamlit as st
 import json
 import os
+
 import psutil
+import streamlit as st
+
 
 class parameter:
+
     def __init__(self):
         self.disable_write = False
 
@@ -17,87 +20,103 @@ class parameter:
         self.update_trader_para()
 
     def update_common_para(self):
-        st.header('%s'%("common:"))
+        st.header('%s' % ("common:"))
 
-        common_needshow_para = ['PrintNetworkDelay']
+        common_needshow_para = ['ApiType']
         email_needshow_para = ['redipients']
-        email_receivers = ['zhoufan@cdsslh.com', 'cuiwenhong@cdsslh.com']
         try:
-            with open('%s/config/config.json'%(os.environ.get('HOME')), 'r', encoding='utf8') as fp:
+            with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
-
-            user_list = [item for item in read_json['users'].keys()]
-            now_user = read_json['common']['user']
-            user_id = st.selectbox('SelectUser: ', user_list, user_list.index(now_user), key='userid')
-            read_json['common']['user'] = user_id
 
             common_json = read_json['common']
             for item in common_json:
                 if item in common_needshow_para:
-                    if item == 'PrintNetworkDelay':
-                        title = st.selectbox('IsPrintNetworkDelay ', ['yes', 'no'], ['yes', 'no'].index(common_json[item]), key='isprint')
+                    if item == 'ApiType':
+                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp'], ['ctp', 'xtp'].index(common_json[item]),
+                                             key='apitype')
                         read_json["common"][item] = title
                     else:
-                        title = st.text_input('%s(%s): '%(item, 'common'), common_json[item])
+                        title = st.text_input('%s(%s): ' % (item, 'common'), common_json[item])
                         read_json["common"][item] = title
 
             email_json = read_json['emailbox']
             for item in email_json:
                 if item in email_needshow_para:
-                    if item  == 'redipients':
-                        title = st.multiselect('%s(%s): '%(item, 'common'), email_receivers, email_json[item])
+                    if item == 'redipients':
+                        title = st.multiselect('%s(%s): ' % (item, 'common'), email_json['emails'], email_json[item])
                         read_json["emailbox"][item] = title
                     else:
                         pass
             fp.close()
             if self.disable_write == False:
-                f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
+                f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
         except:
             pass
 
     def update_market_para(self):
-        st.header('%s'%("market:"))
+        st.header('%s' % ("market:"))
 
-        market_needshow_para = ['LogInTimeList', 'SubscribeMarketDataFrom']
+        market_needshow_para = ['User', 'LogInTimeList', 'SubscribeMarketDataFrom']
         try:
-            with open('%s/config/config.json'%(os.environ.get('HOME')), 'r', encoding='utf8') as fp:
+            with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
 
             market_json = read_json['market']
             for item in market_json:
                 if item in market_needshow_para:
                     if item == 'SubscribeMarketDataFrom':
-                        title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'market', 'trader'], \
-                            ['local', 'strategy', 'market', 'trader'].index(read_json["market"][item]), key='datafrom')
+                        title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'api'], \
+                            ['local', 'strategy', 'api'].index(read_json["market"][item]), key='datafrom')
                         read_json["market"][item] = title
+                    elif item == 'User':
+                        user_list = [item for item in read_json['users'].keys()]
+                        api_users = self.get_users(user_list, read_json['common']['ApiType'])
+                        now_user = read_json['market']['User'][0]
+                        if now_user in api_users:
+                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, api_users.index(now_user), key='marketuserid')
+                        else:
+                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, 0, key='marketuserid')
+                        read_json['market']['User'] = [user_id]
                     else:
-                        title = st.text_input('%s(%s): '%(item, 'market'), market_json[item])
+                        title = st.text_input('%s(%s): ' % (item, 'market'), market_json[item])
                         read_json["market"][item] = title
             fp.close()
             if self.disable_write == False:
-                f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
+                f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
         except:
             pass
 
     def update_trader_para(self):
-        trader_needshow_para = ['LogInTimeList']
-        st.header('%s'%("trader:"))
+        trader_needshow_para = ['User', 'LogInTimeList']
+        st.header('%s' % ("trader:"))
         try:
-            with open('%s/config/config.json'%(os.environ.get('HOME')), 'r', encoding='utf8') as fp:
+            with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
 
             trader_json = read_json['trader']
             for item in trader_json:
                 if item in trader_needshow_para:
-                    title = st.text_input('%s(%s): '%(item, 'trader'), trader_json[item])
-                    read_json["trader"][item] = title
+                    if item == 'User':
+                        user_list = [item for item in read_json['users'].keys()]
+                        api_users = self.get_users(user_list, read_json['common']['ApiType'])
+                        now_user = read_json['trader']['User']
+                        d = [False for c in now_user if c not in api_users]
+                        if d:
+                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, [])
+                        else:
+                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, now_user)
+                        read_json['trader']['User'] = title
+                    else:
+                        title = st.text_input('%s(%s): ' % (item, 'trader'), trader_json[item])
+                        read_json["trader"][item] = title
+
             fp.close()
             if self.disable_write == False:
-                f_d = open('%s/config/config.json'%(os.environ.get('HOME')), 'w', encoding="utf-8")
+                f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
         except:
@@ -114,6 +133,12 @@ class parameter:
         self.disable_write = False
         return
 
+    def get_users(self, users, key):
+        if key == 'ctp':
+            return [item for item in users if 'simnow' in item or 'citic' in item or 'zhonghui' in item]
+        elif key == 'xtp':
+            return [item for item in users if 'xtp' in item]
+
     def checkprocess(self, processname):
         # --获取进程信息--
         pl = psutil.pids()  #所有的进程列出来
@@ -126,5 +151,6 @@ class parameter:
                 continue
 
         return ''
+
 
 parameter_page = parameter()

@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="ctpview",
-    version="1.3.5",
+    version="1.4.5",
     author="zhoufan",
     author_email="zhoufan@cdsslh.com",
     keywords='presentation layer',

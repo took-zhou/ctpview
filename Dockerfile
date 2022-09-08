@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y libstdc++6 && apt-get install -y screen
 COPY requirements.txt /root/requirements.txt
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /root/requirements.txt
 
+RUN echo "deb [trusted=yes] http://192.168.0.102:8095/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
+    apt-get update
+
 #设置环境变量
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
@@ -41,7 +44,6 @@ ENV LANG C.UTF-8
 expose 11332
 
 #拷贝文件或目录到镜像中
-COPY update /bin/cic
 COPY marktrade.sh /bin/$process.sh
 
 #使用tsaodai用户启动streamlit

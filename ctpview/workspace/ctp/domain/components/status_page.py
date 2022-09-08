@@ -50,8 +50,8 @@ class status():
         subscribe_list = []
         try:
             st.write()
-            st.write('market veriosn: `%s`' % (jsonconfig.get_config('market', 'version')))
-            st.write('trader version: `%s`' % (jsonconfig.get_config('trader', 'version')))
+            st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
+            st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
             with open(jsonconfig.get_config('market', 'ControlParaFilePath'), 'r', encoding='utf8') as fp:
                 control_json = json.load(fp)
                 fp.close()
