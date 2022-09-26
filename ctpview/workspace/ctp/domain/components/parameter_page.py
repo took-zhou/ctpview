@@ -32,7 +32,7 @@ class parameter:
             for item in common_json:
                 if item in common_needshow_para:
                     if item == 'ApiType':
-                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp'], ['ctp', 'xtp'].index(common_json[item]),
+                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp', 'btp'], ['ctp', 'xtp', 'btp'].index(common_json[item]),
                                              key='apitype')
                         read_json["common"][item] = title
                     else:
@@ -138,6 +138,8 @@ class parameter:
             return [item for item in users if 'simnow' in item or 'citic' in item or 'zhonghui' in item]
         elif key == 'xtp':
             return [item for item in users if 'xtp' in item]
+        elif key == 'btp':
+            return [item for item in users if 'btp' in item]
 
     def checkprocess(self, processname):
         # --获取进程信息--

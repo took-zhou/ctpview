@@ -52,10 +52,13 @@ class status():
             st.write()
             st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
             st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
-            with open(jsonconfig.get_config('market', 'ControlParaFilePath'), 'r', encoding='utf8') as fp:
-                control_json = json.load(fp)
-                fp.close()
-                subscribe_list = list(set(control_json.keys()))
+
+            for item in jsonconfig.get_config('market', 'User'):
+                with open('%s/%s/controlPara/control.json'%(jsonconfig.get_config('market', 'ControlParaFilePath'), item), 'r', encoding='utf8') as fp:
+                    control_json = json.load(fp)
+                    fp.close()
+                    subscribe_list = list(set(control_json.keys()))
+                    break
         except:
             pass
 
