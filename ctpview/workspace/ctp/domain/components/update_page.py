@@ -8,14 +8,14 @@ import streamlit as st
 class update():
 
     def __init__(self):
-        pass
+        self.package_list = ["tickmine", "ticknature", "ctpview"]
 
     def update(self):
         self.update_market_trader()
 
         st.write('____')
 
-        self.update_ctpview()
+        self.update_package_list()
 
     def update_market_trader(self):
         pack_name = ''
@@ -33,20 +33,21 @@ class update():
         if col2.button('update', key='update2'):
             self.update_single_deb('marktrade', newest_name)
 
-    def update_ctpview(self):
-        newest_version = self.find_newest_version_pip('ctpview')
+    def update_package_list(self):
+        for package in self.package_list:
+            newest_version = self.find_newest_version_pip(package)
 
-        temp_items = os.popen('pip list')
-        lines_items = temp_items.readlines()
-        for item in lines_items:
-            key_values = [value for value in item.split(' ') if value != '']
-            if key_values[0] == 'ctpview':
-                contain = st.container()
-                col1, col2 = contain.columns(2)
-                col1.write('%s: %s --> %s' % (key_values[0], key_values[1], newest_version))
-                if col2.button('update', key=key_values[0]):
-                    self.update_single_pip(key_values[0], key_values[1])
-                break
+            temp_items = os.popen('pip list')
+            lines_items = temp_items.readlines()
+            for item in lines_items:
+                key_values = [value for value in item.split(' ') if value != '']
+                if key_values[0] == package:
+                    contain = st.container()
+                    col1, col2 = contain.columns(2)
+                    col1.write('%s: %s --> %s' % (key_values[0], key_values[1], newest_version))
+                    if col2.button('update', key=key_values[0]):
+                        self.update_single_pip(key_values[0], key_values[1])
+                    break
 
     def find_newest_version_pip(self, item):
         newest_version = ''

@@ -5,12 +5,17 @@ sudo chown 1000:1000 $HOME
 
 echo 'shell /bin/bash' > $HOME/.screenrc
 echo 'termcapinfo xterm* ti@:te@' >> $HOME/.screenrc
+
 if [ $run_mode = 'release' ];
 then
 if [ -e $HOME/.pip/pip.conf ];
 then
+pip install --no-deps tickmine;
+pip install --no-deps ticknature;
 pip install --no-deps ctpview;
 else
+pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev tickmine --trusted-host devpi.cdsslh.com;
+pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ticknature --trusted-host devpi.cdsslh.com;
 pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ctpview --trusted-host devpi.cdsslh.com;
 fi
 fi
@@ -42,4 +47,5 @@ ctpview_path=` python -c "import ctpview;print(ctpview.__path__[0])" `
 nohup streamlit run $ctpview_path/workspace/ctp/domain/presentation.py >> $HOME/.streamlit/output.log 2>&1 &
 fi
 
+sudo ldconfig
 nohup proxy </dev/null 1>/dev/null 2>/dev/null

@@ -19,7 +19,7 @@ services:
     tty: true
     stdin_open: true
     privileged: true
-    cap_add: 
+    cap_add:
       - NET_ADMIN
     networks:
       xizhou:
@@ -124,28 +124,28 @@ services:
   #     xizhou:
   #       ipv4_address: 192.168.16.15
 
-  # simnow_129080:
-  #   restart: always
-  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
-  #   container_name: marktrade_simnow_129080
-  #   devices:
-  #     - /dev/mem:/dev/mem
-  #   environment:
-  #     - base_url=simnow_129080
-  #     - run_mode=release
-  #   ports:
-  #     - "8209:8888"
-  #   volumes:
-  #     - /data/marktrade_simnow_129080:/home/tsaodai
-  #     - /run/udev:/run/udev
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   cap_add: 
-  #     - NET_ADMIN
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.17
+  simnow_129080:
+    restart: always
+    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: marktrade_simnow_129080
+    devices:
+      - /dev/mem:/dev/mem
+    environment:
+      - base_url=simnow_129080
+      - run_mode=release
+    ports:
+      - "8209:8888"
+    volumes:
+      - /data/marktrade_simnow_129080:/home/tsaodai
+      - /run/udev:/run/udev
+    tty: true
+    stdin_open: true
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      xizhou:
+        ipv4_address: 192.168.16.17
 
 #docker network create --subnet=192.168.16.0/24 xizhou
 networks:
