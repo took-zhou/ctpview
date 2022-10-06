@@ -32,6 +32,7 @@ class update():
         col1.write('marktrade: %s --> %s' % (pack_name, newest_name))
         if col2.button('update', key='update2'):
             self.update_single_deb('marktrade', newest_name)
+            os.system("sudo ldconfig")
 
     def update_package_list(self):
         for package in self.package_list:
