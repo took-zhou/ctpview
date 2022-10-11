@@ -32,18 +32,23 @@ class parameter:
             for item in common_json:
                 if item in common_needshow_para:
                     if item == 'ApiType':
-                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp', 'btp'], ['ctp', 'xtp', 'btp'].index(common_json[item]),
-                                             key='apitype')
+                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp', 'btp'], ['ctp', 'xtp',
+                                                                                                    'btp'].index(common_json[item]),
+                                             key='apitype',
+                                             disabled=self.disable_write)
                         read_json["common"][item] = title
                     else:
-                        title = st.text_input('%s(%s): ' % (item, 'common'), common_json[item])
+                        title = st.text_input('%s(%s): ' % (item, 'common'), common_json[item], disabled=self.disable_write)
                         read_json["common"][item] = title
 
             email_json = read_json['emailbox']
             for item in email_json:
                 if item in email_needshow_para:
                     if item == 'redipients':
-                        title = st.multiselect('%s(%s): ' % (item, 'common'), email_json['emails'], email_json[item])
+                        title = st.multiselect('%s(%s): ' % (item, 'common'),
+                                               email_json['emails'],
+                                               email_json[item],
+                                               disabled=self.disable_write)
                         read_json["emailbox"][item] = title
                     else:
                         pass
@@ -68,19 +73,19 @@ class parameter:
                 if item in market_needshow_para:
                     if item == 'SubscribeMarketDataFrom':
                         title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'api'], \
-                            ['local', 'strategy', 'api'].index(read_json["market"][item]), key='datafrom')
+                            ['local', 'strategy', 'api'].index(read_json["market"][item]), key='datafrom', disabled=self.disable_write)
                         read_json["market"][item] = title
                     elif item == 'User':
                         user_list = [item for item in read_json['users'].keys()]
                         api_users = self.get_users(user_list, read_json['common']['ApiType'])
                         now_user = read_json['market']['User'][0]
                         if now_user in api_users:
-                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, api_users.index(now_user), key='marketuserid')
+                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, api_users.index(now_user), key='marketuserid', disabled=self.disable_write)
                         else:
-                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, 0, key='marketuserid')
+                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, 0, key='marketuserid', disabled=self.disable_write)
                         read_json['market']['User'] = [user_id]
                     else:
-                        title = st.text_input('%s(%s): ' % (item, 'market'), market_json[item])
+                        title = st.text_input('%s(%s): ' % (item, 'market'), market_json[item], disabled=self.disable_write)
                         read_json["market"][item] = title
             fp.close()
             if self.disable_write == False:
@@ -106,12 +111,12 @@ class parameter:
                         now_user = read_json['trader']['User']
                         d = [False for c in now_user if c not in api_users]
                         if d:
-                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, [])
+                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, [], disabled=self.disable_write)
                         else:
-                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, now_user)
+                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, now_user, disabled=self.disable_write)
                         read_json['trader']['User'] = title
                     else:
-                        title = st.text_input('%s(%s): ' % (item, 'trader'), trader_json[item])
+                        title = st.text_input('%s(%s): ' % (item, 'trader'), trader_json[item], disabled=self.disable_write)
                         read_json["trader"][item] = title
 
             fp.close()

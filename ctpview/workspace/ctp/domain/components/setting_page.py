@@ -1,9 +1,13 @@
-import streamlit as st
-import time
 import os
+import time
+
 import psutil
+import streamlit as st
+from ctpview.workspace.common.file_util import jsonconfig
+
 
 class setting():
+
     def __init__(self):
         pass
 
@@ -33,36 +37,47 @@ class setting():
         if st.button('clear coredump'):
             self.clear_coredump()
 
-    def clear_process(self,):
+        if st.button('clear data'):
+            self.clear_data()
+
+    def clear_process(self, ):
         id = self.checkprocess("market")
         if isinstance(id, int):
-            os.system("kill -9 %d"%(id))
+            os.system("kill -9 %d" % (id))
             time.sleep(1)
 
         id = self.checkprocess("trader")
         if isinstance(id, int):
-            os.system("kill -9 %d"%(id))
+            os.system("kill -9 %d" % (id))
             time.sleep(1)
 
     def clear_record(self):
-        data_path = '%s/data/'%(os.environ.get('HOME'))
+        data_path = '%s/data/' % (os.environ.get('HOME'))
 
         if os.path.exists(data_path):
-            st.info('rm -rf %s'%(data_path))
-            os.system('rm -rf %s'%(data_path))
+            st.info('rm -rf %s' % (data_path))
+            os.system('rm -rf %s' % (data_path))
 
     def clear_log(self):
-        log_path = '%s/log/'%(os.environ.get('HOME'))
+        log_path = '%s/log/' % (os.environ.get('HOME'))
 
         if os.path.exists(log_path):
-            st.info('rm -rf %s'%(log_path))
-            os.system('rm -rf %s'%(log_path))
+            st.info('rm -rf %s' % (log_path))
+            os.system('rm -rf %s' % (log_path))
 
     def clear_coredump(self):
-        coredump_path = '%s/.local/coredump'%(os.environ.get('HOME'))
+        coredump_path = '%s/.local/coredump' % (os.environ.get('HOME'))
 
         if os.path.exists(coredump_path):
-            st.info('rm -f %s/*'%(coredump_path))
-            os.system('rm -f %s/*'%(coredump_path))
+            st.info('rm -f %s/*' % (coredump_path))
+            os.system('rm -f %s/*' % (coredump_path))
+
+    def clear_data(self):
+        data_path = jsonconfig.get_config('market', 'HistoryTickPath')
+
+        if os.path.exists(data_path):
+            st.info('rm -f %s/*' % (data_path))
+            os.system('rm -f %s/*' % (data_path))
+
 
 setting_page = setting()
