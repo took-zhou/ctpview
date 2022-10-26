@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14\x63tpview-trader.proto\x12\x0e\x63tpview_trader\"\x86\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_trader.LoginControlH\x00\x12\x35\n\rbug_injection\x18\x02 \x01(\x0b\x32\x1c.ctpview_trader.BugInjectionH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_trader.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_trader.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14\x63tpview-trader.proto\x12\x0e\x63tpview_trader\"\xc1\x01\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_trader.LoginControlH\x00\x12\x35\n\rbug_injection\x18\x02 \x01(\x0b\x32\x1c.ctpview_trader.BugInjectionH\x00\x12\x39\n\x0b\x63heck_alive\x18\x03 \x01(\x0b\x32\".ctpview_trader.CheckStrategyAliveH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_trader.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_trader.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\tb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'ctpview_trader_pb2', globals())
@@ -21,13 +21,15 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _MESSAGE._serialized_start=41
-  _MESSAGE._serialized_end=175
-  _LOGINCONTROL._serialized_start=177
-  _LOGINCONTROL._serialized_end=293
-  _LOGINCONTROL_COMMAND._serialized_start=248
-  _LOGINCONTROL_COMMAND._serialized_end=293
-  _BUGINJECTION._serialized_start=295
-  _BUGINJECTION._serialized_end=414
-  _BUGINJECTION_INJECTIONTYPE._serialized_start=369
-  _BUGINJECTION_INJECTIONTYPE._serialized_end=414
+  _MESSAGE._serialized_end=234
+  _LOGINCONTROL._serialized_start=236
+  _LOGINCONTROL._serialized_end=352
+  _LOGINCONTROL_COMMAND._serialized_start=307
+  _LOGINCONTROL_COMMAND._serialized_end=352
+  _BUGINJECTION._serialized_start=354
+  _BUGINJECTION._serialized_end=473
+  _BUGINJECTION_INJECTIONTYPE._serialized_start=428
+  _BUGINJECTION_INJECTIONTYPE._serialized_end=473
+  _CHECKSTRATEGYALIVE._serialized_start=475
+  _CHECKSTRATEGYALIVE._serialized_end=510
 # @@protoc_insertion_point(module_scope)

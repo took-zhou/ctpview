@@ -3,6 +3,7 @@ import os
 import time
 
 import streamlit as st
+from ctpview.workspace.common.file_util import jsonconfig
 from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
 from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
@@ -14,9 +15,7 @@ class debug():
         pass
 
     def update(self):
-        mode_str = [
-            'Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState', 'Network Disconnect'
-        ]
+        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState']
         debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
 
         if debug_mode == 'Login Control':
@@ -29,8 +28,6 @@ class debug():
             self.bug_injection()
         elif debug_mode == 'Simulate MarketState':
             self.simulate_market_state()
-        elif debug_mode == 'Network Disconnect':
-            self.network_disconnect()
 
     def login_control(self):
         contain = st.container()
@@ -88,6 +85,13 @@ class debug():
         if st.button('check'):
             topic = "ctpview_market.CheckStrategyAlive"
             msg = cmp.message()
+            mlc = msg.check_alive
+            mlc.check = "yes"
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+            topic = "ctpview_trader.CheckStrategyAlive"
+            msg = ctp.message()
             mlc = msg.check_alive
             mlc.check = "yes"
             msg_bytes = msg.SerializeToString()
@@ -154,7 +158,7 @@ class debug():
     def simulate_market_state(self):
         market_state = st.selectbox('market state', ['day_open', 'day_close', 'night_open', 'night_close'], key='market_state')
         datestr = self.get_newest_date()
-        target = st.selectbox('target', ['strategy', 'manage'], key='target')
+        # target = st.selectbox('target', ['strategy', 'manage'], key='target')
 
         if st.button('send'):
             topic = "ctpview_market.SimulateMarketState"
@@ -172,7 +176,7 @@ class debug():
                 msms.market_state = cmp.SimulateMarketState.MarketState.reserve
 
             msms.date = datestr
-            msms.target = target
+            msms.target = ''
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 
