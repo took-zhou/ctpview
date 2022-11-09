@@ -80,9 +80,17 @@ class parameter:
                         api_users = self.get_users(user_list, read_json['common']['ApiType'])
                         now_user = read_json['market']['User'][0]
                         if now_user in api_users:
-                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, api_users.index(now_user), key='marketuserid', disabled=self.disable_write)
+                            user_id = st.selectbox('%s(%s): ' % (item, 'market'),
+                                                   api_users,
+                                                   api_users.index(now_user),
+                                                   key='marketuserid',
+                                                   disabled=self.disable_write)
                         else:
-                            user_id = st.selectbox('%s(%s): ' % (item, 'market'), api_users, 0, key='marketuserid', disabled=self.disable_write)
+                            user_id = st.selectbox('%s(%s): ' % (item, 'market'),
+                                                   api_users,
+                                                   0,
+                                                   key='marketuserid',
+                                                   disabled=self.disable_write)
                         read_json['market']['User'] = [user_id]
                     else:
                         title = st.text_input('%s(%s): ' % (item, 'market'), market_json[item], disabled=self.disable_write)

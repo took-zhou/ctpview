@@ -1,6 +1,8 @@
 import os
 
 import streamlit as st
+
+from ctpview.workspace.ctp.domain.components.backtest_page import backtest_page
 from ctpview.workspace.ctp.domain.components.control_page import control_page
 from ctpview.workspace.ctp.domain.components.debug_page import debug_page
 from ctpview.workspace.ctp.domain.components.parameter_page import parameter_page
@@ -16,9 +18,9 @@ class ctpview():
 
     def update(self):
         if os.environ.get('base_url') in ['debug', 'integration_test']:
-            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'debug', 'update', 'setting'))
+            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'debug', 'backtest', 'update', 'setting'))
         else:
-            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'update', 'setting'))
+            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest', 'update', 'setting'))
 
         if module_option == 'configure':
             parameter_page.update()
@@ -28,6 +30,8 @@ class ctpview():
             status_page.update()
         elif module_option == 'debug':
             debug_page.update()
+        elif module_option == 'backtest':
+            backtest_page.update()
         elif module_option == 'update':
             update_page.update()
         elif module_option == 'setting':

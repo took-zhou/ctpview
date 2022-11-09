@@ -3,6 +3,7 @@ import time
 
 import psutil
 import streamlit as st
+
 from ctpview.workspace.common.file_util import jsonconfig
 
 
@@ -37,8 +38,8 @@ class setting():
         if st.button('clear coredump'):
             self.clear_coredump()
 
-        if st.button('clear data'):
-            self.clear_data()
+        if st.button('clear tick'):
+            self.clear_tick()
 
     def clear_process(self, ):
         id = self.checkprocess("market")
@@ -72,12 +73,12 @@ class setting():
             st.info('rm -f %s/*' % (coredump_path))
             os.system('rm -f %s/*' % (coredump_path))
 
-    def clear_data(self):
-        data_path = jsonconfig.get_config('market', 'HistoryTickPath')
+    def clear_tick(self):
+        tick_path = jsonconfig.get_config('market', 'HistoryTickPath')
 
-        if os.path.exists(data_path):
-            st.info('rm -f %s/*' % (data_path))
-            os.system('rm -f %s/*' % (data_path))
+        if os.path.exists(tick_path):
+            st.info('rm -f %s/*' % (tick_path))
+            os.system('rm -f %s/*' % (tick_path))
 
 
 setting_page = setting()

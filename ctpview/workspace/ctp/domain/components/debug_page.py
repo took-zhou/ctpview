@@ -3,7 +3,7 @@ import os
 import time
 
 import streamlit as st
-from ctpview.workspace.common.file_util import jsonconfig
+
 from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
 from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
