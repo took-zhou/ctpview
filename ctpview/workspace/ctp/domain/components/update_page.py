@@ -55,7 +55,7 @@ class update():
         if os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
             command = 'pip install --no-deps  %s== 2>%s/out.txt' % (item, os.environ.get('HOME'))
         else:
-            command = 'pip install --no-deps --index-url http://192.168.0.102:3141/root/dev %s== --trusted-host devpi.cdsslh.com 2>%s/out.txt'% \
+            command = 'pip install --no-deps --index-url http://192.168.0.102:3141/root/dev %s== --trusted-host 192.168.0.102 2>%s/out.txt'% \
             (item, os.environ.get('HOME'))
         os.system(command)
         with open('%s/out.txt' % (os.environ.get('HOME')), 'r') as f:
@@ -75,7 +75,7 @@ class update():
             command = 'pip install --no-deps  %s' % (_module)
         else:
             command = 'pip install --no-deps --index-url http://192.168.0.102:3141/root/dev %s\
-                    --trusted-host devpi.cdsslh.com' % (_module)
+                    --trusted-host 192.168.0.102' % (_module)
         st.write('pip install --no-deps  %s' % (_module))
         os.system(command)
         # 安装依赖
