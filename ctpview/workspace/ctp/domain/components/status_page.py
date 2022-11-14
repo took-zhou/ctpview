@@ -48,19 +48,18 @@ class status():
         ip = socket.gethostbyname(hostname)
         st.write('local ip: `%s`' % (ip))
 
+        st.write()
+        st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
+        st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
+
         subscribe_list = []
         try:
-            st.write()
-            st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
-            st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
-
-            for item in jsonconfig.get_config('market', 'User'):
-                market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
-                with open('%s/%s/controlPara/control.json' % (market_control_path, item), 'r', encoding='utf8') as fp:
-                    control_json = json.load(fp)
-                    fp.close()
-                    subscribe_list = list(set(control_json.keys()))
-                    break
+            username = jsonconfig.get_config('market', 'User')[0]
+            market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
+            with open('%s/%s/PublishControl/control.json' % (market_control_path, username), 'r', encoding='utf8') as fp:
+                control_json = json.load(fp)
+                fp.close()
+                subscribe_list = list(set(control_json.keys()))
         except:
             pass
 
@@ -68,8 +67,8 @@ class status():
         st.write(subscribe_list)
 
         try:
-            trader_control_path = jsonconfig.get_config('trader', 'ControlParaFilePath')
-            with open('%s/controlPara/control.json' % (trader_control_path), 'r', encoding='utf8') as fp:
+            market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
+            with open('%s/controlPara/control.json' % (market_control_path), 'r', encoding='utf8') as fp:
                 control_json = json.load(fp)
                 fp.close()
                 subscribe_list = list(set(control_json['prid']))
