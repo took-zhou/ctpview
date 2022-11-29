@@ -1,29 +1,29 @@
 version: "3"
 services:
 
-  # debug:
-  #   restart: always
-  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
-  #   container_name: marktrade_debug
-  #   devices:
-  #     - /dev/mem:/dev/mem
-  #   environment:
-  #     - base_url=debug
-  #     - run_mode=debug
-  #   ports:
-  #     - "8103:8888"
-  #   volumes:
-  #     - /home/zhoufan/code/quantation:/share
-  #     - /data/marktrade_debug:/home/tsaodai
-  #     - /run/udev:/run/udev
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   cap_add:
-  #     - NET_ADMIN
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.3
+  debug:
+    restart: always
+    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    container_name: marktrade_debug
+    devices:
+      - /dev/mem:/dev/mem
+    environment:
+      - base_url=debug
+      - run_mode=debug
+    ports:
+      - "8103:8888"
+    volumes:
+      - /home/zhoufan/code/quantation:/share
+      - /data/marktrade_debug:/home/tsaodai
+      - /run/udev:/run/udev
+    tty: true
+    stdin_open: true
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      xizhou:
+        ipv4_address: 192.168.16.3
 
   # citic_103201203:
   #   restart: always

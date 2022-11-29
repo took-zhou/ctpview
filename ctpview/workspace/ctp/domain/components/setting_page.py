@@ -56,15 +56,25 @@ class setting():
         data_path = '%s/data/' % (os.environ.get('HOME'))
 
         if os.path.exists(data_path):
-            st.info('rm -rf %s' % (data_path))
-            os.system('rm -rf %s' % (data_path))
+            for root, dirs, files in os.walk(data_path):
+                for f in files:
+                    if f.split('.')[-1] == 'json':
+                        f_path = os.path.join(root, f)
+                        os.system('rm -f %s' % (f_path))
+
+        st.info('rm -rf %s' % (data_path))
 
     def clear_log(self):
         log_path = '%s/log/' % (os.environ.get('HOME'))
 
         if os.path.exists(log_path):
-            st.info('rm -rf %s' % (log_path))
-            os.system('rm -rf %s' % (log_path))
+            for root, dirs, files in os.walk(log_path):
+                for f in files:
+                    if f.split('.')[-1] == 'log':
+                        f_path = os.path.join(root, f)
+                        os.system('rm -f %s' % (f_path))
+
+        st.info('rm -rf %s' % (log_path))
 
     def clear_coredump(self):
         coredump_path = '%s/.local/coredump' % (os.environ.get('HOME'))

@@ -15,7 +15,7 @@ class debug():
         pass
 
     def update(self):
-        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState']
+        mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState', 'Profiler Control']
         debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
 
         if debug_mode == 'Login Control':
@@ -28,6 +28,8 @@ class debug():
             self.bug_injection()
         elif debug_mode == 'Simulate MarketState':
             self.simulate_market_state()
+        elif debug_mode == 'Profiler Control':
+            self.profiler_control()
 
     def login_control(self):
         contain = st.container()
@@ -187,6 +189,42 @@ class debug():
             time.sleep(130)
             command = 'sudo tc qdisc del dev eth0 root'
             os.system(command)
+
+    def profiler_control(self):
+        contain = st.container()
+        col1, col2 = contain.columns(2)
+
+        if col1.button('market start write'):
+            topic = "ctpview_market.ProfilerControl"
+            msg = cmp.message()
+            mlc = msg.profiler_control
+            mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.start_write
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col2.button('market stop write'):
+            topic = "ctpview_market.ProfilerControl"
+            msg = cmp.message()
+            mlc = msg.profiler_control
+            mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.stop_write
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col1.button('trader start write'):
+            topic = "ctpview_trader.ProfilerControl"
+            msg = ctp.message()
+            mlc = msg.profiler_control
+            mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.start_write
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+
+        if col2.button('trader stop write'):
+            topic = "ctpview_trader.ProfilerControl"
+            msg = ctp.message()
+            mlc = msg.profiler_control
+            mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.stop_write
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
 
 
 debug_page = debug()
