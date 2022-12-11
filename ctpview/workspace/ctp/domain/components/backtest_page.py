@@ -60,7 +60,7 @@ class backtest:
         level1_iteration1 = st.empty()
         level1_bar = st.progress(0)
         process = int((now_date - begin_date).days / (end_date - begin_date).days * 100)
-        level1_iteration1.text(f'Iteration {process}')
+        level1_iteration1.text(f'Iteration {process}, date: %s'%(str(now_date).split(' ')[0]))
         level1_bar.progress(process)
 
         st.write('single')
