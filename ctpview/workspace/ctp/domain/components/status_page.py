@@ -49,8 +49,12 @@ class status():
         st.write('local ip: `%s`' % (ip))
 
         st.write()
-        st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
-        st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
+        try:
+            st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
+            st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
+        except:
+            st.write('market compile time: `--`')
+            st.write('trader compile time: `--`')
 
         subscribe_list = []
         try:
