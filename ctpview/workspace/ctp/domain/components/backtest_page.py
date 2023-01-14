@@ -11,8 +11,8 @@ from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
 class backtest:
 
     def __init__(self):
-        self.trader_control_json = {}
-        self.market_control_json = {}
+        self.para_control_json = {}
+        self.backtest_control_json = {}
         self.prids = []
         self.prid = ''
 
@@ -21,17 +21,17 @@ class backtest:
             for item in jsonconfig.get_config('market', 'User'):
                 market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
                 with open('%s/%s/BacktestControl/control.json' % (market_control_path, item), 'r', encoding='utf8') as fp:
-                    self.market_control_json = json.load(fp)
+                    self.backtest_control_json = json.load(fp)
                     fp.close()
         except:
             pass
 
         try:
-            trader_control_path = jsonconfig.get_config('trader', 'ControlParaFilePath')
-            with open('%s/controlPara/control.json' % (trader_control_path), 'r', encoding='utf8') as fp:
-                self.trader_control_json = json.load(fp)
+            market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
+            with open('%s/controlPara/control.json' % (market_control_path), 'r', encoding='utf8') as fp:
+                self.para_control_json = json.load(fp)
                 fp.close()
-                self.prids = list(set(self.trader_control_json['prid']))
+                self.prids = list(set(self.para_control_json['prid']))
         except:
             self.prids = []
             pass
@@ -43,11 +43,11 @@ class backtest:
     def operation(self):
         contain = st.container()
         col1, col2, col3 = contain.columns(3)
-        if self.prid in self.market_control_json:
-            begin = col1.text_input('begin time', self.market_control_json[self.prid]['begin'])
-            end = col2.text_input('end time', self.market_control_json[self.prid]['end'])
-            speed = col3.number_input('speed', self.market_control_json[self.prid]['speed'])
-            now = self.market_control_json[self.prid]['now']
+        if self.prid in self.backtest_control_json:
+            begin = col1.text_input('begin time', self.backtest_control_json[self.prid]['begin'])
+            end = col2.text_input('end time', self.backtest_control_json[self.prid]['end'])
+            speed = col3.number_input('speed', self.backtest_control_json[self.prid]['speed'])
+            now = self.backtest_control_json[self.prid]['now']
         else:
             begin = col1.text_input('begin time', '2015-01-01 09:00:00')
             end = col2.text_input('end time', '2020-12-31 15:00:00')
@@ -60,7 +60,7 @@ class backtest:
         level1_iteration1 = st.empty()
         level1_bar = st.progress(0)
         process = int((now_date - begin_date).days / (end_date - begin_date).days * 100)
-        level1_iteration1.text(f'Iteration {process}, date: %s'%(str(now_date).split(' ')[0]))
+        level1_iteration1.text(f'Iteration {process}, date: %s' % (str(now_date).split(' ')[0]))
         level1_bar.progress(process)
 
         st.write('single')
