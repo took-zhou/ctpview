@@ -158,7 +158,8 @@ class debug():
         return datestr
 
     def simulate_market_state(self):
-        market_state = st.selectbox('market state', ['day_open', 'day_close', 'night_open', 'night_close'], key='market_state')
+        market_state = st.selectbox('market state', ['day_prepare', 'day_open', 'day_close', 'night_prepare', 'night_open', 'night_close'],
+                                    key='market_state')
         datestr = self.get_newest_date()
         # target = st.selectbox('target', ['strategy', 'manage'], key='target')
 
@@ -174,6 +175,10 @@ class debug():
                 msms.market_state = cmp.SimulateMarketState.MarketState.night_open
             elif market_state == 'night_close':
                 msms.market_state = cmp.SimulateMarketState.MarketState.night_close
+            elif market_state == 'day_prepare':
+                msms.market_state = cmp.SimulateMarketState.MarketState.day_prepare
+            elif market_state == 'night_prepare':
+                msms.market_state = cmp.SimulateMarketState.MarketState.night_prepare
             else:
                 msms.market_state = cmp.SimulateMarketState.MarketState.reserve
 

@@ -22,7 +22,7 @@ class parameter:
     def update_common_para(self):
         st.header('%s' % ("common:"))
 
-        common_needshow_para = ['ApiType']
+        common_needshow_para = ['ApiType', 'RunMode']
         email_needshow_para = ['redipients']
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -35,6 +35,12 @@ class parameter:
                         title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp', 'btp'], ['ctp', 'xtp',
                                                                                                     'btp'].index(common_json[item]),
                                              key='apitype',
+                                             disabled=self.disable_write)
+                        read_json["common"][item] = title
+                    elif item == 'RunMode':
+                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['realtime', 'fastback'], ['realtime',
+                                                                                                       'fastback'].index(common_json[item]),
+                                             key='runmode',
                                              disabled=self.disable_write)
                         read_json["common"][item] = title
                     else:
@@ -104,7 +110,7 @@ class parameter:
             pass
 
     def update_trader_para(self):
-        trader_needshow_para = ['User', 'LogInTimeList']
+        trader_needshow_para = ['User', 'LogInTimeList', 'OrderRspMode']
         st.header('%s' % ("trader:"))
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -113,16 +119,23 @@ class parameter:
             trader_json = read_json['trader']
             for item in trader_json:
                 if item in trader_needshow_para:
+
                     if item == 'User':
                         user_list = [item for item in read_json['users'].keys()]
                         api_users = self.get_users(user_list, read_json['common']['ApiType'])
                         now_user = read_json['trader']['User']
                         d = [False for c in now_user if c not in api_users]
                         if d:
-                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, [], disabled=self.disable_write)
+                            title = st.multiselect('%s(%s): ' % (item, 'trader'), api_users, [], disabled=self.disable_write)
                         else:
-                            title = st.multiselect('%s(%s): ' % (item, 'common'), api_users, now_user, disabled=self.disable_write)
+                            title = st.multiselect('%s(%s): ' % (item, 'trader'), api_users, now_user, disabled=self.disable_write)
                         read_json['trader']['User'] = title
+                    elif item == 'OrderRspMode':
+                        title = st.selectbox('%s(%s): ' % (item, 'trader'), ['success', 'random', 'cycle'],
+                                             ['success', 'random', 'cycle'].index(trader_json[item]),
+                                             key='order_rsp',
+                                             disabled=self.disable_write)
+                        read_json["trader"][item] = title
                     else:
                         title = st.text_input('%s(%s): ' % (item, 'trader'), trader_json[item], disabled=self.disable_write)
                         read_json["trader"][item] = title
