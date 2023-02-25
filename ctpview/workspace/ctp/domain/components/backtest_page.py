@@ -17,6 +17,7 @@ class backtest:
         self.prid = ''
 
     def update(self):
+        self.backtest_control_json = {}
         try:
             for item in jsonconfig.get_config('market', 'User'):
                 market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
