@@ -4,7 +4,7 @@ import streamlit as st
 
 from ctpview.workspace.ctp.domain.components.backtest_page import backtest_page
 from ctpview.workspace.ctp.domain.components.control_page import control_page
-from ctpview.workspace.ctp.domain.components.debug_page import debug_page
+from ctpview.workspace.ctp.domain.components.manual_page import manual_page
 from ctpview.workspace.ctp.domain.components.parameter_page import parameter_page
 from ctpview.workspace.ctp.domain.components.setting_page import setting_page
 from ctpview.workspace.ctp.domain.components.status_page import status_page
@@ -17,25 +17,21 @@ class ctpview():
         st.set_page_config(page_title='tsaodai ctp operation control', layout='centered', page_icon="..")
 
     def update(self):
-        if os.environ.get('base_url') in ['debug', 'integration_test']:
-            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'debug', 'backtest', 'update', 'setting'))
-        else:
-            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest', 'update', 'setting'))
-
+        module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest', 'update', 'setting', 'manual'))
         if module_option == 'configure':
             parameter_page.update()
         elif module_option == 'control':
             control_page.update()
         elif module_option == 'status':
             status_page.update()
-        elif module_option == 'debug':
-            debug_page.update()
         elif module_option == 'backtest':
             backtest_page.update()
         elif module_option == 'update':
             update_page.update()
         elif module_option == 'setting':
             setting_page.update()
+        elif module_option == 'manual':
+            manual_page.update()
 
 
 app = ctpview()

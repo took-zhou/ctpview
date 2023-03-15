@@ -9,26 +9,26 @@ from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
 
 
-class debug():
+class manual():
 
     def __init__(self):
         pass
 
     def update(self):
         mode_str = ['Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState', 'Profiler Control']
-        debug_mode = st.selectbox('Debug mode', mode_str, key='debug_mode')
+        manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
-        if debug_mode == 'Login Control':
+        if manual_mode == 'Login Control':
             self.login_control()
-        elif debug_mode == 'Check Strategy Alive':
+        elif manual_mode == 'Check Strategy Alive':
             self.check_alive()
-        elif debug_mode == 'Block Quotation':
+        elif manual_mode == 'Block Quotation':
             self.block_quotation()
-        elif debug_mode == 'Bug Injection':
+        elif manual_mode == 'Bug Injection':
             self.bug_injection()
-        elif debug_mode == 'Simulate MarketState':
+        elif manual_mode == 'Simulate MarketState':
             self.simulate_market_state()
-        elif debug_mode == 'Profiler Control':
+        elif manual_mode == 'Profiler Control':
             self.profiler_control()
 
     def login_control(self):
@@ -227,4 +227,4 @@ class debug():
             proxysender.send_msg(topic, msg_bytes)
 
 
-debug_page = debug()
+manual_page = manual()

@@ -58,7 +58,7 @@ class setting():
         if os.path.exists(data_path):
             for root, dirs, files in os.walk(data_path):
                 for f in files:
-                    if f.split('.')[-1] == 'json':
+                    if f.split('.')[-1] == 'json' or f.split('.')[-1] == 'db':
                         f_path = os.path.join(root, f)
                         os.system('rm -f %s' % (f_path))
 

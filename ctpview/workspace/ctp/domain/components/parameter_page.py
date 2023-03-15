@@ -19,6 +19,10 @@ class parameter:
 
         self.update_trader_para()
 
+        st.write('____')
+
+        self.online_update_para()
+
     def update_common_para(self):
         st.header('%s' % ("common:"))
 
@@ -110,6 +114,7 @@ class parameter:
             pass
 
     def update_trader_para(self):
+        order_rsp_mode = ['success', 'waiting', 'part_success', 'no_money', 'no_open']
         trader_needshow_para = ['User', 'LogInTimeList', 'OrderRspMode']
         st.header('%s' % ("trader:"))
         try:
@@ -131,8 +136,9 @@ class parameter:
                             title = st.multiselect('%s(%s): ' % (item, 'trader'), api_users, now_user, disabled=self.disable_write)
                         read_json['trader']['User'] = title
                     elif item == 'OrderRspMode':
-                        title = st.selectbox('%s(%s): ' % (item, 'trader'), ['success', 'random', 'cycle'],
-                                             ['success', 'random', 'cycle'].index(trader_json[item]),
+                        title = st.selectbox('%s(%s): ' % (item, 'trader'),
+                                             order_rsp_mode,
+                                             order_rsp_mode.index(trader_json[item]),
                                              key='order_rsp',
                                              disabled=self.disable_write)
                         read_json["trader"][item] = title
@@ -148,14 +154,30 @@ class parameter:
         except:
             pass
 
+    def online_update_para(self):
+        if st.button('update para'):
+            if 'para update' in st.session_state and st.session_state['para update'] == True:
+                pass
+
+            if 'para update' in st.session_state:
+                if st.session_state['para update'] == False:
+                    st.session_state['para update'] = True
+                else:
+                    st.session_state['para update'] = False
+            else:
+                st.session_state['para update'] = True
+
     def check_parameter_writtable(self):
         process = ['market', 'trader']
         for item in process:
             process_id = self.checkprocess(item)
             if isinstance(process_id, int):
-                self.disable_write = True
-                return
-
+                if 'para update' in st.session_state and st.session_state['para update'] == True:
+                    self.disable_write = False
+                    return
+                else:
+                    self.disable_write = True
+                    return
         self.disable_write = False
         return
 

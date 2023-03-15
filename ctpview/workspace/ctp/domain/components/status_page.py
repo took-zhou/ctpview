@@ -70,17 +70,4 @@ class status():
         st.write('subscribe instrument number from strategy: `%d`' % (len(subscribe_list)))
         st.write(subscribe_list)
 
-        try:
-            market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
-            with open('%s/controlPara/control.json' % (market_control_path), 'r', encoding='utf8') as fp:
-                control_json = json.load(fp)
-                fp.close()
-                subscribe_list = list(set(control_json['prid']))
-        except:
-            pass
-
-        st.write('subscribe prid number from strategy: `%d`' % (len(subscribe_list)))
-        st.write(subscribe_list)
-
-
 status_page = status()
