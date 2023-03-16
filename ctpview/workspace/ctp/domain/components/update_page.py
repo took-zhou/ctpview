@@ -11,11 +11,60 @@ class update():
         self.package_list = ["tickmine", "ticknature", "ctpview"]
 
     def update(self):
+        self.update_apt_link()
         self.update_market_trader()
 
         st.write('____')
 
+        self.update_pypi_link()
         self.update_package_list()
+
+    def update_apt_link(self):
+        apt_list = []
+        apt_list.append('deb [trusted=yes] http://192.168.0.102:8095/debian/ ./\n')
+        apt_list.append('deb [trusted=yes] http://aptserver.cdsslh.com:8090/debian/ ./\n')
+
+        os.system('sudo chmod 777 /etc/apt/sources.list')
+        now_link = 'deb [trusted=yes] http://192.168.0.102:8095/debian/ ./\n'
+        origin_lines = []
+        with open('/etc/apt/sources.list', 'r') as f:
+            lines = f.readlines()
+            origin_lines = lines.copy()
+            for line in lines:
+                if '[trusted=yes]' in line:
+                    now_link = line
+            f.close()
+
+        title = st.selectbox('select pypi:', apt_list, apt_list.index(now_link))
+        origin_lines.remove(now_link)
+        origin_lines.append(title)
+        with open('/etc/apt/sources.list', 'w') as f:
+            f.writelines(origin_lines)
+            f.close()
+
+    def update_pypi_link(self):
+        pypi_list = []
+        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/dev\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = devpi.cdsslh.com\n', 'index-url = http://devpi.cdsslh.com:8090/root/temp\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = devpi.cdsslh.com\n', 'index-url = http://devpi.cdsslh.com:8090/root/dev\n'])
+
+        now_link = ['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n']
+        if not os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
+            command = 'mkdir %s/.pip/' % (os.environ.get('HOME'))
+            os.system(command)
+            command = 'touch %s/.pip/pip.conf' % (os.environ.get('HOME'))
+            now_link = ['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n']
+            os.system(command)
+        else:
+            with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'r') as f:
+                lines = f.readlines()
+                now_link = lines.copy()
+
+        title = st.selectbox('select pypi:', pypi_list, pypi_list.index(now_link))
+        with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'w') as f:
+            f.writelines(title)
+            f.close()
 
     def update_market_trader(self):
         pack_name = ''
