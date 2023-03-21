@@ -2,6 +2,7 @@ import os
 
 import streamlit as st
 
+from ctpview.workspace.ctp.domain.components.authenticate_page import authenticate_page
 from ctpview.workspace.ctp.domain.components.backtest_page import backtest_page
 from ctpview.workspace.ctp.domain.components.control_page import control_page
 from ctpview.workspace.ctp.domain.components.manual_page import manual_page
@@ -17,7 +18,15 @@ class ctpview():
         st.set_page_config(page_title='tsaodai ctp operation control', layout='centered', page_icon="..")
 
     def update(self):
-        module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest', 'update', 'setting', 'manual'))
+        authenticate_page.login()
+        if 'authentication_status' in st.session_state and st.session_state['authentication_status'] != True:
+            return
+
+        if 'name' in st.session_state and st.session_state['name'] == 'admin':
+            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest', 'update', 'setting', 'manual'))
+        else:
+            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest'))
+
         if module_option == 'configure':
             parameter_page.update()
         elif module_option == 'control':
@@ -32,6 +41,8 @@ class ctpview():
             setting_page.update()
         elif module_option == 'manual':
             manual_page.update()
+
+        authenticate_page.logout()
 
 
 app = ctpview()

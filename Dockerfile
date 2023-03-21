@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y libstdc++6 && apt-get install -y screen
   apt-get install -y iputils-ping && apt-get install -y udev && apt-get install -y dmidecode &&\
   apt-get install -y wget && apt-get install -y iproute2
 
-RUN echo "deb [trusted=yes] http://192.168.0.102:8095/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
+RUN echo "deb [trusted=yes] http://aptserver.cdsslh.com:8090/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
     apt-get update
 
 #设置环境变量

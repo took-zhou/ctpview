@@ -1,0 +1,29 @@
+{
+    "credentials": {
+        "usernames": {
+            "zhoufan": {
+                "email": "zhoufan@cdsslh.com",
+                "name": "zhoufan",
+                "password": "$2b$12$qlrjsR2OCnPCNar.J7bhuOPoD0uDBn9PZf39lVjMmBhLU.Tomq4sO"
+            },
+            "cuiwenhong": {
+                "email": "cuiwenhong@cdsslh.com",
+                "name": "cuiwenhong",
+                "password": "$2b$12$qlrjsR2OCnPCNar.J7bhuOPoD0uDBn9PZf39lVjMmBhLU.Tomq4sO"
+            },
+            "admin": {
+                "email": "admin@cdsslh.com",
+                "name": "admin",
+                "password": "$2b$12$qlrjsR2OCnPCNar.J7bhuOPoD0uDBn9PZf39lVjMmBhLU.Tomq4sO"
+            }
+        }
+    },
+    "cookie": {
+        "expiry_days": 0,
+        "key": "1212121",
+        "name": "sdsd"
+    },
+    "preauthorized": {
+        "emails": "admin@cdsslh.com"
+    }
+}

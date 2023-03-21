@@ -1,5 +1,6 @@
 import os
 import sys
+import streamlit_authenticator as stauth
 
 
 def make_protoc():
@@ -25,6 +26,16 @@ def make_protoc():
                     os.system(command)
 
 
+def make_md5():
+    '''
+    生产md5密码
+    '''
+    hashed_passwords = stauth.Hasher([sys.argv[2]]).generate()
+    print(hashed_passwords[0])
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == "protoc":
         make_protoc()
+    elif len(sys.argv) == 3 and sys.argv[1] == 'md5':
+        make_md5()

@@ -4,10 +4,11 @@ from setuptools import find_packages, setup
 
 setup(
     name="ctpview",
-    version="1.6.0",
+    version="1.6.1",
     author="zhoufan",
     author_email="zhoufan@cdsslh.com",
     keywords='presentation layer',
+    data_files=[('ctpview', ['ctpview/project/projroot/config.json'])],
 
     # 项目的依赖库，读取的requirements.txt内容
     install_requires=['streamlit==1.12.0', 'numpy>=1.19.5', 'psutil>=5.8.0', 'pandas>=1.1.5', 'zerorpc==0.6.3'],
