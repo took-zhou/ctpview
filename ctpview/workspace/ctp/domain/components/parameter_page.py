@@ -4,11 +4,16 @@ import os
 import psutil
 import streamlit as st
 
+from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
+from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
+from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
+
 
 class parameter:
 
     def __init__(self):
         self.disable_write = False
+        self.api_types = ['ctp', 'xtp', 'btp', 'otp']
 
     def update(self):
         self.check_parameter_writtable()
@@ -36,8 +41,9 @@ class parameter:
             for item in common_json:
                 if item in common_needshow_para:
                     if item == 'ApiType':
-                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['ctp', 'xtp', 'btp'], ['ctp', 'xtp',
-                                                                                                    'btp'].index(common_json[item]),
+                        title = st.selectbox('%s(%s): ' % (item, 'common'),
+                                             self.api_types,
+                                             self.api_types.index(common_json[item]),
                                              key='apitype',
                                              disabled=self.disable_write)
                         read_json["common"][item] = title
@@ -157,7 +163,19 @@ class parameter:
     def online_update_para(self):
         if st.button('update para'):
             if 'para update' in st.session_state and st.session_state['para update'] == True:
-                pass
+                topic = "ctpview_market.UpdatePara"
+                msg = cmp.message()
+                mupp = msg.update_para
+                mupp.update_action = cmp.UpdatePara.UpdateAction.update
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+
+                topic = "ctpview_trader.UpdatePara"
+                msg = ctp.message()
+                mupp = msg.update_para
+                mupp.update_action = ctp.UpdatePara.UpdateAction.update
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
 
             if 'para update' in st.session_state:
                 if st.session_state['para update'] == False:
@@ -188,6 +206,8 @@ class parameter:
             return [item for item in users if 'xtp' in item]
         elif key == 'btp':
             return [item for item in users if 'btp' in item]
+        elif key == 'otp':
+            return [item for item in users if 'otp' in item]
 
     def checkprocess(self, processname):
         # --获取进程信息--

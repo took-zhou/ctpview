@@ -4,17 +4,12 @@
             "zhoufan": {
                 "email": "zhoufan@cdsslh.com",
                 "name": "zhoufan",
-                "password": "$2b$12$qlrjsR2OCnPCNar.J7bhuOPoD0uDBn9PZf39lVjMmBhLU.Tomq4sO"
-            },
-            "cuiwenhong": {
-                "email": "cuiwenhong@cdsslh.com",
-                "name": "cuiwenhong",
-                "password": "$2b$12$qlrjsR2OCnPCNar.J7bhuOPoD0uDBn9PZf39lVjMmBhLU.Tomq4sO"
+                "password": "$2b$12$yb/BJ2HHJ07rQ5R0T6CKo.MaVXVX5.HqX.XO5dUu3zmis0HfmjH36"
             },
             "admin": {
                 "email": "admin@cdsslh.com",
                 "name": "admin",
-                "password": "$2b$12$qlrjsR2OCnPCNar.J7bhuOPoD0uDBn9PZf39lVjMmBhLU.Tomq4sO"
+                "password": "$2b$12$yb/BJ2HHJ07rQ5R0T6CKo.MaVXVX5.HqX.XO5dUu3zmis0HfmjH36"
             }
         }
     },
