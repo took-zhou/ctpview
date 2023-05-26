@@ -120,8 +120,8 @@ class parameter:
             pass
 
     def update_trader_para(self):
-        order_rsp_mode = ['success', 'waiting', 'part_success', 'no_money', 'no_open']
-        trader_needshow_para = ['User', 'LogInTimeList', 'OrderRspMode']
+        order_rsp_mode = ['success', 'waiting', 'part_success', 'no_money', 'no_open', 'no_time']
+        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'OrderRspMode']
         st.header('%s' % ("trader:"))
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -130,7 +130,6 @@ class parameter:
             trader_json = read_json['trader']
             for item in trader_json:
                 if item in trader_needshow_para:
-
                     if item == 'User':
                         user_list = [item for item in read_json['users'].keys()]
                         api_users = self.get_users(user_list, read_json['common']['ApiType'])
@@ -141,6 +140,14 @@ class parameter:
                         else:
                             title = st.multiselect('%s(%s): ' % (item, 'trader'), api_users, now_user, disabled=self.disable_write)
                         read_json['trader']['User'] = title
+                    elif item == 'SendOrderEmail':
+                        action_list = ['send', 'nosend']
+                        title = st.selectbox('%s(%s): ' % (item, 'trader'),
+                                             action_list,
+                                             action_list.index(trader_json[item]),
+                                             key='send_email',
+                                             disabled=self.disable_write)
+                        read_json["trader"][item] = title
                     elif item == 'OrderRspMode':
                         title = st.selectbox('%s(%s): ' % (item, 'trader'),
                                              order_rsp_mode,
