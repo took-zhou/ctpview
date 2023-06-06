@@ -14,7 +14,7 @@
         }
     },
     "cookie": {
-        "expiry_days": 0,
+        "expiry_days": 10,
         "key": "1212121",
         "name": "sdsd"
     },

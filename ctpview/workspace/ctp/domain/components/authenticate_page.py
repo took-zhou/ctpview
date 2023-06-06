@@ -21,7 +21,11 @@ class authenticate():
             self.authenticator = stauth.Authenticate(json_data['credentials'], json_data['cookie']['name'], json_data['cookie']['key'],
                                                      json_data['cookie']['expiry_days'], json_data['preauthorized'])
 
-            self.authenticator.login('Login', 'main')
+            name, status, username = self.authenticator.login('Login', 'main')
+            if status == False:
+                st.error('Username/password is incorrect')
+            elif status == None:
+                st.warning('Please enter your username and password')
 
     def logout(self):
         st.sidebar.write('----')
