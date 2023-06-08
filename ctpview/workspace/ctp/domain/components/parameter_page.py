@@ -79,7 +79,7 @@ class parameter:
     def update_market_para(self):
         st.header('%s' % ("market:"))
 
-        market_needshow_para = ['User', 'LogInTimeList', 'SubscribeMarketDataFrom']
+        market_needshow_para = ['User', 'LogInTimeList', 'TimingPush', 'SubscribeMarketDataFrom']
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
@@ -90,6 +90,14 @@ class parameter:
                     if item == 'SubscribeMarketDataFrom':
                         title = st.selectbox('SubscribeMarketDataFrom: ', ['local', 'strategy', 'api'], \
                             ['local', 'strategy', 'api'].index(read_json["market"][item]), key='datafrom', disabled=self.disable_write)
+                        read_json["market"][item] = title
+                    elif item == 'TimingPush':
+                        action_list = ['push', 'nopush']
+                        title = st.selectbox('%s(%s): ' % (item, 'market'),
+                                             action_list,
+                                             action_list.index(market_json[item]),
+                                             key='timeing_push',
+                                             disabled=self.disable_write)
                         read_json["market"][item] = title
                     elif item == 'User':
                         user_list = [item for item in read_json['users'].keys()]

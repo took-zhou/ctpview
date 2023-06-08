@@ -1,9 +1,11 @@
 import datetime
+import json
 import os
 import time
 
 import streamlit as st
 
+from ctpview.workspace.common.file_util import jsonconfig
 from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
 from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
@@ -100,6 +102,18 @@ class manual():
             proxysender.send_msg(topic, msg_bytes)
 
     def block_quotation(self):
+        subscribe_list = []
+        try:
+            username = jsonconfig.get_config('market', 'User')[0]
+            market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
+            with open('%s/%s/PublishControl/control.json' % (market_control_path, username), 'r', encoding='utf8') as fp:
+                control_json = json.load(fp)
+                fp.close()
+                subscribe_list = list(set(control_json.keys()))
+        except:
+            pass
+        select_ins_list = st.multiselect('select ins', subscribe_list)
+
         contain = st.container()
         col1, col2 = contain.columns(2)
 
@@ -108,6 +122,8 @@ class manual():
             msg = cmp.message()
             mlc = msg.block_control
             mlc.command = cmp.BlockControl.Command.block
+            for item in select_ins_list:
+                mlc.instrument.append(item)
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 
@@ -116,6 +132,8 @@ class manual():
             msg = cmp.message()
             mlc = msg.block_control
             mlc.command = cmp.BlockControl.Command.unblock
+            for item in select_ins_list:
+                mlc.instrument.append(item)
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 
