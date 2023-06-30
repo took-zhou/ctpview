@@ -32,17 +32,18 @@ class backtest:
         if self.backtest_control_json != {}:
             begin = col1.text_input('begin time', self.backtest_control_json['begin'])
             end = col2.text_input('end time', self.backtest_control_json['end'])
-            speed = col3.number_input('speed', self.backtest_control_json['speed'])
-            now = self.backtest_control_json['now']
+            speed = col3.number_input('speed', 1, 1000, self.backtest_control_json['speed'], 10)
         else:
             begin = col1.text_input('begin time', '2015-01-01 09:00:00')
             end = col2.text_input('end time', '2020-12-31 15:00:00')
-            speed = col3.number_input('speed', 1)
-            now = begin
+            speed = col3.number_input('speed', 1, 1000, 1, 10)
 
         begin_date = datetime.datetime.strptime(begin, '%Y-%m-%d %H:%M:%S')
         end_date = datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
-        now_date = datetime.datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
+        if 'now' in self.backtest_control_json and self.backtest_control_json['now'] != '':
+            now_date = datetime.datetime.strptime(self.backtest_control_json['now'], '%Y-%m-%d %H:%M:%S')
+        else:
+            now_date = begin_date
         level1_iteration1 = st.empty()
         level1_bar = st.progress(0)
         process = int((now_date - begin_date).days / (end_date - begin_date).days * 100)
@@ -50,15 +51,27 @@ class backtest:
         level1_bar.progress(process)
 
         contain = st.container()
-        col1, col2, col3 = contain.columns(3)
+        col1, col2, col3, col4 = contain.columns(4)
         if col1.button('start', key='start2'):
-            self.hand_total_start_button(begin, end, speed)
+            self.handle_start_button(begin, end, speed)
         if col2.button('stop', key='stop2'):
-            self.hand_total_stop_button()
+            self.handle_stop_button()
         if col3.button('finish', key='finish2'):
-            self.hand_total_finish_button()
+            self.handle_finish_button()
+        if col4.button('update speed', key='update2'):
+            self.handle_speed_change(begin, end, speed)
 
-    def hand_total_start_button(self, begin, end, speed):
+    def handle_speed_change(self, begin, end, speed):
+        topic = "ctpview_market.BackTestControl"
+        msg = cmp.message()
+        mbc = msg.backtest_control
+        mbc.begin_time = begin
+        mbc.end_time = end
+        mbc.speed = speed
+        msg_bytes = msg.SerializeToString()
+        proxysender.send_msg(topic, msg_bytes)
+
+    def handle_start_button(self, begin, end, speed):
         topic = "ctpview_market.BackTestControl"
         msg = cmp.message()
         mbc = msg.backtest_control
@@ -75,7 +88,7 @@ class backtest:
         msg_bytes = msg.SerializeToString()
         proxysender.send_msg(topic, msg_bytes)
 
-    def hand_total_stop_button(self):
+    def handle_stop_button(self):
         topic = "ctpview_market.TickStartStopIndication"
         msg = cmp.message()
         mtsi = msg.tick_start_stop_indication
@@ -83,7 +96,7 @@ class backtest:
         msg_bytes = msg.SerializeToString()
         proxysender.send_msg(topic, msg_bytes)
 
-    def hand_total_finish_button(self):
+    def handle_finish_button(self):
         topic = "ctpview_market.TickStartStopIndication"
         msg = cmp.message()
         mtsi = msg.tick_start_stop_indication
