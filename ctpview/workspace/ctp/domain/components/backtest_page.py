@@ -41,13 +41,16 @@ class backtest:
         begin_date = datetime.datetime.strptime(begin, '%Y-%m-%d %H:%M:%S')
         end_date = datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
         if 'now' in self.backtest_control_json and self.backtest_control_json['now'] != '':
-            now_date = datetime.datetime.strptime(self.backtest_control_json['now'], '%Y-%m-%d %H:%M:%S')
+            temp_date = self.backtest_control_json['now'].split('.')[0]
+            now_date = datetime.datetime.strptime(temp_date, '%Y-%m-%d %H:%M:%S')
         else:
             now_date = begin_date
         level1_iteration1 = st.empty()
         level1_bar = st.progress(0)
-        process = int((now_date - begin_date).days / (end_date - begin_date).days * 100)
-        level1_iteration1.text(f'Iteration {process}, date: %s' % (str(now_date).split(' ')[0]))
+        process = int((now_date.timestamp() - begin_date.timestamp()) / (end_date.timestamp() - begin_date.timestamp()) * 100)
+        process = 0 if process < 0 else process
+        process = 100 if process > 100 else process
+        level1_iteration1.text(f'Iteration {process}, now time: %s' % (now_date))
         level1_bar.progress(process)
 
         contain = st.container()
