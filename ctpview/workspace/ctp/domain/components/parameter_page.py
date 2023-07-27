@@ -129,7 +129,7 @@ class parameter:
 
     def update_trader_para(self):
         order_rsp_mode = ['success', 'waiting', 'part_success', 'no_money', 'no_open', 'no_time']
-        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'OrderRspMode']
+        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'AccountAssignMode', 'OrderRspMode']
         st.header('%s' % ("trader:"))
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -154,6 +154,14 @@ class parameter:
                                              action_list,
                                              action_list.index(trader_json[item]),
                                              key='send_email',
+                                             disabled=self.disable_write)
+                        read_json["trader"][item] = title
+                    elif item == 'AccountAssignMode':
+                        assign_mode = ['cycle', 'share']
+                        title = st.selectbox('%s(%s): ' % (item, 'trader'),
+                                             assign_mode,
+                                             assign_mode.index(trader_json[item]),
+                                             key='assign_mode',
                                              disabled=self.disable_write)
                         read_json["trader"][item] = title
                     elif item == 'OrderRspMode':
