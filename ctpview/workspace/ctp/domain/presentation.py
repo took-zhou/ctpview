@@ -2,6 +2,7 @@ import os
 
 import streamlit as st
 
+from ctpview.workspace.ctp.domain.components.account_page import account_page
 from ctpview.workspace.ctp.domain.components.authenticate_page import authenticate_page
 from ctpview.workspace.ctp.domain.components.backtest_page import backtest_page
 from ctpview.workspace.ctp.domain.components.control_page import control_page
@@ -23,14 +24,18 @@ class ctpview():
             return
 
         if 'name' in st.session_state and st.session_state['name'] == 'admin':
-            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest', 'update', 'setting', 'manual'))
+            page_list = ('configure', 'control', 'account', 'status', 'backtest', 'update', 'setting', 'manual')
+            module_option = st.sidebar.radio('modue', page_list)
         else:
-            module_option = st.sidebar.radio('modue', ('configure', 'control', 'status', 'backtest'))
+            page_list = ('configure', 'control', 'account', 'status', 'backtest')
+            module_option = st.sidebar.radio('modue', page_list)
 
         if module_option == 'configure':
             parameter_page.update()
         elif module_option == 'control':
             control_page.update()
+        elif module_option == 'account':
+            account_page.update()
         elif module_option == 'status':
             status_page.update()
         elif module_option == 'backtest':
