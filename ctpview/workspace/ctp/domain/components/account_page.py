@@ -48,7 +48,7 @@ class account():
         conn = sqlite3.connect(control_db_path)
         history_info = []
         try:
-            command = 'select date, balance from account where and user_id="%s";' % (user_id)
+            command = 'select date, balance from account where user_id="%s";' % (user_id)
             history_info = conn.execute(command).fetchall()
         except:
             # error_msg = traceback.format_exc()
@@ -58,7 +58,6 @@ class account():
 
         date_list = [datetime.strptime(item[0], '%Y%m%d') for item in history_info]
         balance_list = [item[1] for item in history_info]
-        available_list = [item[2] for item in history_info]
 
         data = [
             go.Scatter(x=date_list, y=balance_list, name='balance', showlegend=True),
