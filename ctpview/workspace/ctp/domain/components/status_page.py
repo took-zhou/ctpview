@@ -1,5 +1,5 @@
-import json
 import socket
+import sqlite3
 
 import psutil
 import streamlit as st
@@ -59,15 +59,21 @@ class status():
         subscribe_list = []
         try:
             username = jsonconfig.get_config('market', 'User')[0]
-            market_control_path = jsonconfig.get_config('market', 'ControlParaFilePath')
-            with open('%s/%s/PublishControl/control.json' % (market_control_path, username), 'r', encoding='utf8') as fp:
-                control_json = json.load(fp)
-                fp.close()
-                subscribe_list = list(set(control_json.keys()))
+            control_db_path = '%s/%s/control.db' % (jsonconfig.get_config('market', 'ControlParaFilePath'), username)
+            conn = sqlite3.connect(control_db_path)
+            try:
+                command = 'select ins from publish_control;'
+                subscribe_list = [item[0] for item in conn.execute(command).fetchall()]
+            except:
+                # error_msg = traceback.format_exc()
+                # print(error_msg)
+                pass
+            conn.close()
         except:
             pass
 
         st.write('subscribe instrument number from strategy: `%d`' % (len(subscribe_list)))
         st.write(subscribe_list)
+
 
 status_page = status()

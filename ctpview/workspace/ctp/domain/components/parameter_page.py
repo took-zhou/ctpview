@@ -13,7 +13,7 @@ class parameter:
 
     def __init__(self):
         self.disable_write = False
-        self.api_types = ['ctp', 'xtp', 'btp', 'otp']
+        self.api_types = ['ctp', 'xtp', 'btp', 'otp', 'ftp']
 
     def update(self):
         self.check_parameter_writtable()
@@ -31,7 +31,7 @@ class parameter:
     def update_common_para(self):
         st.header('%s' % ("common:"))
 
-        common_needshow_para = ['ApiType', 'RunMode']
+        common_needshow_para = ['ApiType']
         email_needshow_para = ['redipients']
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -45,12 +45,6 @@ class parameter:
                                              self.api_types,
                                              self.api_types.index(common_json[item]),
                                              key='apitype',
-                                             disabled=self.disable_write)
-                        read_json["common"][item] = title
-                    elif item == 'RunMode':
-                        title = st.selectbox('%s(%s): ' % (item, 'common'), ['realtime', 'fastback'], ['realtime',
-                                                                                                       'fastback'].index(common_json[item]),
-                                             key='runmode',
                                              disabled=self.disable_write)
                         read_json["common"][item] = title
                     else:
@@ -129,7 +123,7 @@ class parameter:
 
     def update_trader_para(self):
         order_rsp_mode = ['success', 'waiting', 'part_success', 'no_money', 'no_open', 'no_time']
-        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'AccountAssignMode', 'OrderRspMode']
+        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'AccountAssignMode']
         st.header('%s' % ("trader:"))
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -162,13 +156,6 @@ class parameter:
                                              assign_mode,
                                              assign_mode.index(trader_json[item]),
                                              key='assign_mode',
-                                             disabled=self.disable_write)
-                        read_json["trader"][item] = title
-                    elif item == 'OrderRspMode':
-                        title = st.selectbox('%s(%s): ' % (item, 'trader'),
-                                             order_rsp_mode,
-                                             order_rsp_mode.index(trader_json[item]),
-                                             key='order_rsp',
                                              disabled=self.disable_write)
                         read_json["trader"][item] = title
                     else:
@@ -231,6 +218,8 @@ class parameter:
             return [item for item in users if 'btp' in item]
         elif key == 'otp':
             return [item for item in users if 'otp' in item]
+        elif key == 'ftp':
+            return [item for item in users if 'ftp' in item]
 
     def checkprocess(self, processname):
         # --获取进程信息--

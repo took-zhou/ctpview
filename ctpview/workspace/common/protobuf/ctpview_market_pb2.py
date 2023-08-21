@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xba\x04\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x39\n\x0b\x63heck_alive\x18\x02 \x01(\x0b\x32\".ctpview_market.CheckStrategyAliveH\x00\x12\x35\n\rblock_control\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x12\x35\n\rbug_injection\x18\x04 \x01(\x0b\x32\x1c.ctpview_market.BugInjectionH\x00\x12\x44\n\x15simulate_market_state\x18\x05 \x01(\x0b\x32#.ctpview_market.SimulateMarketStateH\x00\x12M\n\x1atick_start_stop_indication\x18\x06 \x01(\x0b\x32\'.ctpview_market.TickStartStopIndicationH\x00\x12;\n\x10\x62\x61\x63ktest_control\x18\x07 \x01(\x0b\x32\x1f.ctpview_market.BackTestControlH\x00\x12;\n\x10profiler_control\x18\x08 \x01(\x0b\x32\x1f.ctpview_market.ProfilerControlH\x00\x12\x31\n\x0bupdate_para\x18\t \x01(\x0b\x32\x1a.ctpview_market.UpdateParaH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\t\"\x89\x01\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\x12\x12\n\ninstrument\x18\x02 \x03(\t\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\"\xd4\x01\n\x13SimulateMarketState\x12\x45\n\x0cmarket_state\x18\x01 \x01(\x0e\x32/.ctpview_market.SimulateMarketState.MarketState\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x0e\n\x06target\x18\x03 \x01(\t\"X\n\x0bMarketState\x12\x0b\n\x07reserve\x10\x00\x12\x0c\n\x08\x64\x61y_open\x10\x01\x12\r\n\tday_close\x10\x02\x12\x0e\n\nnight_open\x10\x03\x12\x0f\n\x0bnight_close\x10\x04\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_market.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\"\x99\x01\n\x17TickStartStopIndication\x12\x41\n\x04type\x18\x01 \x01(\x0e\x32\x33.ctpview_market.TickStartStopIndication.MessageType\";\n\x0bMessageType\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05start\x10\x01\x12\x08\n\x04stop\x10\x02\x12\n\n\x06\x66inish\x10\x03\"F\n\x0f\x42\x61\x63kTestControl\x12\x12\n\nbegin_time\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\t\x12\r\n\x05speed\x18\x03 \x01(\r\"\x9a\x01\n\x0fProfilerControl\x12G\n\x0fprofiler_action\x18\x01 \x01(\x0e\x32..ctpview_market.ProfilerControl.ProfilerAction\">\n\x0eProfilerAction\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0bstart_write\x10\x01\x12\x0e\n\nstop_write\x10\x02\"\x83\x01\n\nUpdatePara\x12>\n\rupdate_action\x18\x01 \x01(\x0e\x32\'.ctpview_market.UpdatePara.UpdateAction\"5\n\x0cUpdateAction\x12\x0b\n\x07reserve\x10\x00\x12\n\n\x06update\x10\x01\x12\x0c\n\x08noupdate\x10\x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xeb\x03\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x39\n\x0b\x63heck_alive\x18\x02 \x01(\x0b\x32\".ctpview_market.CheckStrategyAliveH\x00\x12\x35\n\rblock_control\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x12\x35\n\rbug_injection\x18\x04 \x01(\x0b\x32\x1c.ctpview_market.BugInjectionH\x00\x12\x44\n\x15simulate_market_state\x18\x05 \x01(\x0b\x32#.ctpview_market.SimulateMarketStateH\x00\x12;\n\x10\x62\x61\x63ktest_control\x18\x06 \x01(\x0b\x32\x1f.ctpview_market.BackTestControlH\x00\x12;\n\x10profiler_control\x18\x07 \x01(\x0b\x32\x1f.ctpview_market.ProfilerControlH\x00\x12\x31\n\x0bupdate_para\x18\x08 \x01(\x0b\x32\x1a.ctpview_market.UpdateParaH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"#\n\x12\x43heckStrategyAlive\x12\r\n\x05\x63heck\x18\x01 \x01(\t\"\x89\x01\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\x12\x12\n\ninstrument\x18\x02 \x03(\t\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\"\xd4\x01\n\x13SimulateMarketState\x12\x45\n\x0cmarket_state\x18\x01 \x01(\x0e\x32/.ctpview_market.SimulateMarketState.MarketState\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x0e\n\x06target\x18\x03 \x01(\t\"X\n\x0bMarketState\x12\x0b\n\x07reserve\x10\x00\x12\x0c\n\x08\x64\x61y_open\x10\x01\x12\r\n\tday_close\x10\x02\x12\x0e\n\nnight_open\x10\x03\x12\x0f\n\x0bnight_close\x10\x04\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_market.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\"\xab\x02\n\x0f\x42\x61\x63kTestControl\x12\x12\n\nbegin_time\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\t\x12\r\n\x05speed\x18\x03 \x01(\r\x12\x36\n\x06source\x18\x04 \x01(\x0e\x32&.ctpview_market.BackTestControl.Source\x12>\n\nindication\x18\x05 \x01(\x0e\x32*.ctpview_market.BackTestControl.Indication\"/\n\x06Source\x12\x0b\n\x07rawtick\x10\x00\x12\n\n\x06level1\x10\x01\x12\x0c\n\x08m1_kline\x10\x02\":\n\nIndication\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05start\x10\x01\x12\x08\n\x04stop\x10\x02\x12\n\n\x06\x66inish\x10\x03\"\x9a\x01\n\x0fProfilerControl\x12G\n\x0fprofiler_action\x18\x01 \x01(\x0e\x32..ctpview_market.ProfilerControl.ProfilerAction\">\n\x0eProfilerAction\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0bstart_write\x10\x01\x12\x0e\n\nstop_write\x10\x02\"\x83\x01\n\nUpdatePara\x12>\n\rupdate_action\x18\x01 \x01(\x0e\x32\'.ctpview_market.UpdatePara.UpdateAction\"5\n\x0cUpdateAction\x12\x0b\n\x07reserve\x10\x00\x12\n\n\x06update\x10\x01\x12\x0c\n\x08noupdate\x10\x02\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'ctpview_market_pb2', globals())
@@ -21,37 +21,37 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _MESSAGE._serialized_start=41
-  _MESSAGE._serialized_end=611
-  _LOGINCONTROL._serialized_start=613
-  _LOGINCONTROL._serialized_end=729
-  _LOGINCONTROL_COMMAND._serialized_start=684
-  _LOGINCONTROL_COMMAND._serialized_end=729
-  _CHECKSTRATEGYALIVE._serialized_start=731
-  _CHECKSTRATEGYALIVE._serialized_end=766
-  _BLOCKCONTROL._serialized_start=769
-  _BLOCKCONTROL._serialized_end=906
-  _BLOCKCONTROL_COMMAND._serialized_start=860
-  _BLOCKCONTROL_COMMAND._serialized_end=906
-  _SIMULATEMARKETSTATE._serialized_start=909
-  _SIMULATEMARKETSTATE._serialized_end=1121
-  _SIMULATEMARKETSTATE_MARKETSTATE._serialized_start=1033
-  _SIMULATEMARKETSTATE_MARKETSTATE._serialized_end=1121
-  _BUGINJECTION._serialized_start=1123
-  _BUGINJECTION._serialized_end=1242
-  _BUGINJECTION_INJECTIONTYPE._serialized_start=1197
-  _BUGINJECTION_INJECTIONTYPE._serialized_end=1242
-  _TICKSTARTSTOPINDICATION._serialized_start=1245
-  _TICKSTARTSTOPINDICATION._serialized_end=1398
-  _TICKSTARTSTOPINDICATION_MESSAGETYPE._serialized_start=1339
-  _TICKSTARTSTOPINDICATION_MESSAGETYPE._serialized_end=1398
-  _BACKTESTCONTROL._serialized_start=1400
-  _BACKTESTCONTROL._serialized_end=1470
-  _PROFILERCONTROL._serialized_start=1473
-  _PROFILERCONTROL._serialized_end=1627
-  _PROFILERCONTROL_PROFILERACTION._serialized_start=1565
-  _PROFILERCONTROL_PROFILERACTION._serialized_end=1627
-  _UPDATEPARA._serialized_start=1630
-  _UPDATEPARA._serialized_end=1761
-  _UPDATEPARA_UPDATEACTION._serialized_start=1708
-  _UPDATEPARA_UPDATEACTION._serialized_end=1761
+  _MESSAGE._serialized_end=532
+  _LOGINCONTROL._serialized_start=534
+  _LOGINCONTROL._serialized_end=650
+  _LOGINCONTROL_COMMAND._serialized_start=605
+  _LOGINCONTROL_COMMAND._serialized_end=650
+  _CHECKSTRATEGYALIVE._serialized_start=652
+  _CHECKSTRATEGYALIVE._serialized_end=687
+  _BLOCKCONTROL._serialized_start=690
+  _BLOCKCONTROL._serialized_end=827
+  _BLOCKCONTROL_COMMAND._serialized_start=781
+  _BLOCKCONTROL_COMMAND._serialized_end=827
+  _SIMULATEMARKETSTATE._serialized_start=830
+  _SIMULATEMARKETSTATE._serialized_end=1042
+  _SIMULATEMARKETSTATE_MARKETSTATE._serialized_start=954
+  _SIMULATEMARKETSTATE_MARKETSTATE._serialized_end=1042
+  _BUGINJECTION._serialized_start=1044
+  _BUGINJECTION._serialized_end=1163
+  _BUGINJECTION_INJECTIONTYPE._serialized_start=1118
+  _BUGINJECTION_INJECTIONTYPE._serialized_end=1163
+  _BACKTESTCONTROL._serialized_start=1166
+  _BACKTESTCONTROL._serialized_end=1465
+  _BACKTESTCONTROL_SOURCE._serialized_start=1358
+  _BACKTESTCONTROL_SOURCE._serialized_end=1405
+  _BACKTESTCONTROL_INDICATION._serialized_start=1407
+  _BACKTESTCONTROL_INDICATION._serialized_end=1465
+  _PROFILERCONTROL._serialized_start=1468
+  _PROFILERCONTROL._serialized_end=1622
+  _PROFILERCONTROL_PROFILERACTION._serialized_start=1560
+  _PROFILERCONTROL_PROFILERACTION._serialized_end=1622
+  _UPDATEPARA._serialized_start=1625
+  _UPDATEPARA._serialized_end=1756
+  _UPDATEPARA_UPDATEACTION._serialized_start=1703
+  _UPDATEPARA_UPDATEACTION._serialized_end=1756
 # @@protoc_insertion_point(module_scope)
