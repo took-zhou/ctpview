@@ -82,6 +82,8 @@ class setting():
             os.system("kill -9 %d" % (id))
             time.sleep(1)
 
+        st.info('clear process ok')
+
     def clear_record(self):
         data_path = '%s/data/' % (os.environ.get('HOME'))
 
@@ -92,7 +94,7 @@ class setting():
                         f_path = os.path.join(root, f)
                         os.system('rm -f %s' % (f_path))
 
-        st.info('rm -rf %s' % (data_path))
+        st.info('clear record ok')
 
     def clear_log(self):
         log_path = '%s/log/' % (os.environ.get('HOME'))
@@ -104,21 +106,23 @@ class setting():
                         f_path = os.path.join(root, f)
                         os.system('rm -f %s' % (f_path))
 
-        st.info('rm -rf %s' % (log_path))
+        st.info('clear log ok')
 
     def clear_coredump(self):
         coredump_path = '%s/.local/coredump' % (os.environ.get('HOME'))
 
         if os.path.exists(coredump_path):
-            st.info('rm -f %s/*' % (coredump_path))
             os.system('rm -f %s/*' % (coredump_path))
+
+        st.info('clear coredump ok')
 
     def clear_tick(self):
         tick_path = jsonconfig.get_config('market', 'HistoryTickPath')
 
         if os.path.exists(tick_path):
-            st.info('rm -f %s/*' % (tick_path))
             os.system('rm -f %s/*' % (tick_path))
+
+        st.info('clear tick ok')
 
     def uninstall_marktrade(self):
         command = 'sudo apt remove -y marktrade'

@@ -24,7 +24,7 @@ RUN mkdir -p /usr/lib/$process && echo "/usr/lib/$process/" >> /etc/ld.so.conf.d
 
 #安装私有python库
 COPY requirements.txt /root/requirements.txt
-RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /root/requirements.txt
+RUN pip install -i https://mirrors.aliyun.com/pypi/simple  -r /root/requirements.txt
 
 #安装依赖文件
 RUN apt-get update && apt-get install -y libstdc++6 && apt-get install -y screen && \
@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y libstdc++6 && apt-get install -y screen
   apt-get install -y iputils-ping && apt-get install -y udev && apt-get install -y dmidecode &&\
   apt-get install -y wget && apt-get install -y iproute2
 
-RUN echo "deb [trusted=yes] http://aptserver.cdsslh.com:8090/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
+RUN echo "deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
     apt-get update
 
 #设置环境变量

@@ -14,9 +14,9 @@ pip install --no-deps tickmine;
 pip install --no-deps ticknature;
 pip install --no-deps ctpview;
 else
-pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev tickmine --trusted-host devpi.cdsslh.com;
-pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ticknature --trusted-host devpi.cdsslh.com;
-pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev ctpview --trusted-host devpi.cdsslh.com;
+pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev tickmine --trusted-host devpi.tsaodai.com;
+pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev ticknature --trusted-host devpi.tsaodai.com;
+pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev ctpview --trusted-host devpi.tsaodai.com;
 fi
 fi
 

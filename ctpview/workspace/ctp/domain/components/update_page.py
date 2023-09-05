@@ -9,6 +9,8 @@ class update():
 
     def __init__(self):
         self.package_list = ["tickmine", "ticknature", "ctpview"]
+        self.apt_change_flag = False
+        self.pypi_change_flag = False
 
     def update(self):
         self.update_apt_link()
@@ -22,7 +24,7 @@ class update():
     def update_apt_link(self):
         apt_list = []
         apt_list.append('deb [trusted=yes] http://192.168.0.102:8095/debian/ ./\n')
-        apt_list.append('deb [trusted=yes] http://aptserver.cdsslh.com:8090/debian/ ./\n')
+        apt_list.append('deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./\n')
 
         os.system('sudo chmod 777 /etc/apt/sources.list')
         now_link = 'deb [trusted=yes] http://192.168.0.102:8095/debian/ ./\n'
@@ -35,7 +37,8 @@ class update():
                     now_link = line
             f.close()
 
-        title = st.selectbox('select pypi:', apt_list, apt_list.index(now_link))
+        title = st.selectbox('select apt:', apt_list, apt_list.index(now_link))
+        self.apt_change_flag = (title != now_link)
         origin_lines.remove(now_link)
         origin_lines.append(title)
         with open('/etc/apt/sources.list', 'w') as f:
@@ -46,8 +49,8 @@ class update():
         pypi_list = []
         pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n'])
         pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/dev\n'])
-        pypi_list.append(['[global]\n', 'trusted-host = devpi.cdsslh.com\n', 'index-url = http://devpi.cdsslh.com:8090/root/temp\n'])
-        pypi_list.append(['[global]\n', 'trusted-host = devpi.cdsslh.com\n', 'index-url = http://devpi.cdsslh.com:8090/root/dev\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/temp\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/dev\n'])
 
         now_link = ['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n']
         if not os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
@@ -62,6 +65,7 @@ class update():
                 now_link = lines.copy()
 
         title = st.selectbox('select pypi:', pypi_list, pypi_list.index(now_link))
+        self.pypi_change_flag = (title != now_link)
         with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'w') as f:
             f.writelines(title)
             f.close()
@@ -79,9 +83,12 @@ class update():
         contain = st.container()
         col1, col2 = contain.columns(2)
         col1.write('marktrade: %s --> %s' % (pack_name, newest_name))
-        if col2.button('update', key='update2'):
+        if col2.button('update marktrade'):
             self.update_single_deb('marktrade', newest_name)
             os.system("sudo ldconfig")
+
+        if self.apt_change_flag == True:
+            st.info("update apt ok")
 
     def update_package_list(self):
         for package in self.package_list:
@@ -95,16 +102,19 @@ class update():
                     contain = st.container()
                     col1, col2 = contain.columns(2)
                     col1.write('%s: %s --> %s' % (key_values[0], key_values[1], newest_version))
-                    if col2.button('update', key=key_values[0]):
+                    if col2.button('update %s' % key_values[0]):
                         self.update_single_pip(key_values[0], key_values[1])
                     break
+
+        if self.pypi_change_flag == True:
+            st.info("update pypi ok")
 
     def find_newest_version_pip(self, item):
         newest_version = ''
         if os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
             command = 'pip install --no-deps  %s== 2>%s/out.txt' % (item, os.environ.get('HOME'))
         else:
-            command = 'pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev %s== --trusted-host devpi.cdsslh.com 2>%s/out.txt'% \
+            command = 'pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev %s== --trusted-host devpi.tsaodai.com 2>%s/out.txt'% \
             (item, os.environ.get('HOME'))
         os.system(command)
         with open('%s/out.txt' % (os.environ.get('HOME')), 'r') as f:
@@ -115,21 +125,19 @@ class update():
         return newest_version
 
     def update_single_pip(self, _module, _version=''):
-        st.write('updating %s ...' % (_module))
-
         command = 'pip uninstall -y %s' % (_module)
         os.system(command)
         # 安装
         if os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
             command = 'pip install --no-deps  %s' % (_module)
         else:
-            command = 'pip install --no-deps --index-url http://devpi.cdsslh.com:8090/root/dev %s\
-                    --trusted-host devpi.cdsslh.com' % (_module)
-        st.write('pip install --no-deps  %s' % (_module))
+            command = 'pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev %s\
+                    --trusted-host devpi.tsaodai.com' % (_module)
         os.system(command)
         # 安装依赖
         command = 'pip install %s' % (_module)
         os.system(command)
+        st.info('update %s ok' % (_module))
 
         if _module == 'ctpview':
             # 重启streamlit

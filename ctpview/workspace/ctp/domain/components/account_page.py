@@ -1,4 +1,5 @@
 import json
+import os
 import sqlite3
 from datetime import datetime
 
@@ -25,6 +26,8 @@ class account():
             pass
 
         for item in now_user:
+            if not os.path.exists(jsonconfig.get_config('trader', 'ControlParaFilePath')):
+                os.makedirs(jsonconfig.get_config('trader', 'ControlParaFilePath'))
             control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
             conn = sqlite3.connect(control_db_path)
             last_info = []
@@ -44,6 +47,8 @@ class account():
                     self.show_position(item)
 
     def show_capital(self, user_id):
+        if not os.path.exists(jsonconfig.get_config('trader', 'ControlParaFilePath')):
+            os.makedirs(jsonconfig.get_config('trader', 'ControlParaFilePath'))
         control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
         conn = sqlite3.connect(control_db_path)
         history_info = []
@@ -65,6 +70,8 @@ class account():
         st.plotly_chart(data)
 
     def show_position(self, user_id):
+        if not os.path.exists(jsonconfig.get_config('trader', 'ControlParaFilePath')):
+            os.makedirs(jsonconfig.get_config('trader', 'ControlParaFilePath'))
         control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
         conn = sqlite3.connect(control_db_path)
         position_info = []

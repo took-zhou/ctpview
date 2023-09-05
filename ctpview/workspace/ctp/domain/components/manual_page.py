@@ -53,6 +53,7 @@ class manual():
             mlc.command = cmp.LoginControl.Command.login
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('market login send ok')
 
         if col2.button('market logout'):
             topic = "ctpview_market.LoginControl"
@@ -61,6 +62,7 @@ class manual():
             mlc.command = cmp.LoginControl.Command.logout
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('market logout send ok')
 
         if col3.button('market reserve'):
             topic = "ctpview_market.LoginControl"
@@ -69,6 +71,7 @@ class manual():
             mlc.command = cmp.LoginControl.Command.reserve
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('market reserve send ok')
 
         if col1.button('trader login'):
             topic = "ctpview_trader.LoginControl"
@@ -77,6 +80,7 @@ class manual():
             mlc.command = ctp.LoginControl.Command.login
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('trader login send ok')
 
         if col2.button('trader logout'):
             topic = "ctpview_trader.LoginControl"
@@ -85,6 +89,7 @@ class manual():
             mlc.command = ctp.LoginControl.Command.logout
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('trader logout send ok')
 
         if col3.button('trader reserve'):
             topic = "ctpview_trader.LoginControl"
@@ -93,6 +98,7 @@ class manual():
             mlc.command = ctp.LoginControl.Command.reserve
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('trader reserve send ok')
 
     def check_alive(self):
         if st.button('check'):
@@ -156,21 +162,23 @@ class manual():
         contain = st.container()
         col1, col2 = contain.columns(2)
 
-        if col1.button('market: doublefree'):
+        if col1.button('market doublefree'):
             topic = "ctpview_market.BugInjection"
             msg = cmp.message()
             mbi = msg.bug_injection
             mbi.type = cmp.BugInjection.InjectionType.double_free
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('market doublefree send ok')
 
-        if col2.button('trader: doublefree'):
+        if col2.button('trader doublefree'):
             topic = "ctpview_trader.BugInjection"
             msg = ctp.message()
             mbi = msg.bug_injection
             mbi.type = ctp.BugInjection.InjectionType.double_free
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('trader doublefree send ok')
 
     def get_newest_date(self):
         if datetime.date.today().weekday() in [0, 1, 2, 3, 4]:
@@ -263,7 +271,10 @@ class manual():
         control_para = []
         usernames = jsonconfig.get_config('market', 'User')
         if len(usernames) > 0:
-            control_db_path = '%s/%s/backtest.db' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
+            temp_dir = '%s/%s/' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
+            if not os.path.exists(temp_dir):
+                os.makedirs(temp_dir)
+            control_db_path = '%s/backtest.db' % temp_dir
             conn = sqlite3.connect(control_db_path)
             try:
                 command = 'select begin, end, now, speed, source, indication from backtest_control;'
@@ -356,7 +367,10 @@ class manual():
         for username in usernames:
             if 'btp' not in username and 'ftp' not in username:
                 continue
-            control_db_path = '%s/backtest.db' % jsonconfig.get_config('trader', 'ControlParaFilePath')
+            temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
+            if not os.path.exists(temp_dir):
+                os.makedirs(temp_dir)
+            control_db_path = '%s/backtest.db' % temp_dir
             conn = sqlite3.connect(control_db_path)
             try:
                 user_id = username.split('_')[0]

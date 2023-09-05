@@ -1,5 +1,6 @@
 import base64
 import os
+import sqlite3
 import time
 
 import psutil
@@ -26,13 +27,6 @@ class control:
 
         return ''
 
-    def get_binary_file_downloader_html(self, bin_file, file_label='File'):
-        with open(bin_file, 'rb') as f:
-            data = f.read()
-        bin_str = base64.b64encode(data).decode()
-        href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">download {file_label}</a>'
-        return href
-
     def update(self):
         self.control_process('market')
 
@@ -49,42 +43,53 @@ class control:
         st.header('%s' % ("%s:" % (_name)))
         contain = st.container()
         col1, col2 = contain.columns(2)
-        if col1.button('start', key='%s1' % (_name)) and not (isinstance(self.checkprocess(_name), int)):
+        process_id = self.checkprocess(_name)
+        if isinstance(process_id, int):
+            st.session_state['%s_id' % (_name)] = process_id
+            process_status = 'start'
+        else:
+            process_status = 'not start'
+
+        if col1.button('start', key='%s1' % (_name)) and not (isinstance(process_id, int)):
             command = 'nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &' % (_name, os.environ.get('HOME'), _name, _name)
             os.system(command)
             time.sleep(0.1)
 
-        if col2.button('stop', key='%s2' % (_name)) and isinstance(self.checkprocess(_name), int):
-            os.system('kill -9 %d' % (self.checkprocess(_name)))
+        if col2.button('stop', key='%s2' % (_name)) and isinstance(process_id, int):
+            os.system('kill -9 %d' % (process_id))
             time.sleep(0.1)
 
-        if isinstance(self.checkprocess(_name), int):
-            status = 'start'
-        else:
-            status = 'not start'
-        st.write('status: `%s`' % (status))
-        log_files = []
-        if os.path.isdir('%s/log/%s' % (os.environ.get('HOME'), _name)):
-            temp_list = os.listdir('%s/log/%s' % (os.environ.get('HOME'), _name))
-            for item in sorted(temp_list, reverse=True):
-                log_files.append(item)
-
-        index = st.selectbox('process log', log_files, index=0, key='%s3' % (_name))
-        if index != None:
-            st.markdown(self.get_binary_file_downloader_html('%s/log/%s/%s' % (os.environ.get('HOME'), _name, index), index),
-                        unsafe_allow_html=True)
-            if st.button('view', key='%s4' % (_name)):
-                fd = open('%s/log/%s/%s' % (os.environ.get('HOME'), _name, index))
-                st.write(fd.readlines())
-                fd.close()
+        login_logout = "logout"
         try:
-            with open('%s/log/%s/%s_exception.log' % (os.environ.get('HOME'), _name, _name), 'r', encoding='utf8') as fp:
-                exception_log = fp.readlines()
-                if len(exception_log) > 0:
-                    st.info(exception_log[-10:])
-                fp.close()
+            if _name == "market":
+                username = jsonconfig.get_config('market', 'User')[0]
+                control_db_path = '%s/%s/control.db' % (jsonconfig.get_config('market', 'ControlParaFilePath'), username)
+            elif _name == "trader":
+                control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
+            conn = sqlite3.connect(control_db_path)
+            try:
+                command = 'select login_state from service_info;'
+                if conn.execute(command).fetchall()[0][0] == 1:
+                    login_logout = "login"
+            except:
+                # error_msg = traceback.format_exc()
+                # print(error_msg)
+                pass
+            conn.close()
         except:
             pass
+
+        coredump_status = 'normal'
+        core_dump_list = os.listdir('/home/tsaodai/.local/coredump')
+        for item in core_dump_list:
+            if '%s_id' % (_name) in st.session_state and str(st.session_state['%s_id' % (_name)]) in item and _name in item:
+                coredump_status = 'coredump'
+                break
+
+        if process_status == 'start':
+            st.write('status: `start, %s`' % (login_logout))
+        else:
+            st.write('status: `no start, %s`' % (coredump_status))
 
 
 control_page = control()

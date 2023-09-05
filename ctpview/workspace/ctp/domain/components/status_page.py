@@ -48,13 +48,35 @@ class status():
         ip = socket.gethostbyname(hostname)
         st.write('local ip: `%s`' % (ip))
 
-        st.write()
+        market_compile_time = '--'
+        trader_compile_time = '--'
         try:
-            st.write('market compile time: `%s`' % (jsonconfig.get_config('market', 'CompileTime')))
-            st.write('trader compile time: `%s`' % (jsonconfig.get_config('trader', 'CompileTime')))
+            username = jsonconfig.get_config('market', 'User')[0]
+            control_db_path = '%s/%s/control.db' % (jsonconfig.get_config('market', 'ControlParaFilePath'), username)
+            conn = sqlite3.connect(control_db_path)
+            try:
+                command = 'select compile_time from service_info;'
+                market_compile_time = conn.execute(command).fetchall()[0][0]
+            except:
+                # error_msg = traceback.format_exc()
+                # print(error_msg)
+                pass
+            conn.close()
+            control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
+            conn = sqlite3.connect(control_db_path)
+            try:
+                command = 'select compile_time from service_info;'
+                trader_compile_time = conn.execute(command).fetchall()[0][0]
+            except:
+                # error_msg = traceback.format_exc()
+                # print(error_msg)
+                pass
+            conn.close()
         except:
-            st.write('market compile time: `--`')
-            st.write('trader compile time: `--`')
+            pass
+
+        st.write('market compile time: `%s`' % (market_compile_time))
+        st.write('trader compile time: `%s`' % (trader_compile_time))
 
         subscribe_list = []
         try:
