@@ -179,7 +179,7 @@ class update():
     def update_single_deb(self, _module, _version=''):
         command = 'sudo apt install -y %s=%s' % (_module, _version)
         os.system(command)
-        st.write(command)
+        st.info('update marktrade ok')
 
     def checkprocess(self, processname):
         # --获取进程信息--
