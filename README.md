@@ -7,7 +7,7 @@
 
 `docker run --name=[name] -p [port:port]  -v [宿主机目录]:[容器目录] -it [image-id] /bin/bash`
 
-比如 `docker run --name=run -e http_ip=192.168.0.102 -e http_port=8095 -e package=2021-10-28.tar -p 11331:11332 -v /data/simnow-workhours:/home/tsaodai -it [image-id] /bin/bash`  
+比如 `docker run --name=run -e http_ip=192.168.0.106 -e http_port=8095 -e package=2021-10-28.tar -p 11331:11332 -v /data/simnow-workhours:/home/tsaodai -it [image-id] /bin/bash`  
 建议统一windows和aliyun run容器的挂载目录，开发和长期运行都将升级包拷贝到/data/simnow-workhours目录下，
 实现测试程序升级
 ### docker-compose.yml 文件运行
@@ -18,11 +18,11 @@ services:
 
   ctp_dev:
     restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    image: "192.168.0.106:8098/tsaodai/marktrade:latest"
     devices:
       - /dev/mem:/dev/mem
     environment:
-      - http_ip=192.168.0.102
+      - http_ip=192.168.0.106
       - http_port=8095
       - package=2021-10-28.tar
     ports:

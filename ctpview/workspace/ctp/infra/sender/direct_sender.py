@@ -3,11 +3,11 @@ import zmq
 from ctpview.workspace.ctp.infra.zmq_base import zmqbase
 
 
-class ProxySender:
+class DirectSender:
 
     def __init__(self):
         self.zmq_pub = zmqbase.context.socket(zmq.PUB)
-        self.zmq_pub.connect('tcp://%s:5556' % (zmqbase.ip))
+        self.zmq_pub.connect('tcp://%s:8101' % (zmqbase.ip))
 
     def send_msg(self, topic, msg):
         topic_ = bytes(topic + " ", "utf-8")
@@ -15,4 +15,4 @@ class ProxySender:
         self.zmq_pub.send(tmp)
 
 
-proxysender = ProxySender()
+directsender = DirectSender()

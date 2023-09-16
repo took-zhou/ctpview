@@ -87,9 +87,9 @@ class control:
                 break
 
         if process_status == 'start':
-            st.write('status: `start, %s`' % (login_logout))
+            st.write('%s status: `start, %s`' % (_name, login_logout))
         else:
-            st.write('status: `no start, %s`' % (coredump_status))
+            st.write('%s status: `no start, %s`' % (_name, coredump_status))
 
 
 control_page = control()

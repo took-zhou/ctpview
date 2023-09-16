@@ -3,7 +3,7 @@ services:
 
   debug:
     restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    image: "192.168.0.106:8098/tsaodai/marktrade:latest"
     container_name: marktrade_debug
     devices:
       - /dev/mem:/dev/mem
@@ -27,7 +27,7 @@ services:
 
   # citic_103201203:
   #   restart: always
-  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
   #   container_name: marktrade_citic_103201203
   #   devices:
   #     - /dev/mem:/dev/mem
@@ -48,7 +48,7 @@ services:
 
   # ctp_tickdata:
   #   restart: always
-  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
   #   container_name: ctp_tickdata
   #   devices:
   #     - /dev/mem:/dev/mem
@@ -69,7 +69,7 @@ services:
 
   # xtp_tickdata:
   #   restart: always
-  #   image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
   #   container_name: xtp_tickdata
   #   devices:
   #     - /dev/mem:/dev/mem
@@ -120,7 +120,7 @@ services:
 
   integration_test:
     restart: always
-    image: "192.168.0.102:8098/tsaodai/marktrade:latest"
+    image: "192.168.0.106:8098/tsaodai/marktrade:latest"
     container_name: marktrade_integration_test
     devices:
       - /dev/mem:/dev/mem

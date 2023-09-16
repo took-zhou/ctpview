@@ -5,11 +5,16 @@ import sqlite3
 import time
 
 import streamlit as st
+from ticknature.instrument_info import instrumentinfo
 
 from ctpview.workspace.common.file_util import jsonconfig
 from ctpview.workspace.common.protobuf import ctpview_market_pb2 as cmp
 from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
+from ctpview.workspace.common.protobuf import market_trader_pb2 as mtp
+from ctpview.workspace.common.protobuf import strategy_market_pb2 as smp
+from ctpview.workspace.common.protobuf import strategy_trader_pb2 as stp
 from ctpview.workspace.ctp.domain.components.control_page import control
+from ctpview.workspace.ctp.infra.sender.direct_sender import directsender
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
 
 
@@ -20,27 +25,27 @@ class manual():
 
     def update(self):
         mode_str = [
-            'Login Control', 'Check Strategy Alive', 'Block Quotation', 'Bug Injection', 'Simulate MarketState', 'Profiler Control',
-            'Backtest Control', 'Virtual Account Set'
+            'Login Control', 'Block Quotation', 'Bug Injection', 'Profiler Control', 'Backtest Control', 'Virtual Account Set',
+            'Order Test', 'Subscribe Instrument'
         ]
         manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
         if manual_mode == 'Login Control':
             self.login_control()
-        elif manual_mode == 'Check Strategy Alive':
-            self.check_alive()
         elif manual_mode == 'Block Quotation':
             self.block_quotation()
         elif manual_mode == 'Bug Injection':
             self.bug_injection()
-        elif manual_mode == 'Simulate MarketState':
-            self.simulate_market_state()
         elif manual_mode == 'Profiler Control':
             self.profiler_control()
         elif manual_mode == 'Backtest Control':
             self.backtest_control()
         elif manual_mode == 'Virtual Account Set':
             self.virtual_account_set()
+        elif manual_mode == 'Order Test':
+            self.order_test()
+        elif manual_mode == 'Subscribe Instrument':
+            self.subscribe_instrument()
 
     def login_control(self):
         contain = st.container()
@@ -99,22 +104,6 @@ class manual():
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
             st.info('trader reserve send ok')
-
-    def check_alive(self):
-        if st.button('check'):
-            topic = "ctpview_market.CheckStrategyAlive"
-            msg = cmp.message()
-            mlc = msg.check_alive
-            mlc.check = "yes"
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-
-            topic = "ctpview_trader.CheckStrategyAlive"
-            msg = ctp.message()
-            mlc = msg.check_alive
-            mlc.check = "yes"
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
 
     def block_quotation(self):
         subscribe_list = []
@@ -180,57 +169,6 @@ class manual():
             proxysender.send_msg(topic, msg_bytes)
             st.info('trader doublefree send ok')
 
-    def get_newest_date(self):
-        if datetime.date.today().weekday() in [0, 1, 2, 3, 4]:
-            if datetime.datetime.now().hour <= 20:
-                select_date = st.date_input('select data', datetime.date.today())
-            else:
-                if datetime.date.today().weekday() == 4:
-                    select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=3))
-                else:
-                    select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=1))
-        elif datetime.date.today().weekday() == 5:
-            select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=2))
-        elif datetime.date.today().weekday() == 6:
-            select_date = st.date_input('select data', datetime.date.today() + datetime.timedelta(days=1))
-
-        datestr = '%04d%02d%02d' % (select_date.year, select_date.month, select_date.day)
-
-        return datestr
-
-    def simulate_market_state(self):
-        market_state = st.selectbox('market state', ['day_open', 'day_close', 'night_open', 'night_close'], key='market_state')
-        datestr = self.get_newest_date()
-        # target = st.selectbox('target', ['strategy', 'manage'], key='target')
-
-        if st.button('send'):
-            topic = "ctpview_market.SimulateMarketState"
-            msg = cmp.message()
-            msms = msg.simulate_market_state
-            if market_state == 'day_open':
-                msms.market_state = cmp.SimulateMarketState.MarketState.day_open
-            elif market_state == 'day_close':
-                msms.market_state = cmp.SimulateMarketState.MarketState.day_close
-            elif market_state == 'night_open':
-                msms.market_state = cmp.SimulateMarketState.MarketState.night_open
-            elif market_state == 'night_close':
-                msms.market_state = cmp.SimulateMarketState.MarketState.night_close
-            else:
-                msms.market_state = cmp.SimulateMarketState.MarketState.reserve
-
-            msms.date = datestr
-            msms.target = ''
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-
-    def network_disconnect(self):
-        if st.button('network disconnect'):
-            command = 'sudo tc qdisc add dev eth0 root netem loss 100%'
-            os.system(command)
-            time.sleep(130)
-            command = 'sudo tc qdisc del dev eth0 root'
-            os.system(command)
-
     def profiler_control(self):
         contain = st.container()
         col1, col2 = contain.columns(2)
@@ -271,6 +209,9 @@ class manual():
         control_para = []
         usernames = jsonconfig.get_config('market', 'User')
         if len(usernames) > 0:
+            if 'ftp' not in usernames[0]:
+                st.info('need in ftp api')
+                return
             temp_dir = '%s/%s/' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
@@ -293,17 +234,6 @@ class manual():
                         3] and updated_para[3] == control_para[4] and updated_para[4] == control_para[5]:
                     pass
                 else:
-                    topic = "ctpview_market.BackTestControl"
-                    msg = cmp.message()
-                    mbc = msg.backtest_control
-                    mbc.begin_time = updated_para[0]
-                    mbc.end_time = updated_para[1]
-                    mbc.speed = updated_para[2]
-                    mbc.source = updated_para[3]
-                    mbc.indication = updated_para[4]
-                    msg_bytes = msg.SerializeToString()
-                    proxysender.send_msg(topic, msg_bytes)
-
                     conn = sqlite3.connect(control_db_path)
                     command = "update backtest_control set begin = '%s', end = '%s', speed = %d, source = %d, indication = %d;" % (
                         updated_para[0], updated_para[1], updated_para[2], updated_para[3], updated_para[4])
@@ -325,7 +255,7 @@ class manual():
 
         contain = st.container()
         col1, col2, col3, col4 = contain.columns(4)
-        if control_para[5] in [cmp.BackTestControl.Indication.start, cmp.BackTestControl.Indication.stop]:
+        if control_para[5] in [1, 2]:
             begin = col1.text_input('begin time', control_para[0], disabled=True)
             end = col2.text_input('end time', control_para[1], disabled=True)
         else:
@@ -338,11 +268,11 @@ class manual():
         contain = st.container()
         col1, col2, col3 = contain.columns(3)
         if col1.button('start', key='start2'):
-            indication = cmp.BackTestControl.Indication.start
+            indication = 1
         if col2.button('stop', key='stop2'):
-            indication = cmp.BackTestControl.Indication.stop
+            indication = 2
         if col3.button('finish', key='finish2'):
-            indication = cmp.BackTestControl.Indication.finish
+            indication = 3
 
         begin_date = datetime.datetime.strptime(begin, '%Y-%m-%d %H:%M:%S')
         end_date = datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
@@ -366,6 +296,7 @@ class manual():
         usernames = jsonconfig.get_config('trader', 'User')
         for username in usernames:
             if 'btp' not in username and 'ftp' not in username:
+                st.info('need in ftp/btp api')
                 continue
             temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
             if not os.path.exists(temp_dir):
@@ -416,6 +347,98 @@ class manual():
         rspmode = rspmode_list.index(rspmode)
 
         return [float(balance), rspmode]
+
+    def order_test(self):
+        exch = st.text_input('exch', 'CZCE')
+        ins = st.text_input('ins', 'TA301')
+        index = st.text_input('index', '0001')
+        limit_price = st.number_input('limit_price')
+        volume = st.number_input('number', step=1)
+        direction = st.selectbox('direction', ['buy', 'sell'], key='order test direction')
+        if exch in ['SHFE', 'INE']:
+            close_type = ['open', 'close', 'close_yesterday', 'close_today']
+            comb_offset_flag = st.selectbox('comb_offset_flag', close_type, key='order test comb_offset_flag')
+        else:
+            comb_offset_flag = st.selectbox('comb_offset_flag', ['open', 'close'], key='order test comb_offset_flag')
+
+        order_dict = {'limit_LIMIT': 1, 'Limit_FAK': 2, 'limit_FOK': 3, 'AnyPrice_Fok': 4, 'AnyPrice_Fak': 5}
+        order_type = st.selectbox('order type', list(order_dict.keys()), key='open_type')
+
+        contain = st.container()
+        col1, col2 = contain.columns(2)
+        if col1.button('insert'):
+            topic = "strategy_trader.OrderInsertReq"
+
+            msg = stp.message()
+            oims = msg.order_insert_req
+            oims.instrument = ins
+            oims.index = index
+
+            order = oims.order
+            order.exchangeId = exch
+            order.instrument = ins
+            order.limitPrice = limit_price
+            order.volume_total_original = int(volume)
+
+            if direction == 'buy':
+                order.direction = stp.Direction.BUY
+            elif direction == 'sell':
+                order.direction = stp.Direction.SELL
+
+            if comb_offset_flag == 'open':
+                order.comb_offset_flag = stp.CombOffsetType.OPEN
+            elif comb_offset_flag == 'close':
+                order.comb_offset_flag = stp.CombOffsetType.CLOSE
+            elif comb_offset_flag == 'close_yesterday':
+                order.comb_offset_flag = stp.CombOffsetType.CLOSE_YESTERDAY
+            elif comb_offset_flag == 'close_today':
+                order.comb_offset_flag = stp.CombOffsetType.CLOSE_TODAY
+            order.order_type = order_dict[order_type]
+
+            msg_bytes = msg.SerializeToString()
+            directsender.send_msg(topic, msg_bytes)
+            st.info('send order ok')
+
+        if col2.button('cancle'):
+            topic = "strategy_trader.OrderCancelReq"
+
+            msg = stp.message()
+            ocr = msg.order_cancel_req
+            ocr.instrument = ins
+            ocr.index = index
+
+            msg_bytes = msg.SerializeToString()
+            directsender.send_msg(topic, msg_bytes)
+            st.info('cancle order ok')
+
+    def subscribe_instrument(self):
+        exch = st.text_input('exch', 'CZCE')
+        ins = st.text_input('ins', 'TA301')
+        contain = st.container()
+        col1, col2 = contain.columns(2)
+        if col1.button('subcribe'):
+            topic = "strategy_market.TickSubscribeReq"
+            msg = smp.message()
+            tsr = msg.tick_sub_req
+            info = tsr.instrument_info
+            info.instrument_id = ins
+            info.exchange_id = exch
+            tsr.action = smp.TickSubscribeReq.Action.sub
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+            st.info('subscribe ins ok')
+
+        if col2.button('unsubcribe'):
+            topic = "strategy_market.TickSubscribeReq"
+            msg = smp.message()
+            tsr = msg.tick_sub_req
+            info = tsr.instrument_info
+            info.instrument_id = ins
+            info.exchange_id = exch
+            tsr.action = smp.TickSubscribeReq.Action.unsub
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+            st.info('unsubscribe ins ok')
 
 
 manual_page = manual()

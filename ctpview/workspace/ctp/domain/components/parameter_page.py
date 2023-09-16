@@ -13,6 +13,9 @@ class parameter:
 
     def __init__(self):
         self.disable_write = False
+        self.common_para_change = False
+        self.market_para_change = False
+        self.trader_para_change = False
         self.api_types = ['ctp', 'xtp', 'btp', 'otp', 'ftp']
 
     def update(self):
@@ -36,7 +39,9 @@ class parameter:
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
+            fp.close()
 
+            self.common_para_change = False
             common_json = read_json['common']
             for item in common_json:
                 if item in common_needshow_para:
@@ -46,10 +51,14 @@ class parameter:
                                              self.api_types.index(common_json[item]),
                                              key='apitype',
                                              disabled=self.disable_write)
-                        read_json["common"][item] = title
+                        if read_json["common"][item] != title:
+                            read_json["common"][item] = title
+                            self.common_para_change = True
                     else:
                         title = st.text_input('%s(%s): ' % (item, 'common'), common_json[item], disabled=self.disable_write)
-                        read_json["common"][item] = title
+                        if read_json["common"][item] != title:
+                            read_json["common"][item] = title
+                            self.common_para_change = True
 
             email_json = read_json['emailbox']
             for item in email_json:
@@ -59,11 +68,13 @@ class parameter:
                                                email_json['emails'],
                                                email_json[item],
                                                disabled=self.disable_write)
-                        read_json["emailbox"][item] = title
+                        if read_json["emailbox"][item] != title:
+                            read_json["emailbox"][item] = title
+                            self.common_para_change = True
                     else:
                         pass
-            fp.close()
-            if self.disable_write == False:
+
+            if self.disable_write == False and self.common_para_change == True:
                 f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
@@ -77,7 +88,9 @@ class parameter:
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
+            fp.close()
 
+            self.market_para_change = False
             market_json = read_json['market']
             for item in market_json:
                 if item in market_needshow_para:
@@ -92,29 +105,35 @@ class parameter:
                                              action_list.index(market_json[item]),
                                              key='timeing_push',
                                              disabled=self.disable_write)
-                        read_json["market"][item] = title
+                        if read_json["market"][item] != title:
+                            read_json["market"][item] = title
+                            self.market_para_change = True
                     elif item == 'User':
                         user_list = [item for item in read_json['users'].keys()]
                         api_users = self.get_users(user_list, read_json['common']['ApiType'])
                         now_user = read_json['market']['User'][0]
                         if now_user in api_users:
-                            user_id = st.selectbox('%s(%s): ' % (item, 'market'),
-                                                   api_users,
-                                                   api_users.index(now_user),
-                                                   key='marketuserid',
-                                                   disabled=self.disable_write)
+                            title = st.selectbox('%s(%s): ' % (item, 'market'),
+                                                 api_users,
+                                                 api_users.index(now_user),
+                                                 key='marketuserid',
+                                                 disabled=self.disable_write)
                         else:
-                            user_id = st.selectbox('%s(%s): ' % (item, 'market'),
-                                                   api_users,
-                                                   0,
-                                                   key='marketuserid',
-                                                   disabled=self.disable_write)
-                        read_json['market']['User'] = [user_id]
+                            title = st.selectbox('%s(%s): ' % (item, 'market'),
+                                                 api_users,
+                                                 0,
+                                                 key='marketuserid',
+                                                 disabled=self.disable_write)
+                        if read_json["market"][item] != [title]:
+                            read_json["market"][item] = [title]
+                            self.market_para_change = True
                     else:
                         title = st.text_input('%s(%s): ' % (item, 'market'), market_json[item], disabled=self.disable_write)
-                        read_json["market"][item] = title
-            fp.close()
-            if self.disable_write == False:
+                        if read_json["market"][item] != title:
+                            read_json["market"][item] = title
+                            self.market_para_change = True
+
+            if self.disable_write == False and self.market_para_change == True:
                 f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()
@@ -122,13 +141,15 @@ class parameter:
             pass
 
     def update_trader_para(self):
-        order_rsp_mode = ['success', 'waiting', 'part_success', 'no_money', 'no_open', 'no_time']
-        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'AccountAssignMode']
         st.header('%s' % ("trader:"))
+
+        trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'AccountAssignMode']
         try:
             with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
                 read_json = json.load(fp)
+            fp.close()
 
+            self.trader_para_change = False
             trader_json = read_json['trader']
             for item in trader_json:
                 if item in trader_needshow_para:
@@ -141,7 +162,9 @@ class parameter:
                             title = st.multiselect('%s(%s): ' % (item, 'trader'), api_users, [], disabled=self.disable_write)
                         else:
                             title = st.multiselect('%s(%s): ' % (item, 'trader'), api_users, now_user, disabled=self.disable_write)
-                        read_json['trader']['User'] = title
+                        if read_json["trader"][item] != title:
+                            read_json["trader"][item] = title
+                            self.trader_para_change = True
                     elif item == 'SendOrderEmail':
                         action_list = ['send', 'nosend']
                         title = st.selectbox('%s(%s): ' % (item, 'trader'),
@@ -149,7 +172,9 @@ class parameter:
                                              action_list.index(trader_json[item]),
                                              key='send_email',
                                              disabled=self.disable_write)
-                        read_json["trader"][item] = title
+                        if read_json["trader"][item] != title:
+                            read_json["trader"][item] = title
+                            self.trader_para_change = True
                     elif item == 'AccountAssignMode':
                         assign_mode = ['cycle', 'share']
                         title = st.selectbox('%s(%s): ' % (item, 'trader'),
@@ -157,13 +182,16 @@ class parameter:
                                              assign_mode.index(trader_json[item]),
                                              key='assign_mode',
                                              disabled=self.disable_write)
-                        read_json["trader"][item] = title
+                        if read_json["trader"][item] != title:
+                            read_json["trader"][item] = title
+                            self.trader_para_change = True
                     else:
                         title = st.text_input('%s(%s): ' % (item, 'trader'), trader_json[item], disabled=self.disable_write)
-                        read_json["trader"][item] = title
+                        if read_json["trader"][item] != title:
+                            read_json["trader"][item] = title
+                            self.trader_para_change = True
 
-            fp.close()
-            if self.disable_write == False:
+            if self.disable_write == False and self.trader_para_change == True:
                 f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
                 json.dump(read_json, f_d, indent=4)
                 f_d.close()

@@ -15,7 +15,9 @@ from ctpview.workspace.ctp.domain.components.update_page import update_page
 class ctpview():
 
     def __init__(self):
-        st.set_page_config(page_title='tsaodai ctp operation control', layout='centered', page_icon="../../resource/icon.png")
+        st.set_page_config(page_title='tsaodai ctp operation control',
+                           layout='centered',
+                           page_icon='%s/.local/resource/icon.png' % (os.environ.get('HOME')))
 
     def update(self):
         authenticate_page.login()

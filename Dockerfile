@@ -1,5 +1,5 @@
-#基于192.168.0.102:8098/tsaodai/ubuntu1804镜像
-FROM 192.168.0.102:8098/tsaodai/ubuntu1804:latest
+#基于192.168.0.106:8098/tsaodai/ubuntu1804镜像
+FROM 192.168.0.106:8098/tsaodai/ubuntu1804:latest
 
 #维护个人信息
 MAINTAINER The run Project <zhoufan@cdsslh.com>

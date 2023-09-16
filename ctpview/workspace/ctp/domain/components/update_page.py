@@ -23,11 +23,11 @@ class update():
 
     def update_apt_link(self):
         apt_list = []
-        apt_list.append('deb [trusted=yes] http://192.168.0.102:8095/debian/ ./\n')
+        apt_list.append('deb [trusted=yes] http://192.168.0.106:8095/debian/ ./\n')
         apt_list.append('deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./\n')
 
         os.system('sudo chmod 777 /etc/apt/sources.list')
-        now_link = 'deb [trusted=yes] http://192.168.0.102:8095/debian/ ./\n'
+        now_link = 'deb [trusted=yes] http://192.168.0.106:8095/debian/ ./\n'
         origin_lines = []
         with open('/etc/apt/sources.list', 'r') as f:
             lines = f.readlines()
@@ -47,17 +47,17 @@ class update():
 
     def update_pypi_link(self):
         pypi_list = []
-        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n'])
-        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/dev\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n'])
+        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/dev\n'])
         pypi_list.append(['[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/temp\n'])
         pypi_list.append(['[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/dev\n'])
 
-        now_link = ['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n']
+        now_link = ['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n']
         if not os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
             command = 'mkdir %s/.pip/' % (os.environ.get('HOME'))
             os.system(command)
             command = 'touch %s/.pip/pip.conf' % (os.environ.get('HOME'))
-            now_link = ['[global]\n', 'trusted-host = 192.168.0.102\n', 'index-url = http://192.168.0.102:3141/root/temp\n']
+            now_link = ['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n']
             os.system(command)
         else:
             with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'r') as f:

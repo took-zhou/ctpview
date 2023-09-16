@@ -10,7 +10,7 @@ def make_protoc():
     path = './../../workspace/common/protobuf'
     protoc_path = "protoc/bin/protoc"
     message_path = "message"
-    package_name = ['ctpview']
+    package_name = ['ctpview', 'market', 'trader']
     touch_list = []
     os.chdir(path)
     version = os.popen('%s --version' % (protoc_path)).readlines()

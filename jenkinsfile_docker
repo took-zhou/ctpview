@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        GIT_PROJECT_ADDR="ssh://jenkins@gerrit.cdsslh.com:29418/DC/marktrade" //项目的git地址
+        GIT_PROJECT_ADDR="ssh://jenkins@gerrit.tsaodai.com:29418/DC/marktrade" //项目的git地址
         JENKINS_WORKSPACE="/var/jenkins_home/workspace"    //jenkins存放文件的地址
         PROJECT_NAME="${JOB_NAME}"                      // 项目名
         JAR_NAME="run-SNAPSHOT.jar"   // 项目生成的jar的名字
