@@ -32,21 +32,21 @@ class status():
             name = psutil.Process(item).name()
             cpu_percent = psutil.Process(item).cpu_percent(interval=1)
             memory_percent = psutil.Process(item).memory_percent()
-            st.write('{}: `start` cup: `{:.2}` memory: `{:.2}`'.format(name, cpu_percent, memory_percent))
+            st.write('{}`start` cup`{:.2}` memory`{:.2}`'.format(name, cpu_percent, memory_percent))
 
         count = 0
         for item in psutil.cpu_percent(interval=1, percpu=True):
             name = 'core%d' % (count)
-            st.write('{} utilization rate: `{:.2}`'.format(name, item))
+            st.write('{} utilization rate`{:.2}`'.format(name, item))
             count = count + 1
 
         memory_msg = psutil.virtual_memory()
-        st.write('mem total: `{}` mem used: `{}` mem free: `{}`'.format(int(memory_msg.total/1024/1024), \
+        st.write('mem total`{}` mem used`{}` mem free`{}`'.format(int(memory_msg.total/1024/1024), \
             int(memory_msg.used/1024/1024), int(memory_msg.free/1024/2014)))
 
         hostname = socket.gethostname()
         ip = socket.gethostbyname(hostname)
-        st.write('local ip: `%s`' % (ip))
+        st.write('local ip`%s`' % (ip))
 
         market_compile_time = '--'
         trader_compile_time = '--'
@@ -75,8 +75,8 @@ class status():
         except:
             pass
 
-        st.write('market compile time: `%s`' % (market_compile_time))
-        st.write('trader compile time: `%s`' % (trader_compile_time))
+        st.write('market compile time`%s`' % (market_compile_time))
+        st.write('trader compile time`%s`' % (trader_compile_time))
 
         subscribe_list = []
         try:
@@ -94,7 +94,7 @@ class status():
         except:
             pass
 
-        st.write('subscribe instrument number from strategy: `%d`' % (len(subscribe_list)))
+        st.write('subscribe instrument number from strategy`%d`' % (len(subscribe_list)))
         st.write(subscribe_list)
 
 

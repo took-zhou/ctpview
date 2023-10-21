@@ -40,7 +40,7 @@ class control:
             os.makedirs(jsonconfig.get_config(_name, 'LogPath'))
 
         # 进程控制
-        st.header('%s' % ("%s:" % (_name)))
+        st.header(_name)
         contain = st.container()
         col1, col2 = contain.columns(2)
         process_id = self.checkprocess(_name)
@@ -53,13 +53,34 @@ class control:
         if col1.button('start', key='%s1' % (_name)) and not (isinstance(process_id, int)):
             command = 'nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &' % (_name, os.environ.get('HOME'), _name, _name)
             os.system(command)
-            time.sleep(0.1)
+            while 1:
+                time.sleep(3)
+                if self.get_login_status(_name) == "exit":
+                    time.sleep(3)
+                else:
+                    break
 
         if col2.button('stop', key='%s2' % (_name)) and isinstance(process_id, int):
-            os.system('kill -9 %d' % (process_id))
-            time.sleep(0.1)
+            os.system('kill -2 %d' % (process_id))
+            time.sleep(1)
 
-        login_logout = "logout"
+        process_id = self.checkprocess(_name)
+        if isinstance(process_id, int):
+            st.session_state['%s_id' % (_name)] = process_id
+            process_status = 'start'
+        else:
+            process_status = 'not start'
+
+        login_logout = self.get_login_status(_name)
+        coredump_status = self.get_coredump_status(_name)
+
+        if process_status == 'start':
+            st.write('status`start, %s`' % (login_logout))
+        else:
+            st.write('status`no start, %s`' % (coredump_status))
+
+    def get_login_status(self, _name):
+        login_logout = "exit"
         try:
             if _name == "market":
                 username = jsonconfig.get_config('market', 'User')[0]
@@ -69,8 +90,11 @@ class control:
             conn = sqlite3.connect(control_db_path)
             try:
                 command = 'select login_state from service_info;'
-                if conn.execute(command).fetchall()[0][0] == 1:
+                ret_data = conn.execute(command).fetchall()[0][0]
+                if ret_data == 1:
                     login_logout = "login"
+                elif ret_data == 2:
+                    login_logout = "logout"
             except:
                 # error_msg = traceback.format_exc()
                 # print(error_msg)
@@ -79,6 +103,9 @@ class control:
         except:
             pass
 
+        return login_logout
+
+    def get_coredump_status(self, _name):
         coredump_status = 'normal'
         core_dump_list = os.listdir('/home/tsaodai/.local/coredump')
         for item in core_dump_list:
@@ -86,10 +113,7 @@ class control:
                 coredump_status = 'coredump'
                 break
 
-        if process_status == 'start':
-            st.write('%s status: `start, %s`' % (_name, login_logout))
-        else:
-            st.write('%s status: `no start, %s`' % (_name, coredump_status))
+        return coredump_status
 
 
 control_page = control()

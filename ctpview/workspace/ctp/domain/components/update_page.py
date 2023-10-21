@@ -1,5 +1,5 @@
-import configparser
 import os
+import time
 
 import psutil
 import streamlit as st
@@ -9,10 +9,28 @@ class update():
 
     def __init__(self):
         self.package_list = ["tickmine", "ticknature", "ctpview"]
-        self.apt_change_flag = False
-        self.pypi_change_flag = False
+        self.apt_source_dict = {}
+        self.apt_source_dict['http://192.168.0.106:8095/debian'] = 'deb [trusted=yes] http://192.168.0.106:8095/debian/ ./\n'
+        self.apt_source_dict['http://aptserver.tsaodai.com/debian'] = 'deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./\n'
+        self.pip_source_dict = {}
+        self.pip_source_dict['http://192.168.0.106:3141/root/temp'] = [
+            '[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n'
+        ]
+        self.pip_source_dict['http://192.168.0.106:3141/root/dev'] = [
+            '[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/dev\n'
+        ]
+        self.pip_source_dict['http://devpi.tsaodai.com/root/temp'] = [
+            '[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/temp\n'
+        ]
+        self.pip_source_dict['http://devpi.tsaodai.com/root/dev'] = [
+            '[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/dev\n'
+        ]
+        self.apt_source = '192.168.0.106:8095/debian'
+        self.pip_source = '192.168.0.106:3141/root/dev'
 
     def update(self):
+        self.read_para()
+
         self.update_apt_link()
         self.update_market_trader()
 
@@ -21,54 +39,69 @@ class update():
         self.update_pypi_link()
         self.update_package_list()
 
-    def update_apt_link(self):
-        apt_list = []
-        apt_list.append('deb [trusted=yes] http://192.168.0.106:8095/debian/ ./\n')
-        apt_list.append('deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./\n')
+        st.write('____')
 
+        self.write_para()
+
+    def read_para(self):
+        try:
+            with open('/etc/apt/sources.list', 'r') as f:
+                lines = f.readlines()
+                for line in lines:
+                    if '[trusted=yes]' in line:
+                        for item in self.apt_source_dict:
+                            if self.apt_source_dict[item] == line:
+                                self.apt_source = item
+            f.close()
+
+            with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'r') as f:
+                lines = f.readlines()
+                for item in self.pip_source_dict:
+                    if self.pip_source_dict[item] == lines:
+                        self.pip_source = item
+        except:
+            pass
+
+    def write_para(self):
+        if st.button("update file", on_click=self.button_write_para_click):
+            st.info('update file ok')
+
+    def button_write_para_click(self):
         os.system('sudo chmod 777 /etc/apt/sources.list')
-        now_link = 'deb [trusted=yes] http://192.168.0.106:8095/debian/ ./\n'
+
         origin_lines = []
         with open('/etc/apt/sources.list', 'r') as f:
             lines = f.readlines()
             origin_lines = lines.copy()
             for line in lines:
                 if '[trusted=yes]' in line:
-                    now_link = line
+                    origin_lines.remove(line)
             f.close()
 
-        title = st.selectbox('select apt:', apt_list, apt_list.index(now_link))
-        self.apt_change_flag = (title != now_link)
-        origin_lines.remove(now_link)
-        origin_lines.append(title)
+        origin_lines.append(self.apt_source_dict[self.apt_source])
         with open('/etc/apt/sources.list', 'w') as f:
             f.writelines(origin_lines)
             f.close()
 
-    def update_pypi_link(self):
-        pypi_list = []
-        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n'])
-        pypi_list.append(['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/dev\n'])
-        pypi_list.append(['[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/temp\n'])
-        pypi_list.append(['[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/dev\n'])
-
-        now_link = ['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n']
         if not os.path.exists('%s/.pip/pip.conf' % (os.environ.get('HOME'))):
             command = 'mkdir %s/.pip/' % (os.environ.get('HOME'))
             os.system(command)
             command = 'touch %s/.pip/pip.conf' % (os.environ.get('HOME'))
-            now_link = ['[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n']
             os.system(command)
-        else:
-            with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'r') as f:
-                lines = f.readlines()
-                now_link = lines.copy()
 
-        title = st.selectbox('select pypi:', pypi_list, pypi_list.index(now_link))
-        self.pypi_change_flag = (title != now_link)
         with open('%s/.pip/pip.conf' % (os.environ.get('HOME')), 'w') as f:
-            f.writelines(title)
+            f.writelines(self.pip_source_dict[self.pip_source])
             f.close()
+
+    def update_apt_link(self):
+        apt_list = [item for item in self.apt_source_dict]
+        title = st.selectbox('select apt', apt_list, apt_list.index(self.apt_source))
+        self.apt_source = title
+
+    def update_pypi_link(self):
+        pypi_list = [item for item in self.pip_source_dict]
+        title = st.selectbox('select pypi', pypi_list, pypi_list.index(self.pip_source))
+        self.pip_source = title
 
     def update_market_trader(self):
         pack_name = ''
@@ -82,13 +115,10 @@ class update():
 
         contain = st.container()
         col1, col2 = contain.columns(2)
-        col1.write('marktrade: %s --> %s' % (pack_name, newest_name))
+        col1.write('marktrade`%s --> %s`' % (pack_name, newest_name))
         if col2.button('update marktrade'):
             self.update_single_deb('marktrade', newest_name)
             os.system("sudo ldconfig")
-
-        if self.apt_change_flag == True:
-            st.info("update apt ok")
 
     def update_package_list(self):
         for package in self.package_list:
@@ -101,13 +131,10 @@ class update():
                 if key_values[0] == package:
                     contain = st.container()
                     col1, col2 = contain.columns(2)
-                    col1.write('%s: %s --> %s' % (key_values[0], key_values[1], newest_version))
+                    col1.write('%s`%s --> %s`' % (key_values[0], key_values[1], newest_version))
                     if col2.button('update %s' % key_values[0]):
                         self.update_single_pip(key_values[0], key_values[1])
                     break
-
-        if self.pypi_change_flag == True:
-            st.info("update pypi ok")
 
     def find_newest_version_pip(self, item):
         newest_version = ''

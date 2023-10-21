@@ -53,7 +53,7 @@ class setting():
             self.pack_history_record()
         st.write('____')
 
-        uploaded_file = st.file_uploader("Choose a file:", key='setting1')
+        uploaded_file = st.file_uploader("Choose a file", key='setting1')
         if uploaded_file is not None:
             bytes_data = uploaded_file.getvalue()
             fw = open("%s/%s" % (self.history_record_path, uploaded_file.name), "wb")
@@ -74,12 +74,12 @@ class setting():
     def clear_process(self, ):
         id = self.checkprocess("market")
         if isinstance(id, int):
-            os.system("kill -9 %d" % (id))
+            os.system("kill -2 %d" % (id))
             time.sleep(1)
 
         id = self.checkprocess("trader")
         if isinstance(id, int):
-            os.system("kill -9 %d" % (id))
+            os.system("kill -2 %d" % (id))
             time.sleep(1)
 
         st.info('clear process ok')

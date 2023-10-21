@@ -240,6 +240,7 @@ class manual():
                     conn.execute(command)
                     conn.commit()
                     conn.close()
+                    st.info('update para ok')
 
     def hand_backtest_operation(self, control_para):
         source_dict = {}
@@ -293,6 +294,7 @@ class manual():
 
     def virtual_account_set(self):
         account_para = []
+        updated_para_list = []
         usernames = jsonconfig.get_config('trader', 'User')
         for username in usernames:
             if 'btp' not in username and 'ftp' not in username:
@@ -307,6 +309,7 @@ class manual():
                 user_id = username.split('_')[0]
                 command = "select user_id, balance, rspmode from virtual_account where user_id = '%s';" % (user_id)
                 account_para = conn.execute(command).fetchall()[0]
+                conn.close()
             except:
                 command = "create table if not exists virtual_account(user_id TEXT, balance REAL, rspmode INT);"
                 conn.execute(command)
@@ -315,19 +318,26 @@ class manual():
                     user_id, user_id)
                 conn.execute(command)
                 conn.commit()
-            conn.close()
+                conn.close()
+                st.experimental_rerun()
 
             if len(account_para) > 0:
                 updated_para = self.hand_account_operation(account_para)
-                if updated_para[0] == account_para[1] and updated_para[1] == account_para[2]:
-                    pass
-                else:
-                    conn = sqlite3.connect(control_db_path)
-                    command = "update virtual_account set balance = %f, rspmode = %d where user_id = '%s';" % (updated_para[0],
-                                                                                                               updated_para[1], user_id)
-                    conn.execute(command)
-                    conn.commit()
-                    conn.close()
+                updated_para_list.append(updated_para)
+
+        if st.button("update para", on_click=self.button_virtual_account_set_click, args=[updated_para_list]):
+            st.info('update para ok')
+
+    def button_virtual_account_set_click(self, updated_para_list):
+        temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
+        control_db_path = '%s/backtest.db' % temp_dir
+        conn = sqlite3.connect(control_db_path)
+        for updated_para in updated_para_list:
+            command = "update virtual_account set balance = %f, rspmode = %d where user_id = '%s';" % (updated_para[1], updated_para[2],
+                                                                                                       updated_para[0])
+            conn.execute(command)
+        conn.commit()
+        conn.close()
 
     def hand_account_operation(self, account_para):
         rspmode_dict = {}
@@ -346,7 +356,7 @@ class manual():
         rspmode = col3.selectbox('source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[2]]), key='3_%s' % account_para[0])
         rspmode = rspmode_list.index(rspmode)
 
-        return [float(balance), rspmode]
+        return [account_para[0], float(balance), rspmode]
 
     def order_test(self):
         exch = st.text_input('exch', 'CZCE')

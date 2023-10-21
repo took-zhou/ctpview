@@ -41,7 +41,7 @@ class account():
             conn.close()
 
             if last_info != []:
-                message = 'account: %s, balance: %f, available: %f, open_blacklist: %s' % (item, last_info[1], last_info[2], last_info[3])
+                message = 'account %s, balance %f, available %f, open_blacklist %s' % (item, last_info[1], last_info[2], last_info[3])
                 with st.expander(message):
                     self.show_capital(item)
                     self.show_position(item)

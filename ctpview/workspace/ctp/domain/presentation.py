@@ -25,13 +25,13 @@ class ctpview():
             return
 
         if 'name' in st.session_state and st.session_state['name'] == 'admin':
-            page_list = ('configure', 'control', 'account', 'status', 'update', 'setting', 'manual')
+            page_list = ('parameter', 'control', 'account', 'status', 'update', 'setting', 'manual')
             module_option = st.sidebar.radio('modue', page_list)
         else:
-            page_list = ('configure', 'control', 'account', 'status')
+            page_list = ('parameter', 'control', 'account', 'status')
             module_option = st.sidebar.radio('modue', page_list)
 
-        if module_option == 'configure':
+        if module_option == 'parameter':
             parameter_page.update()
         elif module_option == 'control':
             control_page.update()
