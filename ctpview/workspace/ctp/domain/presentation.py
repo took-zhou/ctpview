@@ -1,6 +1,7 @@
 import os
 
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 
 from ctpview.workspace.ctp.domain.components.account_page import account_page
 from ctpview.workspace.ctp.domain.components.authenticate_page import authenticate_page
@@ -24,6 +25,7 @@ class ctpview():
         if 'authentication_status' in st.session_state and st.session_state['authentication_status'] != True:
             return
 
+        st_autorefresh(interval=13000, limit=10000, key="auto_update")
         if 'name' in st.session_state and st.session_state['name'] == 'admin':
             page_list = ('parameter', 'control', 'account', 'status', 'update', 'setting', 'manual')
             module_option = st.sidebar.radio('modue', page_list)

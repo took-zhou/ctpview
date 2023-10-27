@@ -22,16 +22,13 @@ VOLUME $TSAODAI_HOME
 #构建环境目录
 RUN mkdir -p /usr/lib/$process && echo "/usr/lib/$process/" >> /etc/ld.so.conf.d/$process.conf && ldconfig
 
-#安装私有python库
-COPY requirements.txt /root/requirements.txt
-RUN pip install -i https://mirrors.aliyun.com/pypi/simple  -r /root/requirements.txt
-
 #安装依赖文件
-RUN apt-get update && apt-get install -y libstdc++6 && apt-get install -y screen && \
-  apt-get install -y vim && apt-get install -y net-tools && apt-get install -y sudo && \
-  echo $user 'ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers &&\
-  apt-get install -y iputils-ping && apt-get install -y udev && apt-get install -y dmidecode &&\
-  apt-get install -y wget && apt-get install -y iproute2
+RUN apt-get update && apt-get install -y libstdc++6 --no-install-recommends && apt-get install -y screen --no-install-recommends && \
+  apt-get install -y vim --no-install-recommends && apt-get install -y net-tools --no-install-recommends && \
+  apt-get install -y sudo --no-install-recommends && echo $user 'ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+  apt-get install -y iputils-ping --no-install-recommends && apt-get install -y udev --no-install-recommends && \
+  apt-get install -y dmidecode --no-install-recommends && apt-get install -y wget --no-install-recommends && \
+  apt-get install -y iproute2 --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 RUN echo "deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
     apt-get update
@@ -44,6 +41,7 @@ ENV LANG C.UTF-8
 expose 11332
 
 #拷贝文件或目录到镜像中
+COPY requirements.txt /$TSAODAI_HOME/.requirements.txt
 COPY marktrade.sh /bin/$process.sh
 
 #使用tsaodai用户启动streamlit

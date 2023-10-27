@@ -25,6 +25,7 @@ class account():
         except:
             pass
 
+        st.subheader('exist')
         for item in now_user:
             if not os.path.exists(jsonconfig.get_config('trader', 'ControlParaFilePath')):
                 os.makedirs(jsonconfig.get_config('trader', 'ControlParaFilePath'))
@@ -41,10 +42,11 @@ class account():
             conn.close()
 
             if last_info != []:
-                message = 'account %s, balance %f, available %f, open_blacklist %s' % (item, last_info[1], last_info[2], last_info[3])
-                with st.expander(message):
-                    self.show_capital(item)
-                    self.show_position(item)
+                message = 'account`%s|%f|%f|%s`' % (item, last_info[1], last_info[2], last_info[3])
+                st.write(message)
+                self.show_capital(item)
+                self.show_position(item)
+                st.write('----')
 
     def show_capital(self, user_id):
         if not os.path.exists(jsonconfig.get_config('trader', 'ControlParaFilePath')):
@@ -85,16 +87,23 @@ class account():
         conn.close()
 
         if position_info != []:
+            index_list = []
             ins_list = []
             yesterday_volume_list = []
             today_volume_list = []
             for item in position_info:
                 if item[1] != 0 or item[2] != 0:
+                    index_list.append(item[0].split('.')[1])
                     ins_list.append(item[0].split('.')[0])
                     yesterday_volume_list.append(item[1])
                     today_volume_list.append(item[2])
 
-            pisition_dict = {'ins': ins_list, 'yesterday_volume': yesterday_volume_list, 'today_volume': today_volume_list}
+            pisition_dict = {
+                'index': index_list,
+                'ins': ins_list,
+                'yesterday_volume': yesterday_volume_list,
+                'today_volume': today_volume_list
+            }
 
             position_df = pd.DataFrame(pisition_dict)
             st.table(position_df)

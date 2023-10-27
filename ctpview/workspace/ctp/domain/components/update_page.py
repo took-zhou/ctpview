@@ -25,8 +25,8 @@ class update():
         self.pip_source_dict['http://devpi.tsaodai.com/root/dev'] = [
             '[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/dev\n'
         ]
-        self.apt_source = '192.168.0.106:8095/debian'
-        self.pip_source = '192.168.0.106:3141/root/dev'
+        self.apt_source = 'http://192.168.0.106:8095/debian'
+        self.pip_source = 'http://192.168.0.106:3141/root/dev'
 
     def update(self):
         self.read_para()
@@ -63,10 +63,11 @@ class update():
             pass
 
     def write_para(self):
-        if st.button("update file", on_click=self.button_write_para_click):
-            st.info('update file ok')
+        if st.button("update version"):
+            self.write_para_click()
+            st.info('update version ok')
 
-    def button_write_para_click(self):
+    def write_para_click(self):
         os.system('sudo chmod 777 /etc/apt/sources.list')
 
         origin_lines = []
@@ -93,6 +94,24 @@ class update():
             f.writelines(self.pip_source_dict[self.pip_source])
             f.close()
 
+        temp_items = os.popen('sudo apt-cache show %s' % ('marktrade'))
+        lines_items = temp_items.readlines()
+        for item in lines_items:
+            if 'Version' in item:
+                st.session_state['marktrade_installed_version'] = item.split(":")[-1].strip(" ")
+        st.session_state['marktrade_newest_version'] = self.find_newest_version_deb('marktrade')
+
+        for package in self.package_list:
+            newest_version = self.find_newest_version_pip(package)
+            temp_items = os.popen('pip list')
+            lines_items = temp_items.readlines()
+            for item in lines_items:
+                key_values = [value for value in item.split(' ') if value != '']
+                if key_values[0] == package:
+                    st.session_state['%s_installed_version'%(key_values[0])] = key_values[1]
+                    st.session_state['%s_newest_version'%(key_values[0])] = newest_version
+                    break
+
     def update_apt_link(self):
         apt_list = [item for item in self.apt_source_dict]
         title = st.selectbox('select apt', apt_list, apt_list.index(self.apt_source))
@@ -104,37 +123,27 @@ class update():
         self.pip_source = title
 
     def update_market_trader(self):
-        pack_name = ''
-        temp_items = os.popen('sudo apt-cache show %s' % ('marktrade'))
-        lines_items = temp_items.readlines()
-        for item in lines_items:
-            if 'Version' in item:
-                pack_name = item.split(":")[-1].strip(" ")
-
-        newest_name = self.find_newest_version_deb('marktrade')
-
         contain = st.container()
         col1, col2 = contain.columns(2)
-        col1.write('marktrade`%s --> %s`' % (pack_name, newest_name))
+        if 'marktrade_installed_version' in st.session_state and 'marktrade_newest_version' in st.session_state:
+            col1.write('marktrade`%s --> %s`' % (st.session_state['marktrade_installed_version'], st.session_state['marktrade_newest_version']))
+        else:
+            col1.write('marktrade`? --> ?`')
         if col2.button('update marktrade'):
-            self.update_single_deb('marktrade', newest_name)
+            self.update_single_deb('marktrade', st.session_state['marktrade_newest_version'])
             os.system("sudo ldconfig")
 
     def update_package_list(self):
         for package in self.package_list:
-            newest_version = self.find_newest_version_pip(package)
-
-            temp_items = os.popen('pip list')
-            lines_items = temp_items.readlines()
-            for item in lines_items:
-                key_values = [value for value in item.split(' ') if value != '']
-                if key_values[0] == package:
-                    contain = st.container()
-                    col1, col2 = contain.columns(2)
-                    col1.write('%s`%s --> %s`' % (key_values[0], key_values[1], newest_version))
-                    if col2.button('update %s' % key_values[0]):
-                        self.update_single_pip(key_values[0], key_values[1])
-                    break
+            contain = st.container()
+            col1, col2 = contain.columns(2)
+            if '%s_installed_version'%(package) in st.session_state and '%s_newest_version'%(package) in st.session_state:
+                col1.write('%s`%s --> %s`' % (package, st.session_state['%s_installed_version'%(package)], st.session_state['%s_newest_version'%(package)]))
+            else:
+                col1.write('%s`? --> ?`'%(package))
+        
+            if col2.button('update %s' % package):
+                self.update_single_pip(package, st.session_state['%s_newest_version'%(package)])
 
     def find_newest_version_pip(self, item):
         newest_version = ''
@@ -170,8 +179,8 @@ class update():
             # 重启streamlit
             ui_id = self.checkprocess('streamlit')
             import ctpview
-            command = 'nohup kill -9 %d; nohup streamlit run %s/workspace/ctp/domain/presentation.py >> \
-                %s/.streamlit/output.log 2>&1 &' % (ui_id, ctpview.__path__[0], os.environ.get('HOME'))
+            command = 'nohup kill -9 %d; nohup /%s/.local/bin/streamlit run %s/workspace/ctp/domain/presentation.py >> \
+                %s/.streamlit/output.log 2>&1 &' % (ui_id, os.environ.get('HOME'), ctpview.__path__[0], os.environ.get('HOME'))
             os.system(command)
 
     def find_newest_version_deb(self, item):

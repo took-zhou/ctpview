@@ -69,7 +69,7 @@ class parameter:
                                          ['local', 'strategy', 'api'].index(self.read_json["market"][item]), key='datafrom')
                     self.read_json["market"][item] = title
                 elif item == 'TimingPush':
-                    action_list = ['push', 'nopush']
+                    action_list = ['yes', 'no']
                     title = st.selectbox(item, action_list, action_list.index(market_json[item]), key='timeing_push')
                     self.read_json["market"][item] = title
                 elif item == 'User':
@@ -103,7 +103,7 @@ class parameter:
                         title = st.multiselect(item, api_users, now_user)
                     self.read_json["trader"][item] = title
                 elif item == 'SendOrderEmail':
-                    action_list = ['send', 'nosend']
+                    action_list = ['yes', 'no']
                     title = st.selectbox(item, action_list, action_list.index(trader_json[item]), key='send_email')
                     self.read_json["trader"][item] = title
                 elif item == 'AccountAssignMode':
@@ -118,10 +118,11 @@ class parameter:
         if not ('name' in st.session_state and st.session_state['name'] == 'admin'):
             return
 
-        if st.button('update para', on_click=self.button_write_para_click):
+        if st.button('update para'):
+            self.write_para_click()
             st.info('update para ok')
 
-    def button_write_para_click(self):
+    def write_para_click(self):
         f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
         json.dump(self.read_json, f_d, indent=4)
         f_d.close()

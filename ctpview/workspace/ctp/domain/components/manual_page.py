@@ -180,6 +180,7 @@ class manual():
             mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.start_write
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('market start write send ok')
 
         if col2.button('market stop write'):
             topic = "ctpview_market.ProfilerControl"
@@ -188,6 +189,7 @@ class manual():
             mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.stop_write
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('market stop write send ok')
 
         if col1.button('trader start write'):
             topic = "ctpview_trader.ProfilerControl"
@@ -196,6 +198,7 @@ class manual():
             mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.start_write
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('trader start write send ok')
 
         if col2.button('trader stop write'):
             topic = "ctpview_trader.ProfilerControl"
@@ -204,6 +207,7 @@ class manual():
             mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.stop_write
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
+            st.info('trader stop write send ok')
 
     def backtest_control(self):
         control_para = []
@@ -294,89 +298,79 @@ class manual():
 
     def virtual_account_set(self):
         account_para = []
-        updated_para_list = []
         usernames = jsonconfig.get_config('trader', 'User')
-        for username in usernames:
-            if 'btp' not in username and 'ftp' not in username:
-                st.info('need in ftp/btp api')
-                continue
-            temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
-            if not os.path.exists(temp_dir):
-                os.makedirs(temp_dir)
-            control_db_path = '%s/backtest.db' % temp_dir
-            conn = sqlite3.connect(control_db_path)
-            try:
-                user_id = username.split('_')[0]
-                command = "select user_id, balance, rspmode from virtual_account where user_id = '%s';" % (user_id)
-                account_para = conn.execute(command).fetchall()[0]
-                conn.close()
-            except:
-                command = "create table if not exists virtual_account(user_id TEXT, balance REAL, rspmode INT);"
-                conn.execute(command)
-                user_id = username.split('_')[0]
-                command = "insert into virtual_account(user_id, balance, rspmode) select '%s', 1000000, 0 where not exists (select * from virtual_account where user_id = '%s');" % (
-                    user_id, user_id)
-                conn.execute(command)
-                conn.commit()
-                conn.close()
-                st.experimental_rerun()
 
-            if len(account_para) > 0:
-                updated_para = self.hand_account_operation(account_para)
-                updated_para_list.append(updated_para)
+        username = st.selectbox("user", usernames)
+        if 'btp' not in username and 'ftp' not in username:
+            st.info('need in ftp/btp api')
+            return
+        temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        control_db_path = '%s/backtest.db' % temp_dir
+        conn = sqlite3.connect(control_db_path)
+        try:
+            user_id = username.split('_')[0]
+            command = "select user_id, balance, rspmode from virtual_account where user_id = '%s';" % (user_id)
+            account_para = conn.execute(command).fetchall()[0]
+            conn.close()
+        except:
+            command = "create table if not exists virtual_account(user_id TEXT, balance REAL, rspmode INT);"
+            conn.execute(command)
+            user_id = username.split('_')[0]
+            command = "insert into virtual_account(user_id, balance, rspmode) select '%s', 1000000, 0 where not exists (select * from virtual_account where user_id = '%s');" % (
+                user_id, user_id)
+            conn.execute(command)
+            conn.commit()
+            conn.close()
+            st.experimental_rerun()
 
-        if st.button("update para", on_click=self.button_virtual_account_set_click, args=[updated_para_list]):
+        if len(account_para) > 0:
+            account_para = self.hand_account_operation(account_para)
+
+        if st.button("update para"):
+            self.virtual_account_set_click(account_para)
             st.info('update para ok')
 
-    def button_virtual_account_set_click(self, updated_para_list):
+    def virtual_account_set_click(self, updated_para):
         temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
         control_db_path = '%s/backtest.db' % temp_dir
         conn = sqlite3.connect(control_db_path)
-        for updated_para in updated_para_list:
-            command = "update virtual_account set balance = %f, rspmode = %d where user_id = '%s';" % (updated_para[1], updated_para[2],
-                                                                                                       updated_para[0])
-            conn.execute(command)
+        command = "update virtual_account set balance = %f, rspmode = %d where user_id = '%s';" % (updated_para[1], updated_para[2],
+                                                                                                   updated_para[0])
+        conn.execute(command)
         conn.commit()
         conn.close()
 
     def hand_account_operation(self, account_para):
         rspmode_dict = {}
-        rspmode_dict[0] = 'success'
+        rspmode_dict[0] = 'immediately complete'
         rspmode_dict[1] = 'waiting'
-        rspmode_dict[2] = 'part_success'
-        rspmode_dict[3] = 'no_money'
-        rspmode_dict[4] = 'no_open'
-        rspmode_dict[5] = 'no_time'
+        rspmode_dict[2] = 'multiple partial'
+        rspmode_dict[3] = 'multiple complete'
         rspmode_list = [rspmode_dict[item] for item in rspmode_dict]
 
         contain = st.container()
-        col1, col2, col3 = contain.columns(3)
-        account = col1.text_input('account', account_para[0], key='1_%s' % account_para[0], disabled=True)
-        balance = col2.text_input('balance', account_para[1], key='2_%s' % account_para[0])
-        rspmode = col3.selectbox('source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[2]]), key='3_%s' % account_para[0])
+        col1, col2 = contain.columns(2)
+        balance = col1.text_input('balance', account_para[1], key='2_%s' % account_para[0])
+        rspmode = col2.selectbox('source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[2]]), key='3_%s' % account_para[0])
         rspmode = rspmode_list.index(rspmode)
 
         return [account_para[0], float(balance), rspmode]
 
     def order_test(self):
         exch = st.text_input('exch', 'CZCE')
-        ins = st.text_input('ins', 'TA301')
+        ins = st.text_input('ins', 'TA401')
         index = st.text_input('index', '0001')
         limit_price = st.number_input('limit_price')
         volume = st.number_input('number', step=1)
         direction = st.selectbox('direction', ['buy', 'sell'], key='order test direction')
-        if exch in ['SHFE', 'INE']:
-            close_type = ['open', 'close', 'close_yesterday', 'close_today']
-            comb_offset_flag = st.selectbox('comb_offset_flag', close_type, key='order test comb_offset_flag')
-        else:
-            comb_offset_flag = st.selectbox('comb_offset_flag', ['open', 'close'], key='order test comb_offset_flag')
-
+        comb_offset_flag = st.selectbox('comb_offset_flag', ['open', 'close'], key='order test comb_offset_flag')
         order_dict = {'limit_LIMIT': 1, 'Limit_FAK': 2, 'limit_FOK': 3, 'AnyPrice_Fok': 4, 'AnyPrice_Fak': 5}
         order_type = st.selectbox('order type', list(order_dict.keys()), key='open_type')
-
         contain = st.container()
         col1, col2 = contain.columns(2)
-        if col1.button('insert'):
+        if col1.button('insert order'):
             topic = "strategy_trader.OrderInsertReq"
 
             msg = stp.message()
@@ -407,9 +401,9 @@ class manual():
 
             msg_bytes = msg.SerializeToString()
             directsender.send_msg(topic, msg_bytes)
-            st.info('send order ok')
+            st.info('insert order ok')
 
-        if col2.button('cancle'):
+        if col2.button('cancle order'):
             topic = "strategy_trader.OrderCancelReq"
 
             msg = stp.message()

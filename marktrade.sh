@@ -6,6 +6,8 @@ sudo chown 1000:1000 $HOME
 echo 'shell /bin/bash' > $HOME/.screenrc
 echo 'termcapinfo xterm* ti@:te@' >> $HOME/.screenrc
 
+pip install -i https://mirrors.aliyun.com/pypi/simple -r /$HOME/.requirements.txt
+
 if [ $run_mode = 'release' ];
 then
 if [ -e $HOME/.pip/pip.conf ];
@@ -44,7 +46,7 @@ sudo chmod 777 /sys/firmware/dmi/tables/DMI
 if [ $run_mode = 'release' ];
 then
 ctpview_path=` python -c "import ctpview;print(ctpview.__path__[0])" `
-nohup streamlit run $ctpview_path/workspace/ctp/domain/presentation.py >> $HOME/.streamlit/output.log 2>&1 &
+nohup /$HOME/.local/bin/streamlit run $ctpview_path/workspace/ctp/domain/presentation.py >> $HOME/.streamlit/output.log 2>&1 &
 fi
 
 sudo ldconfig
