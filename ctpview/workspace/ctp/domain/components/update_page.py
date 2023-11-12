@@ -108,8 +108,8 @@ class update():
             for item in lines_items:
                 key_values = [value for value in item.split(' ') if value != '']
                 if key_values[0] == package:
-                    st.session_state['%s_installed_version'%(key_values[0])] = key_values[1]
-                    st.session_state['%s_newest_version'%(key_values[0])] = newest_version
+                    st.session_state['%s_installed_version' % (key_values[0])] = key_values[1]
+                    st.session_state['%s_newest_version' % (key_values[0])] = newest_version
                     break
 
     def update_apt_link(self):
@@ -126,7 +126,8 @@ class update():
         contain = st.container()
         col1, col2 = contain.columns(2)
         if 'marktrade_installed_version' in st.session_state and 'marktrade_newest_version' in st.session_state:
-            col1.write('marktrade`%s --> %s`' % (st.session_state['marktrade_installed_version'], st.session_state['marktrade_newest_version']))
+            col1.write('marktrade`%s --> %s`' %
+                       (st.session_state['marktrade_installed_version'], st.session_state['marktrade_newest_version']))
         else:
             col1.write('marktrade`? --> ?`')
         if col2.button('update marktrade'):
@@ -137,13 +138,14 @@ class update():
         for package in self.package_list:
             contain = st.container()
             col1, col2 = contain.columns(2)
-            if '%s_installed_version'%(package) in st.session_state and '%s_newest_version'%(package) in st.session_state:
-                col1.write('%s`%s --> %s`' % (package, st.session_state['%s_installed_version'%(package)], st.session_state['%s_newest_version'%(package)]))
+            if '%s_installed_version' % (package) in st.session_state and '%s_newest_version' % (package) in st.session_state:
+                col1.write('%s`%s --> %s`' % (package, st.session_state['%s_installed_version' %
+                                                                        (package)], st.session_state['%s_newest_version' % (package)]))
             else:
-                col1.write('%s`? --> ?`'%(package))
-        
+                col1.write('%s`? --> ?`' % (package))
+
             if col2.button('update %s' % package):
-                self.update_single_pip(package, st.session_state['%s_newest_version'%(package)])
+                self.update_single_pip(package, st.session_state['%s_newest_version' % (package)])
 
     def find_newest_version_pip(self, item):
         newest_version = ''
@@ -179,8 +181,8 @@ class update():
             # 重启streamlit
             ui_id = self.checkprocess('streamlit')
             import ctpview
-            command = 'nohup kill -9 %d; nohup /%s/.local/bin/streamlit run %s/workspace/ctp/domain/presentation.py >> \
-                %s/.streamlit/output.log 2>&1 &' % (ui_id, os.environ.get('HOME'), ctpview.__path__[0], os.environ.get('HOME'))
+            command = 'nohup kill -9 %d; nohup streamlit run %s/workspace/ctp/domain/presentation.py >> %s/.streamlit/output.log 2>&1 &' % (
+                ui_id, ctpview.__path__[0], os.environ.get('HOME'))
             os.system(command)
 
     def find_newest_version_deb(self, item):

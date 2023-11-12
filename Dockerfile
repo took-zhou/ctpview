@@ -41,7 +41,7 @@ ENV LANG C.UTF-8
 expose 11332
 
 #拷贝文件或目录到镜像中
-COPY requirements.txt /$TSAODAI_HOME/.requirements.txt
+COPY requirements.txt /etc/requirements.txt
 COPY marktrade.sh /bin/$process.sh
 
 #使用tsaodai用户启动streamlit

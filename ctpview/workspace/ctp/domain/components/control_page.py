@@ -49,12 +49,12 @@ class control:
         else:
             process_status = 'not start'
 
-        if col1.button('%s start'%(_name), key='%s1' % (_name)) and not (isinstance(process_id, int)):
+        if col1.button('%s start' % (_name), key='%s1' % (_name)) and not (isinstance(process_id, int)):
             command = 'nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &' % (_name, os.environ.get('HOME'), _name, _name)
             os.system(command)
             time.sleep(0.1)
 
-        if col2.button('%s stop'%(_name), key='%s2' % (_name)) and isinstance(process_id, int):
+        if col2.button('%s stop' % (_name), key='%s2' % (_name)) and isinstance(process_id, int):
             os.system('kill -2 %d' % (process_id))
             time.sleep(0.1)
 
