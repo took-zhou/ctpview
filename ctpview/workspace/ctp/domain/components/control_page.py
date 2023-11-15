@@ -9,7 +9,7 @@ import streamlit as st
 from ctpview.workspace.common.file_util import jsonconfig
 
 
-class control:
+class control():
 
     def __init__(self):
         pass
@@ -101,6 +101,3 @@ class control:
                 break
 
         return coredump_status
-
-
-control_page = control()

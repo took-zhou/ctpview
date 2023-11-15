@@ -328,9 +328,9 @@ class manual():
         if len(account_para) > 0:
             account_para = self.hand_account_operation(account_para)
 
-        if st.button("update para"):
+        if st.button("update %s" % (username.split('_')[0])):
             self.virtual_account_set_click(account_para)
-            st.info('update para ok')
+            st.info('update %s ok' % (username.split('_')[0]))
 
     def virtual_account_set_click(self, updated_para):
         temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
@@ -443,6 +443,3 @@ class manual():
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
             st.info('unsubscribe ins ok')
-
-
-manual_page = manual()

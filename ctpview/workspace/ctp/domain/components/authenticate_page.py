@@ -31,6 +31,3 @@ class authenticate():
         st.sidebar.write('----')
         self.authenticator.logout('Logout', 'sidebar')
         st.sidebar.write(f'welcome `%s`' % (st.session_state['name']))
-
-
-authenticate_page = authenticate()

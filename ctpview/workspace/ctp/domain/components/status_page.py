@@ -96,6 +96,3 @@ class status():
 
         st.write('subscribe instrument number from strategy`%d`' % (len(subscribe_list)))
         st.write(subscribe_list)
-
-
-status_page = status()

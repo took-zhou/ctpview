@@ -10,7 +10,7 @@ from ctpview.workspace.common.protobuf import ctpview_trader_pb2 as ctp
 from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
 
 
-class parameter:
+class parameter():
 
     def __init__(self):
         self.api_types = ['ctp', 'xtp', 'btp', 'otp', 'ftp']
@@ -166,6 +166,3 @@ class parameter:
                 continue
 
         return ''
-
-
-parameter_page = parameter()

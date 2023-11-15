@@ -231,6 +231,3 @@ class update():
                 continue
 
         return ''
-
-
-update_page = update()

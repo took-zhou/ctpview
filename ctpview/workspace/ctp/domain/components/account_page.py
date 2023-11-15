@@ -107,6 +107,3 @@ class account():
 
             position_df = pd.DataFrame(pisition_dict)
             st.table(position_df)
-
-
-account_page = account()

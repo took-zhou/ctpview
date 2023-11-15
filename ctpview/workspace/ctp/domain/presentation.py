@@ -3,14 +3,14 @@ import os
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-from ctpview.workspace.ctp.domain.components.account_page import account_page
-from ctpview.workspace.ctp.domain.components.authenticate_page import authenticate_page
-from ctpview.workspace.ctp.domain.components.control_page import control_page
-from ctpview.workspace.ctp.domain.components.manual_page import manual_page
-from ctpview.workspace.ctp.domain.components.parameter_page import parameter_page
-from ctpview.workspace.ctp.domain.components.setting_page import setting_page
-from ctpview.workspace.ctp.domain.components.status_page import status_page
-from ctpview.workspace.ctp.domain.components.update_page import update_page
+from ctpview.workspace.ctp.domain.components.account_page import account
+from ctpview.workspace.ctp.domain.components.authenticate_page import authenticate
+from ctpview.workspace.ctp.domain.components.control_page import control
+from ctpview.workspace.ctp.domain.components.manual_page import manual
+from ctpview.workspace.ctp.domain.components.parameter_page import parameter
+from ctpview.workspace.ctp.domain.components.setting_page import setting
+from ctpview.workspace.ctp.domain.components.status_page import status
+from ctpview.workspace.ctp.domain.components.update_page import update
 
 
 class ctpview():
@@ -19,9 +19,10 @@ class ctpview():
         st.set_page_config(page_title='tsaodai ctp operation control',
                            layout='centered',
                            page_icon='%s/.local/resource/icon.png' % (os.environ.get('HOME')))
+        self.authenticate_page = authenticate()
 
     def update(self):
-        authenticate_page.login()
+        self.authenticate_page.login()
         if 'authentication_status' in st.session_state and st.session_state['authentication_status'] != True:
             return
 
@@ -34,21 +35,21 @@ class ctpview():
             module_option = st.sidebar.radio('modue', page_list)
 
         if module_option == 'parameter':
-            parameter_page.update()
+            parameter().update()
         elif module_option == 'control':
-            control_page.update()
+            control().update()
         elif module_option == 'account':
-            account_page.update()
+            account().update()
         elif module_option == 'status':
-            status_page.update()
+            status().update()
         elif module_option == 'update':
-            update_page.update()
+            update().update()
         elif module_option == 'setting':
-            setting_page.update()
+            setting().update()
         elif module_option == 'manual':
-            manual_page.update()
+            manual().update()
 
-        authenticate_page.logout()
+        self.authenticate_page.logout()
 
 
 app = ctpview()

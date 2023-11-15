@@ -144,6 +144,3 @@ class setting():
     def distribute_history_record(self, file):
         command = 'tar zxf %s -C /' % (file)
         os.system(command)
-
-
-setting_page = setting()
