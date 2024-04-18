@@ -71,7 +71,7 @@ class setting():
             if st.button('distribute', key='strategy8'):
                 self.distribute_history_record(binary_file)
 
-    def clear_process(self, ):
+    def clear_process(self):
         id = self.checkprocess("market")
         if isinstance(id, int):
             os.system("kill -2 %d" % (id))

@@ -311,19 +311,19 @@ class manual():
         conn = sqlite3.connect(control_db_path)
         try:
             user_id = username.split('_')[0]
-            command = "select user_id, balance, rspmode from virtual_account where user_id = '%s';" % (user_id)
+            command = "select user_id, balance, available, rspmode from virtual_account where user_id = '%s';" % (user_id)
             account_para = conn.execute(command).fetchall()[0]
             conn.close()
         except:
-            command = "create table if not exists virtual_account(user_id TEXT, balance REAL, rspmode INT);"
+            command = "create table if not exists virtual_account(user_id TEXT, balance REAL, available REAL, rspmode INT, updated INT);"
             conn.execute(command)
             user_id = username.split('_')[0]
-            command = "insert into virtual_account(user_id, balance, rspmode) select '%s', 1000000, 0 where not exists (select * from virtual_account where user_id = '%s');" % (
+            command = "insert into virtual_account(user_id, balance, available, rspmode, updated) select '%s', 1000000, 1000000, 0 , 0 where not exists (select * from virtual_account where user_id = '%s');" % (
                 user_id, user_id)
             conn.execute(command)
             conn.commit()
             conn.close()
-            st.experimental_rerun()
+            st.rerun()
 
         if len(account_para) > 0:
             account_para = self.hand_account_operation(account_para)
@@ -336,8 +336,8 @@ class manual():
         temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
         control_db_path = '%s/backtest.db' % temp_dir
         conn = sqlite3.connect(control_db_path)
-        command = "update virtual_account set balance = %f, rspmode = %d where user_id = '%s';" % (updated_para[1], updated_para[2],
-                                                                                                   updated_para[0])
+        command = "update virtual_account set balance = %f, available = %f, rspmode = %d, updated = 1 where user_id = '%s';" % (
+            updated_para[1], updated_para[2], updated_para[3], updated_para[0])
         conn.execute(command)
         conn.commit()
         conn.close()
@@ -351,12 +351,13 @@ class manual():
         rspmode_list = [rspmode_dict[item] for item in rspmode_dict]
 
         contain = st.container()
-        col1, col2 = contain.columns(2)
+        col1, col2, col3 = contain.columns(3)
         balance = col1.text_input('balance', account_para[1], key='2_%s' % account_para[0])
-        rspmode = col2.selectbox('source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[2]]), key='3_%s' % account_para[0])
+        available = col2.text_input('available', account_para[2], key='3_%s' % account_para[0])
+        rspmode = col3.selectbox('source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[3]]), key='4_%s' % account_para[0])
         rspmode = rspmode_list.index(rspmode)
 
-        return [account_para[0], float(balance), rspmode]
+        return [account_para[0], float(balance), float(available), rspmode]
 
     def order_test(self):
         exch = st.text_input('exch', 'CZCE')
