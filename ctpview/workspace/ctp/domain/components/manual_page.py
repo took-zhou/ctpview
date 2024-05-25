@@ -26,7 +26,7 @@ class manual():
     def update(self):
         mode_str = [
             'Login Control', 'Block Quotation', 'Bug Injection', 'Profiler Control', 'Backtest Control', 'Virtual Account Set',
-            'Order Test', 'Subscribe Instrument'
+            'Order Test', 'Subscribe Instrument', 'Send Test Email'
         ]
         manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
@@ -46,6 +46,8 @@ class manual():
             self.order_test()
         elif manual_mode == 'Subscribe Instrument':
             self.subscribe_instrument()
+        elif manual_mode == 'Send Test Email':
+            self.send_test_email()
 
     def login_control(self):
         contain = st.container()
@@ -227,7 +229,12 @@ class manual():
             except:
                 command = "create table if not exists backtest_control(begin TEXT, end TEXT, now TEXT, speed INT, source INT, indication INT);"
                 conn.execute(command)
-                command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
+                if 'backtest_control' in st.session_state:
+                    backtest_para = st.session_state['backtest_control']
+                    command = "insert into backtest_control(begin, end, now, speed, source, indication) select '%s', '%s', '', %d, %d, 0 where not exists (select * from backtest_control);" % (
+                        backtest_para[0], backtest_para[1], backtest_para[2], backtest_para[3])
+                else:
+                    command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
                 conn.execute(command)
                 conn.commit()
             conn.close()
@@ -244,6 +251,7 @@ class manual():
                     conn.execute(command)
                     conn.commit()
                     conn.close()
+                    st.session_state['backtest_control'] = updated_para
                     st.info('update para ok')
 
     def hand_backtest_operation(self, control_para):
@@ -444,3 +452,24 @@ class manual():
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
             st.info('unsubscribe ins ok')
+
+    def send_test_email(self):
+        contain = st.container()
+        col1, col2 = contain.columns(2)
+        if col1.button('market send'):
+            topic = 'ctpview_market.SendTestEmail'
+            msg = cmp.message()
+            mse = msg.send_email
+            mse.send_action = cmp.SendTestEmail.SendAction.send
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+            st.info('market send ok')
+
+        if col2.button('trader send'):
+            topic = 'ctpview_trader.SendTestEmail'
+            msg = ctp.message()
+            mse = msg.send_email
+            mse.send_action = ctp.SendTestEmail.SendAction.send
+            msg_bytes = msg.SerializeToString()
+            proxysender.send_msg(topic, msg_bytes)
+            st.info('trader send ok')

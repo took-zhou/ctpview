@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xad\x02\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x35\n\rblock_control\x18\x02 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x12\x35\n\rbug_injection\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BugInjectionH\x00\x12;\n\x10profiler_control\x18\x04 \x01(\x0b\x32\x1f.ctpview_market.ProfilerControlH\x00\x12\x31\n\x0bupdate_para\x18\x05 \x01(\x0b\x32\x1a.ctpview_market.UpdateParaH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"\x89\x01\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\x12\x12\n\ninstrument\x18\x02 \x03(\t\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_market.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\"\x9a\x01\n\x0fProfilerControl\x12G\n\x0fprofiler_action\x18\x01 \x01(\x0e\x32..ctpview_market.ProfilerControl.ProfilerAction\">\n\x0eProfilerAction\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0bstart_write\x10\x01\x12\x0e\n\nstop_write\x10\x02\"\x83\x01\n\nUpdatePara\x12>\n\rupdate_action\x18\x01 \x01(\x0e\x32\'.ctpview_market.UpdatePara.UpdateAction\"5\n\x0cUpdateAction\x12\x0b\n\x07reserve\x10\x00\x12\n\n\x06update\x10\x01\x12\x0c\n\x08noupdate\x10\x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14\x63tpview-market.proto\x12\x0e\x63tpview_market\"\xaa\x03\n\x07message\x12\x35\n\rlogin_control\x18\x01 \x01(\x0b\x32\x1c.ctpview_market.LoginControlH\x00\x12\x35\n\rblock_control\x18\x02 \x01(\x0b\x32\x1c.ctpview_market.BlockControlH\x00\x12\x35\n\rbug_injection\x18\x03 \x01(\x0b\x32\x1c.ctpview_market.BugInjectionH\x00\x12;\n\x10profiler_control\x18\x04 \x01(\x0b\x32\x1f.ctpview_market.ProfilerControlH\x00\x12\x31\n\x0bupdate_para\x18\x05 \x01(\x0b\x32\x1a.ctpview_market.UpdateParaH\x00\x12\x46\n\x16\x63lear_diagnostic_event\x18\x06 \x01(\x0b\x32$.ctpview_market.ClearDiagnosticEventH\x00\x12\x33\n\nsend_email\x18\x07 \x01(\x0b\x32\x1d.ctpview_market.SendTestEmailH\x00\x42\r\n\x0bMessageType\"t\n\x0cLoginControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.LoginControl.Command\"-\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05login\x10\x01\x12\n\n\x06logout\x10\x02\"\x89\x01\n\x0c\x42lockControl\x12\x35\n\x07\x63ommand\x18\x01 \x01(\x0e\x32$.ctpview_market.BlockControl.Command\x12\x12\n\ninstrument\x18\x02 \x03(\t\".\n\x07\x43ommand\x12\x0b\n\x07reserve\x10\x00\x12\t\n\x05\x62lock\x10\x01\x12\x0b\n\x07unblock\x10\x02\"w\n\x0c\x42ugInjection\x12\x38\n\x04type\x18\x01 \x01(\x0e\x32*.ctpview_market.BugInjection.InjectionType\"-\n\rInjectionType\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0b\x64ouble_free\x10\x01\"\x9a\x01\n\x0fProfilerControl\x12G\n\x0fprofiler_action\x18\x01 \x01(\x0e\x32..ctpview_market.ProfilerControl.ProfilerAction\">\n\x0eProfilerAction\x12\x0b\n\x07reserve\x10\x00\x12\x0f\n\x0bstart_write\x10\x01\x12\x0e\n\nstop_write\x10\x02\"\x83\x01\n\nUpdatePara\x12>\n\rupdate_action\x18\x01 \x01(\x0e\x32\'.ctpview_market.UpdatePara.UpdateAction\"5\n\x0cUpdateAction\x12\x0b\n\x07reserve\x10\x00\x12\n\n\x06update\x10\x01\x12\x0c\n\x08noupdate\x10\x02\"3\n\x14\x43learDiagnosticEvent\x12\x1b\n\x13\x64iagnostic_event_id\x18\x01 \x01(\r\"\x7f\n\rSendTestEmail\x12=\n\x0bsend_action\x18\x01 \x01(\x0e\x32(.ctpview_market.SendTestEmail.SendAction\"/\n\nSendAction\x12\x0b\n\x07reserve\x10\x00\x12\x08\n\x04send\x10\x01\x12\n\n\x06nosend\x10\x02\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'ctpview_market_pb2', globals())
@@ -21,25 +21,31 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _MESSAGE._serialized_start=41
-  _MESSAGE._serialized_end=342
-  _LOGINCONTROL._serialized_start=344
-  _LOGINCONTROL._serialized_end=460
-  _LOGINCONTROL_COMMAND._serialized_start=415
-  _LOGINCONTROL_COMMAND._serialized_end=460
-  _BLOCKCONTROL._serialized_start=463
-  _BLOCKCONTROL._serialized_end=600
-  _BLOCKCONTROL_COMMAND._serialized_start=554
-  _BLOCKCONTROL_COMMAND._serialized_end=600
-  _BUGINJECTION._serialized_start=602
-  _BUGINJECTION._serialized_end=721
-  _BUGINJECTION_INJECTIONTYPE._serialized_start=676
-  _BUGINJECTION_INJECTIONTYPE._serialized_end=721
-  _PROFILERCONTROL._serialized_start=724
-  _PROFILERCONTROL._serialized_end=878
-  _PROFILERCONTROL_PROFILERACTION._serialized_start=816
-  _PROFILERCONTROL_PROFILERACTION._serialized_end=878
-  _UPDATEPARA._serialized_start=881
-  _UPDATEPARA._serialized_end=1012
-  _UPDATEPARA_UPDATEACTION._serialized_start=959
-  _UPDATEPARA_UPDATEACTION._serialized_end=1012
+  _MESSAGE._serialized_end=467
+  _LOGINCONTROL._serialized_start=469
+  _LOGINCONTROL._serialized_end=585
+  _LOGINCONTROL_COMMAND._serialized_start=540
+  _LOGINCONTROL_COMMAND._serialized_end=585
+  _BLOCKCONTROL._serialized_start=588
+  _BLOCKCONTROL._serialized_end=725
+  _BLOCKCONTROL_COMMAND._serialized_start=679
+  _BLOCKCONTROL_COMMAND._serialized_end=725
+  _BUGINJECTION._serialized_start=727
+  _BUGINJECTION._serialized_end=846
+  _BUGINJECTION_INJECTIONTYPE._serialized_start=801
+  _BUGINJECTION_INJECTIONTYPE._serialized_end=846
+  _PROFILERCONTROL._serialized_start=849
+  _PROFILERCONTROL._serialized_end=1003
+  _PROFILERCONTROL_PROFILERACTION._serialized_start=941
+  _PROFILERCONTROL_PROFILERACTION._serialized_end=1003
+  _UPDATEPARA._serialized_start=1006
+  _UPDATEPARA._serialized_end=1137
+  _UPDATEPARA_UPDATEACTION._serialized_start=1084
+  _UPDATEPARA_UPDATEACTION._serialized_end=1137
+  _CLEARDIAGNOSTICEVENT._serialized_start=1139
+  _CLEARDIAGNOSTICEVENT._serialized_end=1190
+  _SENDTESTEMAIL._serialized_start=1192
+  _SENDTESTEMAIL._serialized_end=1319
+  _SENDTESTEMAIL_SENDACTION._serialized_start=1272
+  _SENDTESTEMAIL_SENDACTION._serialized_end=1319
 # @@protoc_insertion_point(module_scope)
