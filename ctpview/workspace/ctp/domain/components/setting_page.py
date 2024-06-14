@@ -61,7 +61,7 @@ class setting():
             fw.close()
 
         package_list = os.listdir(self.history_record_path)
-        package = st.selectbox('package', package_list)
+        package = st.selectbox('Package', package_list)
 
         binary_file = '%s/%s' % (self.history_record_path, package)
         if os.path.exists(binary_file):

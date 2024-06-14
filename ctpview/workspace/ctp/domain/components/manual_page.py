@@ -25,28 +25,28 @@ class manual():
 
     def update(self):
         mode_str = [
-            'Login Control', 'Block Quotation', 'Bug Injection', 'Profiler Control', 'Backtest Control', 'Virtual Account Set',
-            'Order Test', 'Subscribe Instrument', 'Send Test Email'
+            'login control', 'block quotation', 'bug injection', 'profiler control', 'backtest control', 'virtual account set',
+            'order test', 'subscribe instrument', 'send test email'
         ]
         manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
-        if manual_mode == 'Login Control':
+        if manual_mode == 'login control':
             self.login_control()
-        elif manual_mode == 'Block Quotation':
+        elif manual_mode == 'block quotation':
             self.block_quotation()
-        elif manual_mode == 'Bug Injection':
+        elif manual_mode == 'bug injection':
             self.bug_injection()
-        elif manual_mode == 'Profiler Control':
+        elif manual_mode == 'profiler control':
             self.profiler_control()
-        elif manual_mode == 'Backtest Control':
+        elif manual_mode == 'backtest control':
             self.backtest_control()
-        elif manual_mode == 'Virtual Account Set':
+        elif manual_mode == 'virtual account set':
             self.virtual_account_set()
-        elif manual_mode == 'Order Test':
+        elif manual_mode == 'order test':
             self.order_test()
-        elif manual_mode == 'Subscribe Instrument':
+        elif manual_mode == 'subscribe instrument':
             self.subscribe_instrument()
-        elif manual_mode == 'Send Test Email':
+        elif manual_mode == 'send test email':
             self.send_test_email()
 
     def login_control(self):
@@ -124,7 +124,7 @@ class manual():
         except:
             pass
 
-        select_ins_list = st.multiselect('select ins', subscribe_list)
+        select_ins_list = st.multiselect('Select ins', subscribe_list)
 
         contain = st.container()
         col1, col2 = contain.columns(2)
@@ -269,13 +269,13 @@ class manual():
         contain = st.container()
         col1, col2, col3, col4 = contain.columns(4)
         if control_para[5] in [1, 2]:
-            begin = col1.text_input('begin time', control_para[0], disabled=True)
-            end = col2.text_input('end time', control_para[1], disabled=True)
+            begin = col1.text_input('Begin time', control_para[0], disabled=True)
+            end = col2.text_input('End time', control_para[1], disabled=True)
         else:
-            begin = col1.text_input('begin time', control_para[0])
-            end = col2.text_input('end time', control_para[1])
-        source = col4.selectbox('source', source_list, source_list.index(source_dict[control_para[4]]))
-        speed = col3.number_input('speed', 1, 1000, control_para[3], 10)
+            begin = col1.text_input('Begin time', control_para[0])
+            end = col2.text_input('End time', control_para[1])
+        source = col4.selectbox('Source', source_list, source_list.index(source_dict[control_para[4]]))
+        speed = col3.number_input('Speed', 1, 1000, control_para[3], 10)
         source = source_list.index(source)
         indication = control_para[5]
         contain = st.container()
@@ -299,7 +299,7 @@ class manual():
         process = int((now_date.timestamp() - begin_date.timestamp()) / (end_date.timestamp() - begin_date.timestamp()) * 100)
         process = 0 if process < 0 else process
         process = 100 if process > 100 else process
-        level1_iteration1.text(f'Iteration {process}, now time: %s, status: %s' % (now_date, indication_dict[indication]))
+        level1_iteration1.text(f'iteration {process}, now time {now_date}, status {indication_dict[indication]}')
         level1_bar.progress(process)
 
         return [begin, end, speed, source, indication]
@@ -308,9 +308,9 @@ class manual():
         account_para = []
         usernames = jsonconfig.get_config('trader', 'User')
 
-        username = st.selectbox("user", usernames)
-        if 'btp' not in username and 'ftp' not in username:
-            st.info('need in ftp/btp api')
+        username = st.selectbox("User", usernames)
+        if username == None or ('btp' not in username and 'ftp' not in username):
+            st.info('need in ftp/btp api and select user')
             return
         temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
         if not os.path.exists(temp_dir):
@@ -360,23 +360,23 @@ class manual():
 
         contain = st.container()
         col1, col2, col3 = contain.columns(3)
-        balance = col1.text_input('balance', account_para[1], key='2_%s' % account_para[0])
-        available = col2.text_input('available', account_para[2], key='3_%s' % account_para[0])
-        rspmode = col3.selectbox('source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[3]]), key='4_%s' % account_para[0])
+        balance = col1.text_input('Balance', account_para[1], key='2_%s' % account_para[0])
+        available = col2.text_input('Available', account_para[2], key='3_%s' % account_para[0])
+        rspmode = col3.selectbox('Source', rspmode_list, rspmode_list.index(rspmode_dict[account_para[3]]), key='4_%s' % account_para[0])
         rspmode = rspmode_list.index(rspmode)
 
         return [account_para[0], float(balance), float(available), rspmode]
 
     def order_test(self):
-        exch = st.text_input('exch', 'CZCE')
-        ins = st.text_input('ins', 'TA401')
-        index = st.text_input('index', '0001')
-        limit_price = st.number_input('limit_price')
-        volume = st.number_input('number', step=1)
-        direction = st.selectbox('direction', ['buy', 'sell'], key='order test direction')
-        comb_offset_flag = st.selectbox('comb_offset_flag', ['open', 'close'], key='order test comb_offset_flag')
-        order_dict = {'limit_LIMIT': 1, 'Limit_FAK': 2, 'limit_FOK': 3, 'AnyPrice_Fok': 4, 'AnyPrice_Fak': 5}
-        order_type = st.selectbox('order type', list(order_dict.keys()), key='open_type')
+        exch = st.text_input('Exch', 'CZCE')
+        ins = st.text_input('Ins', 'TA401')
+        index = st.text_input('Index', '0001')
+        limit_price = st.number_input('Limit price')
+        volume = st.number_input('Number', step=1)
+        direction = st.selectbox('Direction', ['buy', 'sell'], key='order test direction')
+        comb_offset_flag = st.selectbox('Comb offset flag', ['open', 'close'], key='order test comb_offset_flag')
+        order_dict = {'limit limit': 1, 'limit fak': 2, 'limit fok': 3, 'anyprice fok': 4, 'anyprice fak': 5}
+        order_type = st.selectbox('Order type', list(order_dict.keys()), key='open_type')
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('insert order'):
@@ -425,8 +425,8 @@ class manual():
             st.info('cancle order ok')
 
     def subscribe_instrument(self):
-        exch = st.text_input('exch', 'CZCE')
-        ins = st.text_input('ins', 'TA301')
+        exch = st.text_input('Exch', 'CZCE')
+        ins = st.text_input('Ins', 'TA301')
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('subcribe'):

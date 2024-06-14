@@ -114,12 +114,12 @@ class update():
 
     def update_apt_link(self):
         apt_list = [item for item in self.apt_source_dict]
-        title = st.selectbox('select apt', apt_list, apt_list.index(self.apt_source))
+        title = st.selectbox('Select apt', apt_list, apt_list.index(self.apt_source))
         self.apt_source = title
 
     def update_pypi_link(self):
         pypi_list = [item for item in self.pip_source_dict]
-        title = st.selectbox('select pypi', pypi_list, pypi_list.index(self.pip_source))
+        title = st.selectbox('Select pypi', pypi_list, pypi_list.index(self.pip_source))
         self.pip_source = title
 
     def update_market_trader(self):
@@ -181,7 +181,7 @@ class update():
             # 重启streamlit
             ui_id = self.checkprocess('streamlit')
             import ctpview
-            command = 'nohup kill -9 %d; nohup streamlit run %s/workspace/ctp/domain/presentation.py >> %s/.streamlit/output.log 2>&1 &' % (
+            command = 'nohup kill -9 %d && streamlit run %s/workspace/ctp/domain/presentation.py >> %s/.streamlit/output.log 2>&1 &' % (
                 ui_id, ctpview.__path__[0], os.environ.get('HOME'))
             os.system(command)
 

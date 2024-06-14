@@ -29,10 +29,10 @@ class ctpview():
         st_autorefresh(interval=13000, limit=10000, key="auto_update")
         if 'name' in st.session_state and st.session_state['name'] == 'admin':
             page_list = ('parameter', 'control', 'account', 'status', 'update', 'setting', 'manual')
-            module_option = st.sidebar.radio('modue', page_list)
+            module_option = st.sidebar.radio('Modue', page_list)
         else:
             page_list = ('parameter', 'control', 'account', 'status')
-            module_option = st.sidebar.radio('modue', page_list)
+            module_option = st.sidebar.radio('Modue', page_list)
 
         if module_option == 'parameter':
             parameter().update()
