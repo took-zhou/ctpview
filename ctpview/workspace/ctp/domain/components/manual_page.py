@@ -54,58 +54,64 @@ class manual():
         col1, col2, col3 = contain.columns(3)
 
         if col1.button('market login'):
-            topic = "ctpview_market.LoginControl"
-            msg = cmp.message()
-            mlc = msg.login_control
-            mlc.command = cmp.LoginControl.Command.login
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market login send ok')
+            with st.status("market login send...") as st_status:
+                topic = "ctpview_market.LoginControl"
+                msg = cmp.message()
+                mlc = msg.login_control
+                mlc.command = cmp.LoginControl.Command.login
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market login send complete", state="complete")
 
         if col2.button('market logout'):
-            topic = "ctpview_market.LoginControl"
-            msg = cmp.message()
-            mlc = msg.login_control
-            mlc.command = cmp.LoginControl.Command.logout
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market logout send ok')
+            with st.status("market logout send...") as st_status:
+                topic = "ctpview_market.LoginControl"
+                msg = cmp.message()
+                mlc = msg.login_control
+                mlc.command = cmp.LoginControl.Command.logout
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market logout send complete", state="complete")
 
         if col3.button('market reserve'):
-            topic = "ctpview_market.LoginControl"
-            msg = cmp.message()
-            mlc = msg.login_control
-            mlc.command = cmp.LoginControl.Command.reserve
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market reserve send ok')
+            with st.status("market reserve send...") as st_status:
+                topic = "ctpview_market.LoginControl"
+                msg = cmp.message()
+                mlc = msg.login_control
+                mlc.command = cmp.LoginControl.Command.reserve
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market reserve send complete", state="complete")
 
         if col1.button('trader login'):
-            topic = "ctpview_trader.LoginControl"
-            msg = ctp.message()
-            mlc = msg.login_control
-            mlc.command = ctp.LoginControl.Command.login
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader login send ok')
+            with st.status("trader login send...") as st_status:
+                topic = "ctpview_trader.LoginControl"
+                msg = ctp.message()
+                mlc = msg.login_control
+                mlc.command = ctp.LoginControl.Command.login
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader login send complete", state="complete")
 
         if col2.button('trader logout'):
-            topic = "ctpview_trader.LoginControl"
-            msg = ctp.message()
-            mlc = msg.login_control
-            mlc.command = ctp.LoginControl.Command.logout
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader logout send ok')
+            with st.status("trader logout send...") as st_status:
+                topic = "ctpview_trader.LoginControl"
+                msg = ctp.message()
+                mlc = msg.login_control
+                mlc.command = ctp.LoginControl.Command.logout
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader logout send complete", state="complete")
 
         if col3.button('trader reserve'):
-            topic = "ctpview_trader.LoginControl"
-            msg = ctp.message()
-            mlc = msg.login_control
-            mlc.command = ctp.LoginControl.Command.reserve
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader reserve send ok')
+            with st.status("trader reserve send...") as st_status:
+                topic = "ctpview_trader.LoginControl"
+                msg = ctp.message()
+                mlc = msg.login_control
+                mlc.command = ctp.LoginControl.Command.reserve
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader reserve send complete", state="complete")
 
     def block_quotation(self):
         subscribe_list = []
@@ -130,86 +136,96 @@ class manual():
         col1, col2 = contain.columns(2)
 
         if col1.button('block'):
-            topic = "ctpview_market.BlockControl"
-            msg = cmp.message()
-            mlc = msg.block_control
-            mlc.command = cmp.BlockControl.Command.block
-            for item in select_ins_list:
-                mlc.instrument.append(item)
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
+            with st.status("block send...") as st_status:
+                topic = "ctpview_market.BlockControl"
+                msg = cmp.message()
+                mlc = msg.block_control
+                mlc.command = cmp.BlockControl.Command.block
+                for item in select_ins_list:
+                    mlc.instrument.append(item)
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="block send complete", state="complete")
 
         if col2.button('unblock'):
-            topic = "ctpview_market.BlockControl"
-            msg = cmp.message()
-            mlc = msg.block_control
-            mlc.command = cmp.BlockControl.Command.unblock
-            for item in select_ins_list:
-                mlc.instrument.append(item)
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
+            with st.status("unblock send...") as st_status:
+                topic = "ctpview_market.BlockControl"
+                msg = cmp.message()
+                mlc = msg.block_control
+                mlc.command = cmp.BlockControl.Command.unblock
+                for item in select_ins_list:
+                    mlc.instrument.append(item)
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="unblock send complete", state="complete")
 
     def bug_injection(self):
         contain = st.container()
         col1, col2 = contain.columns(2)
 
         if col1.button('market doublefree'):
-            topic = "ctpview_market.BugInjection"
-            msg = cmp.message()
-            mbi = msg.bug_injection
-            mbi.type = cmp.BugInjection.InjectionType.double_free
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market doublefree send ok')
+            with st.status("market doublefree send...") as st_status:
+                topic = "ctpview_market.BugInjection"
+                msg = cmp.message()
+                mbi = msg.bug_injection
+                mbi.type = cmp.BugInjection.InjectionType.double_free
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market doublefree send complete", state="complete")
 
         if col2.button('trader doublefree'):
-            topic = "ctpview_trader.BugInjection"
-            msg = ctp.message()
-            mbi = msg.bug_injection
-            mbi.type = ctp.BugInjection.InjectionType.double_free
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader doublefree send ok')
+            with st.status("trader doublefree send...") as st_status:
+                topic = "ctpview_trader.BugInjection"
+                msg = ctp.message()
+                mbi = msg.bug_injection
+                mbi.type = ctp.BugInjection.InjectionType.double_free
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader doublefree send complete", state="complete")
 
     def profiler_control(self):
         contain = st.container()
         col1, col2 = contain.columns(2)
 
         if col1.button('market start write'):
-            topic = "ctpview_market.ProfilerControl"
-            msg = cmp.message()
-            mlc = msg.profiler_control
-            mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.start_write
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market start write send ok')
+            with st.status("market start write send...") as st_status:
+                topic = "ctpview_market.ProfilerControl"
+                msg = cmp.message()
+                mlc = msg.profiler_control
+                mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.start_write
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market start write send complete", state="complete")
 
         if col2.button('market stop write'):
-            topic = "ctpview_market.ProfilerControl"
-            msg = cmp.message()
-            mlc = msg.profiler_control
-            mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.stop_write
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market stop write send ok')
+            with st.status("market stop write send...") as st_status:
+                topic = "ctpview_market.ProfilerControl"
+                msg = cmp.message()
+                mlc = msg.profiler_control
+                mlc.profiler_action = cmp.ProfilerControl.ProfilerAction.stop_write
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market stop write send complete", state="complete")
 
         if col1.button('trader start write'):
-            topic = "ctpview_trader.ProfilerControl"
-            msg = ctp.message()
-            mlc = msg.profiler_control
-            mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.start_write
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader start write send ok')
+            with st.status("trader start write send...") as st_status:
+                topic = "ctpview_trader.ProfilerControl"
+                msg = ctp.message()
+                mlc = msg.profiler_control
+                mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.start_write
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader start write send complete", state="complete")
 
         if col2.button('trader stop write'):
-            topic = "ctpview_trader.ProfilerControl"
-            msg = ctp.message()
-            mlc = msg.profiler_control
-            mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.stop_write
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader stop write send ok')
+            with st.status("trader stop write send...") as st_status:
+                topic = "ctpview_trader.ProfilerControl"
+                msg = ctp.message()
+                mlc = msg.profiler_control
+                mlc.profiler_action = ctp.ProfilerControl.ProfilerAction.stop_write
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader stop write send complete", state="complete")
 
     def backtest_control(self):
         control_para = []
@@ -241,18 +257,11 @@ class manual():
 
             if len(control_para) > 0:
                 updated_para = self.hand_backtest_operation(control_para)
-                if updated_para[0] == control_para[0] and updated_para[1] == control_para[1] and updated_para[2] == control_para[
-                        3] and updated_para[3] == control_para[4] and updated_para[4] == control_para[5]:
-                    pass
-                else:
-                    conn = sqlite3.connect(control_db_path)
-                    command = "update backtest_control set begin = '%s', end = '%s', speed = %d, source = %d, indication = %d;" % (
-                        updated_para[0], updated_para[1], updated_para[2], updated_para[3], updated_para[4])
-                    conn.execute(command)
-                    conn.commit()
-                    conn.close()
-                    st.session_state['backtest_control'] = updated_para
-                    st.info('update para ok')
+
+            if st.button("update backtest control"):
+                with st.status("update backtest control...") as st_status:
+                    self.backtest_control_click(updated_para)
+                    st_status.update(label="update backtest control complete", state="complete")
 
     def hand_backtest_operation(self, control_para):
         source_dict = {}
@@ -265,27 +274,22 @@ class manual():
         indication_dict[2] = 'stop'
         indication_dict[3] = 'finish'
         source_list = [source_dict[item] for item in source_dict]
+        indication_list = [indication_dict[item] for item in indication_dict]
 
         contain = st.container()
-        col1, col2, col3, col4 = contain.columns(4)
+        col1, col2 = contain.columns(2)
         if control_para[5] in [1, 2]:
             begin = col1.text_input('Begin time', control_para[0], disabled=True)
             end = col2.text_input('End time', control_para[1], disabled=True)
         else:
             begin = col1.text_input('Begin time', control_para[0])
             end = col2.text_input('End time', control_para[1])
-        source = col4.selectbox('Source', source_list, source_list.index(source_dict[control_para[4]]))
-        speed = col3.number_input('Speed', 1, 1000, control_para[3], 10)
-        source = source_list.index(source)
-        indication = control_para[5]
-        contain = st.container()
         col1, col2, col3 = contain.columns(3)
-        if col1.button('start', key='start2'):
-            indication = 1
-        if col2.button('stop', key='stop2'):
-            indication = 2
-        if col3.button('finish', key='finish2'):
-            indication = 3
+        speed = col1.number_input('Speed', 1, 1000, control_para[3], 10)
+        source = col2.selectbox('Source', source_list, source_list.index(source_dict[control_para[4]]))
+        indication = col3.selectbox('Indication', indication_list, indication_list.index(indication_dict[control_para[5]]))
+        source = source_list.index(source)
+        indication = indication_list.index(indication)
 
         begin_date = datetime.datetime.strptime(begin, '%Y-%m-%d %H:%M:%S')
         end_date = datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
@@ -303,6 +307,20 @@ class manual():
         level1_bar.progress(process)
 
         return [begin, end, speed, source, indication]
+
+    def backtest_control_click(self, updated_para):
+        usernames = jsonconfig.get_config('market', 'User')
+        temp_dir = '%s/%s/' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        control_db_path = '%s/backtest.db' % temp_dir
+        conn = sqlite3.connect(control_db_path)
+        command = "update backtest_control set begin = '%s', end = '%s', speed = %d, source = %d, indication = %d;" % (
+            updated_para[0], updated_para[1], updated_para[2], updated_para[3], updated_para[4])
+        conn.execute(command)
+        conn.commit()
+        conn.close()
+        st.session_state['backtest_control'] = updated_para
 
     def virtual_account_set(self):
         account_para = []
@@ -337,8 +355,9 @@ class manual():
             account_para = self.hand_account_operation(account_para)
 
         if st.button("update %s" % (username.split('_')[0])):
-            self.virtual_account_set_click(account_para)
-            st.info('update %s ok' % (username.split('_')[0]))
+            with st.status("update %s..." % (username.split('_')[0])) as st_status:
+                self.virtual_account_set_click(account_para)
+                st_status.update(label="update %s complete" % (username.split("_")[0]), state="complete")
 
     def virtual_account_set_click(self, updated_para):
         temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
@@ -380,96 +399,102 @@ class manual():
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('insert order'):
-            topic = "strategy_trader.OrderInsertReq"
+            with st.status("insert order send...") as st_status:
+                topic = "strategy_trader.OrderInsertReq"
 
-            msg = stp.message()
-            oims = msg.order_insert_req
-            oims.instrument = ins
-            oims.index = index
+                msg = stp.message()
+                oims = msg.order_insert_req
+                oims.instrument = ins
+                oims.index = index
 
-            order = oims.order
-            order.exchangeId = exch
-            order.instrument = ins
-            order.limitPrice = limit_price
-            order.volume_total_original = int(volume)
+                order = oims.order
+                order.exchangeId = exch
+                order.instrument = ins
+                order.limitPrice = limit_price
+                order.volume_total_original = int(volume)
 
-            if direction == 'buy':
-                order.direction = stp.Direction.BUY
-            elif direction == 'sell':
-                order.direction = stp.Direction.SELL
+                if direction == 'buy':
+                    order.direction = stp.Direction.BUY
+                elif direction == 'sell':
+                    order.direction = stp.Direction.SELL
 
-            if comb_offset_flag == 'open':
-                order.comb_offset_flag = stp.CombOffsetType.OPEN
-            elif comb_offset_flag == 'close':
-                order.comb_offset_flag = stp.CombOffsetType.CLOSE
-            elif comb_offset_flag == 'close_yesterday':
-                order.comb_offset_flag = stp.CombOffsetType.CLOSE_YESTERDAY
-            elif comb_offset_flag == 'close_today':
-                order.comb_offset_flag = stp.CombOffsetType.CLOSE_TODAY
-            order.order_type = order_dict[order_type]
+                if comb_offset_flag == 'open':
+                    order.comb_offset_flag = stp.CombOffsetType.OPEN
+                elif comb_offset_flag == 'close':
+                    order.comb_offset_flag = stp.CombOffsetType.CLOSE
+                elif comb_offset_flag == 'close_yesterday':
+                    order.comb_offset_flag = stp.CombOffsetType.CLOSE_YESTERDAY
+                elif comb_offset_flag == 'close_today':
+                    order.comb_offset_flag = stp.CombOffsetType.CLOSE_TODAY
+                order.order_type = order_dict[order_type]
 
-            msg_bytes = msg.SerializeToString()
-            directsender.send_msg(topic, msg_bytes)
-            st.info('insert order ok')
+                msg_bytes = msg.SerializeToString()
+                directsender.send_msg(topic, msg_bytes)
+                st_status.update(label="insert order complete", state="complete")
 
         if col2.button('cancle order'):
-            topic = "strategy_trader.OrderCancelReq"
+            with st.status("cancle order send...") as st_status:
+                topic = "strategy_trader.OrderCancelReq"
 
-            msg = stp.message()
-            ocr = msg.order_cancel_req
-            ocr.instrument = ins
-            ocr.index = index
+                msg = stp.message()
+                ocr = msg.order_cancel_req
+                ocr.instrument = ins
+                ocr.index = index
 
-            msg_bytes = msg.SerializeToString()
-            directsender.send_msg(topic, msg_bytes)
-            st.info('cancle order ok')
+                msg_bytes = msg.SerializeToString()
+                directsender.send_msg(topic, msg_bytes)
+                st_status.update(label="cancle order send complete", state="complete")
 
     def subscribe_instrument(self):
         exch = st.text_input('Exch', 'CZCE')
         ins = st.text_input('Ins', 'TA301')
         contain = st.container()
         col1, col2 = contain.columns(2)
-        if col1.button('subcribe'):
-            topic = "strategy_market.TickSubscribeReq"
-            msg = smp.message()
-            tsr = msg.tick_sub_req
-            info = tsr.instrument_info
-            info.instrument_id = ins
-            info.exchange_id = exch
-            tsr.action = smp.TickSubscribeReq.Action.sub
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('subscribe ins ok')
+        if col1.button('subscribe'):
+            with st.stauts("subscribe send...") as st_status:
+                topic = "strategy_market.TickSubscribeReq"
+                msg = smp.message()
+                tsr = msg.tick_sub_req
+                info = tsr.instrument_info
+                info.instrument_id = ins
+                info.exchange_id = exch
+                tsr.action = smp.TickSubscribeReq.Action.sub
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="subscribe send complete", state="complete")
 
         if col2.button('unsubcribe'):
-            topic = "strategy_market.TickSubscribeReq"
-            msg = smp.message()
-            tsr = msg.tick_sub_req
-            info = tsr.instrument_info
-            info.instrument_id = ins
-            info.exchange_id = exch
-            tsr.action = smp.TickSubscribeReq.Action.unsub
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('unsubscribe ins ok')
+            with st.stauts("unsubcribe send...") as st_status:
+                topic = "strategy_market.TickSubscribeReq"
+                msg = smp.message()
+                tsr = msg.tick_sub_req
+                info = tsr.instrument_info
+                info.instrument_id = ins
+                info.exchange_id = exch
+                tsr.action = smp.TickSubscribeReq.Action.unsub
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="unsubcribe send complete", state="complete")
 
     def send_test_email(self):
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('market send'):
-            topic = 'ctpview_market.SendTestEmail'
-            msg = cmp.message()
-            mse = msg.send_email
-            mse.send_action = cmp.SendTestEmail.SendAction.send
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('market send ok')
+            with st.stauts("market send...") as st_status:
+                topic = 'ctpview_market.SendTestEmail'
+                msg = cmp.message()
+                mse = msg.send_email
+                mse.send_action = cmp.SendTestEmail.SendAction.send
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market send complete", state="complete")
 
         if col2.button('trader send'):
-            topic = 'ctpview_trader.SendTestEmail'
-            msg = ctp.message()
-            mse = msg.send_email
-            mse.send_action = ctp.SendTestEmail.SendAction.send
-            msg_bytes = msg.SerializeToString()
-            proxysender.send_msg(topic, msg_bytes)
-            st.info('trader send ok')
+            with st.stauts("trader send...") as st_status:
+                topic = 'ctpview_trader.SendTestEmail'
+                msg = ctp.message()
+                mse = msg.send_email
+                mse.send_action = ctp.SendTestEmail.SendAction.send
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="trader send complete", state="complete")

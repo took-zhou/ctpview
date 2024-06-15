@@ -64,8 +64,9 @@ class update():
 
     def write_para(self):
         if st.button("update version"):
-            self.write_para_click()
-            st.info('update version ok')
+            with st.status("update version...") as st_status:
+                self.write_para_click()
+                st_status.update(label="update version complete", state="complete")
 
     def write_para_click(self):
         os.system('sudo chmod 777 /etc/apt/sources.list')
@@ -131,8 +132,10 @@ class update():
         else:
             col1.write('marktrade`? --> ?`')
         if col2.button('update marktrade'):
-            self.update_single_deb('marktrade', st.session_state['marktrade_newest_version'])
-            os.system("sudo ldconfig")
+            with st.status("update marktrade...") as st_status:
+                self.update_single_deb('marktrade', st.session_state['marktrade_newest_version'])
+                os.system("sudo ldconfig")
+                st_status.update(label="update marktrade complete", state="complete")
 
     def update_package_list(self):
         for package in self.package_list:
@@ -145,7 +148,9 @@ class update():
                 col1.write('%s`? --> ?`' % (package))
 
             if col2.button('update %s' % package):
-                self.update_single_pip(package, st.session_state['%s_newest_version' % (package)])
+                with st.status("update %s..." % package) as st_status:
+                    self.update_single_pip(package, st.session_state['%s_newest_version' % (package)])
+                    st_status.update(label="update %s complete" % package, state="complete")
 
     def find_newest_version_pip(self, item):
         newest_version = ''
@@ -175,7 +180,6 @@ class update():
         # 安装依赖
         command = 'pip install %s' % (_module)
         os.system(command)
-        st.info('update %s ok' % (_module))
 
         if _module == 'ctpview':
             # 重启streamlit
@@ -217,7 +221,6 @@ class update():
     def update_single_deb(self, _module, _version=''):
         command = 'sudo apt install -y %s=%s' % (_module, _version)
         os.system(command)
-        st.info('update marktrade ok')
 
     def checkprocess(self, processname):
         # --获取进程信息--

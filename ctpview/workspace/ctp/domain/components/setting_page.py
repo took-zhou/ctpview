@@ -29,28 +29,44 @@ class setting():
 
     def update(self):
         if st.button('clear process'):
-            self.clear_process()
+            with st.status("clear process...") as st_status:
+                self.clear_strategy_process()
+                st_status.update(label="clear process complete", state="complete")
 
         if st.button('clear record'):
-            self.clear_record()
+            with st.status("clear record...") as st_status:
+                self.clear_strategy_record()
+                st_status.update(label="clear record complete", state="complete")
 
         if st.button('clear log'):
-            self.clear_log()
+            with st.status("clear log...") as st_status:
+                self.clear_strategy_log()
+                st_status.update(label="clear log complete", state="complete")
 
         if st.button('clear coredump'):
-            self.clear_coredump()
+            with st.status("clear coredump...") as st_status:
+                self.clear_core_dump()
+                st_status.update(label="clear coredump complete", state="complete")
 
         if st.button('clear tick'):
-            self.clear_tick()
+            with st.status("clear tick...") as st_status:
+                self.clear_tick()
+                st_status.update(label="clear tick complete", state="complete")
 
-        if st.button('uninstall'):
-            self.uninstall_marktrade()
+        if st.button('uninstall marktrade'):
+            with st.status("uninstall marktrade...") as st_status:
+                if self.uninstall_marktrade() == 0:
+                    st_status.update(label="uninstall marktrade complete", state="complete")
+                else:
+                    st_status.update(label="uninstall marktrade error", state="error")
 
         if not os.path.exists(self.history_record_path):
             os.makedirs(self.history_record_path)
 
         if st.button('package'):
-            self.pack_history_record()
+            with st.status("package...") as st_status:
+                self.pack_history_record()
+                st_status.update(label="package complete", state="complete")
         st.write('____')
 
         uploaded_file = st.file_uploader("Choose a file", key='setting1')
@@ -59,6 +75,7 @@ class setting():
             fw = open("%s/%s" % (self.history_record_path, uploaded_file.name), "wb")
             fw.write(bytes_data)
             fw.close()
+            st.status("choose a file complete", state="complete")
 
         package_list = os.listdir(self.history_record_path)
         package = st.selectbox('Package', package_list)
@@ -69,7 +86,9 @@ class setting():
                 st.download_button(label="download", data=file, file_name=package, mime="application/octet-stream")
 
             if st.button('distribute', key='strategy8'):
-                self.distribute_history_record(binary_file)
+                with st.status("distribute...") as st_status:
+                    self.distribute_history_record(binary_file)
+                    st_status.update(label="distribute complete", state="complete")
 
     def clear_process(self):
         id = self.checkprocess("market")
@@ -82,8 +101,6 @@ class setting():
             os.system("kill -2 %d" % (id))
             time.sleep(1)
 
-        st.info('clear process ok')
-
     def clear_record(self):
         data_path = '%s/data/' % (os.environ.get('HOME'))
 
@@ -93,8 +110,6 @@ class setting():
                     if f.split('.')[-1] == 'json' or f.split('.')[-1] == 'db':
                         f_path = os.path.join(root, f)
                         os.system('rm -f %s' % (f_path))
-
-        st.info('clear record ok')
 
     def clear_log(self):
         log_path = '%s/log/' % (os.environ.get('HOME'))
@@ -106,15 +121,11 @@ class setting():
                         f_path = os.path.join(root, f)
                         os.system('rm -f %s' % (f_path))
 
-        st.info('clear log ok')
-
     def clear_coredump(self):
         coredump_path = '%s/.local/coredump' % (os.environ.get('HOME'))
 
         if os.path.exists(coredump_path):
             os.system('rm -f %s/*' % (coredump_path))
-
-        st.info('clear coredump ok')
 
     def clear_tick(self):
         tick_path = jsonconfig.get_config('market', 'HistoryTickPath')
@@ -122,11 +133,11 @@ class setting():
         if os.path.exists(tick_path):
             os.system('rm -f %s/*' % (tick_path))
 
-        st.info('clear tick ok')
-
     def uninstall_marktrade(self):
+        ret = 0
         command = 'sudo apt remove -y marktrade'
         os.system(command)
+        return ret
 
     def pack_history_record(self):
         file_name = 'history_record_%s.tar.gz' % (date.today())

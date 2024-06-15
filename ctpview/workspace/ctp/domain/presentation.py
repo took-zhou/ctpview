@@ -26,13 +26,12 @@ class ctpview():
         if 'authentication_status' in st.session_state and st.session_state['authentication_status'] != True:
             return
 
-        st_autorefresh(interval=13000, limit=10000, key="auto_update")
         if 'name' in st.session_state and st.session_state['name'] == 'admin':
             page_list = ('parameter', 'control', 'account', 'status', 'update', 'setting', 'manual')
-            module_option = st.sidebar.radio('Modue', page_list)
+            module_option = st.sidebar.radio('Operation', page_list)
         else:
             page_list = ('parameter', 'control', 'account', 'status')
-            module_option = st.sidebar.radio('Modue', page_list)
+            module_option = st.sidebar.radio('Operation', page_list)
 
         if module_option == 'parameter':
             parameter().update()
@@ -50,6 +49,7 @@ class ctpview():
             manual().update()
 
         self.authenticate_page.logout()
+        st_autorefresh(interval=10000, limit=10000, key="auto_update")
 
 
 app = ctpview()

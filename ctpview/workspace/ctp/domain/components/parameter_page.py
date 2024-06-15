@@ -119,8 +119,9 @@ class parameter():
             return
 
         if st.button('update para'):
-            self.write_para_click()
-            st.info('update para ok')
+            with st.status("update para...") as st_status:
+                self.write_para_click()
+                st_status.update(label="update para complete", state="complete")
 
     def write_para_click(self):
         f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
