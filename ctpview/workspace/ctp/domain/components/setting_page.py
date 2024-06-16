@@ -30,22 +30,22 @@ class setting():
     def update(self):
         if st.button('clear process'):
             with st.status("clear process...") as st_status:
-                self.clear_strategy_process()
+                self.clear_process()
                 st_status.update(label="clear process complete", state="complete")
 
         if st.button('clear record'):
             with st.status("clear record...") as st_status:
-                self.clear_strategy_record()
+                self.clear_record()
                 st_status.update(label="clear record complete", state="complete")
 
         if st.button('clear log'):
             with st.status("clear log...") as st_status:
-                self.clear_strategy_log()
+                self.clear_log()
                 st_status.update(label="clear log complete", state="complete")
 
         if st.button('clear coredump'):
             with st.status("clear coredump...") as st_status:
-                self.clear_core_dump()
+                self.clear_coredump()
                 st_status.update(label="clear coredump complete", state="complete")
 
         if st.button('clear tick'):

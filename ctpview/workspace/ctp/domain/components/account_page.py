@@ -101,8 +101,8 @@ class account():
             pisition_dict = {
                 'index': index_list,
                 'ins': ins_list,
-                'yesterday_volume': yesterday_volume_list,
-                'today_volume': today_volume_list
+                'yesterday volume': yesterday_volume_list,
+                'today volume': today_volume_list
             }
 
             position_df = pd.DataFrame(pisition_dict)

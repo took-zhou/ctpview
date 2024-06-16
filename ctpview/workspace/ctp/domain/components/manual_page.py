@@ -239,20 +239,18 @@ class manual():
                 os.makedirs(temp_dir)
             control_db_path = '%s/backtest.db' % temp_dir
             conn = sqlite3.connect(control_db_path)
-            try:
-                command = 'select begin, end, now, speed, source, indication from backtest_control;'
-                control_para = conn.execute(command).fetchall()[0]
-            except:
-                command = "create table if not exists backtest_control(begin TEXT, end TEXT, now TEXT, speed INT, source INT, indication INT);"
-                conn.execute(command)
-                if 'backtest_control' in st.session_state:
-                    backtest_para = st.session_state['backtest_control']
-                    command = "insert into backtest_control(begin, end, now, speed, source, indication) select '%s', '%s', '', %d, %d, 0 where not exists (select * from backtest_control);" % (
-                        backtest_para[0], backtest_para[1], backtest_para[2], backtest_para[3])
-                else:
-                    command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
-                conn.execute(command)
-                conn.commit()
+            command = "create table if not exists backtest_control(begin TEXT, end TEXT, now TEXT, speed INT, source INT, indication INT);"
+            conn.execute(command)
+            if 'backtest_control' in st.session_state:
+                backtest_para = st.session_state['backtest_control']
+                command = "insert into backtest_control(begin, end, now, speed, source, indication) select '%s', '%s', '', %d, %d, 0 where not exists (select * from backtest_control);" % (
+                    backtest_para[0], backtest_para[1], backtest_para[2], backtest_para[3])
+            else:
+                command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
+            conn.execute(command)
+            command = 'select begin, end, now, speed, source, indication from backtest_control;'
+            control_para = conn.execute(command).fetchall()[0]
+            conn.commit()
             conn.close()
 
             if len(control_para) > 0:
@@ -335,21 +333,17 @@ class manual():
             os.makedirs(temp_dir)
         control_db_path = '%s/backtest.db' % temp_dir
         conn = sqlite3.connect(control_db_path)
-        try:
-            user_id = username.split('_')[0]
-            command = "select user_id, balance, available, rspmode from virtual_account where user_id = '%s';" % (user_id)
-            account_para = conn.execute(command).fetchall()[0]
-            conn.close()
-        except:
-            command = "create table if not exists virtual_account(user_id TEXT, balance REAL, available REAL, rspmode INT, updated INT);"
-            conn.execute(command)
-            user_id = username.split('_')[0]
-            command = "insert into virtual_account(user_id, balance, available, rspmode, updated) select '%s', 1000000, 1000000, 0 , 0 where not exists (select * from virtual_account where user_id = '%s');" % (
-                user_id, user_id)
-            conn.execute(command)
-            conn.commit()
-            conn.close()
-            st.rerun()
+        user_id = username.split('_')[0]
+        command = "create table if not exists virtual_account(user_id TEXT, balance REAL, available REAL, rspmode INT, updated INT);"
+        conn.execute(command)
+        user_id = username.split('_')[0]
+        command = "insert into virtual_account(user_id, balance, available, rspmode, updated) select '%s', 1000000, 1000000, 0 , 0 where not exists (select * from virtual_account where user_id = '%s');" % (
+            user_id, user_id)
+        conn.execute(command)
+        command = "select user_id, balance, available, rspmode from virtual_account where user_id = '%s';" % (user_id)
+        account_para = conn.execute(command).fetchall()[0]
+        conn.commit()
+        conn.close()
 
         if len(account_para) > 0:
             account_para = self.hand_account_operation(account_para)
@@ -451,7 +445,7 @@ class manual():
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('subscribe'):
-            with st.stauts("subscribe send...") as st_status:
+            with st.status("subscribe send...") as st_status:
                 topic = "strategy_market.TickSubscribeReq"
                 msg = smp.message()
                 tsr = msg.tick_sub_req
@@ -464,7 +458,7 @@ class manual():
                 st_status.update(label="subscribe send complete", state="complete")
 
         if col2.button('unsubcribe'):
-            with st.stauts("unsubcribe send...") as st_status:
+            with st.status("unsubcribe send...") as st_status:
                 topic = "strategy_market.TickSubscribeReq"
                 msg = smp.message()
                 tsr = msg.tick_sub_req
@@ -480,7 +474,7 @@ class manual():
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('market send'):
-            with st.stauts("market send...") as st_status:
+            with st.status("market send...") as st_status:
                 topic = 'ctpview_market.SendTestEmail'
                 msg = cmp.message()
                 mse = msg.send_email
@@ -490,7 +484,7 @@ class manual():
                 st_status.update(label="market send complete", state="complete")
 
         if col2.button('trader send'):
-            with st.stauts("trader send...") as st_status:
+            with st.status("trader send...") as st_status:
                 topic = 'ctpview_trader.SendTestEmail'
                 msg = ctp.message()
                 mse = msg.send_email

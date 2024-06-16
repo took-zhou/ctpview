@@ -23,9 +23,9 @@ class authenticate():
 
             name, status, username = self.authenticator.login('Login', 'main')
             if status == False:
-                st.error('Username/password is incorrect')
+                st.error('username/password is incorrect')
             elif status == None:
-                st.warning('Please enter your username and password')
+                st.warning('please enter your username and password')
 
     def logout(self):
         st.sidebar.write('----')
