@@ -26,7 +26,7 @@ class manual():
     def update(self):
         mode_str = [
             'login control', 'block quotation', 'bug injection', 'profiler control', 'backtest control', 'virtual account set',
-            'order test', 'subscribe instrument', 'send test email'
+            'order test', 'subscribe instrument', 'send test email', 'market state'
         ]
         manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
@@ -48,6 +48,8 @@ class manual():
             self.subscribe_instrument()
         elif manual_mode == 'send test email':
             self.send_test_email()
+        elif manual_mode == 'market state':
+            self.market_state()
 
     def login_control(self):
         contain = st.container()
@@ -492,3 +494,60 @@ class manual():
                 msg_bytes = msg.SerializeToString()
                 proxysender.send_msg(topic, msg_bytes)
                 st_status.update(label="trader send complete", state="complete")
+
+    def get_newest_state(self):
+        now_hour = datetime.datetime.now().hour
+        if now_hour >= 8 and now_hour <= 15:
+            now_state = 2
+        elif now_hour >= 16 and now_hour <= 19:
+            now_state = 3
+        elif now_hour >= 20 or now_hour <= 2:
+            now_state = 0
+        else:
+            now_state = 1
+
+        return now_state
+
+    def get_newest_date(self):
+        if datetime.date.today().weekday() in [0, 1, 2, 3, 4]:
+            if datetime.datetime.now().hour <= 20:
+                select_date = st.date_input('Select date', datetime.date.today())
+            else:
+                if datetime.date.today().weekday() == 4:
+                    select_date = st.date_input('Select date', datetime.date.today() + datetime.timedelta(days=3))
+                else:
+                    select_date = st.date_input('Select date', datetime.date.today() + datetime.timedelta(days=1))
+        elif datetime.date.today().weekday() == 5:
+            select_date = st.date_input('Select date', datetime.date.today() + datetime.timedelta(days=2))
+        elif datetime.date.today().weekday() == 6:
+            select_date = st.date_input('Select date', datetime.date.today() + datetime.timedelta(days=1))
+
+        datestr = '%04d%02d%02d' % (select_date.year, select_date.month, select_date.day)
+
+        return datestr
+
+    def market_state(self):
+        now_state = self.get_newest_state()
+        market_state = st.selectbox('Market state', ['night open', 'night close', 'day open', 'day close'], now_state, key='market_state')
+        datestr = self.get_newest_date()
+
+        if st.button('send'):
+            with st.status("market state send...") as st_status:
+                topic = "market_trader.MarketStateReq"
+                msg = mtp.message()
+                mmsr = msg.market_state_req
+                if market_state == 'day open':
+                    mmsr.market_state = mtp.MarketStateReq.MarketState.day_open
+                elif market_state == 'day close':
+                    mmsr.market_state = mtp.MarketStateReq.MarketState.day_close
+                elif market_state == 'night open':
+                    mmsr.market_state = mtp.MarketStateReq.MarketState.night_open
+                elif market_state == 'night close':
+                    mmsr.market_state = mtp.MarketStateReq.MarketState.night_close
+                else:
+                    mmsr.market_state = mtp.MarketStateReq.MarketState.reserve
+
+                mmsr.date = datestr
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="market state send complete", state="complete")
