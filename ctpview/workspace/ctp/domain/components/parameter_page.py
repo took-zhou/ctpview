@@ -13,7 +13,7 @@ from ctpview.workspace.ctp.infra.sender.proxy_sender import proxysender
 class parameter():
 
     def __init__(self):
-        self.api_types = ['ctp', 'xtp', 'btp', 'otp', 'ftp']
+        self.api_types = ['ctp', 'xtp', 'btp', 'otp', 'ftp', 'gtp']
 
     def update(self):
         self.read_para()
@@ -34,7 +34,7 @@ class parameter():
         fp.close()
 
     def update_common_para(self):
-        st.header('common')
+        st.subheader('common')
 
         common_needshow_para = ['ApiType']
         email_needshow_para = ['redipients']
@@ -58,7 +58,7 @@ class parameter():
                     pass
 
     def update_market_para(self):
-        st.header('market')
+        st.subheader('market')
 
         market_needshow_para = ['User', 'LogInTimeList', 'TimingPush', 'SubscribeMarketDataFrom']
         market_json = self.read_json['market']
@@ -82,11 +82,11 @@ class parameter():
                         title = st.selectbox(item, api_users, 0, key='marketuserid')
                     self.read_json["market"][item] = [title]
                 else:
-                    title = st.text_input(item, market_json[item])
+                    title = st.text_input('market(%s)' % item, market_json[item])
                     self.read_json["market"][item] = title
 
     def update_trader_para(self):
-        st.header('trader')
+        st.subheader('trader')
 
         trader_needshow_para = ['User', 'LogInTimeList', 'SendOrderEmail', 'AccountAssignMode']
         trader_json = self.read_json['trader']
@@ -111,7 +111,7 @@ class parameter():
                     title = st.selectbox(item, assign_mode, assign_mode.index(trader_json[item]), key='assign_mode')
                     self.read_json["trader"][item] = title
                 else:
-                    title = st.text_input(item, trader_json[item])
+                    title = st.text_input('trader%s' % item, trader_json[item])
                     self.read_json["trader"][item] = title
 
     def write_para(self):
@@ -154,6 +154,8 @@ class parameter():
             return [item for item in users if 'otp' in item]
         elif key == 'ftp':
             return [item for item in users if 'ftp' in item]
+        elif key == 'gtp':
+            return [item for item in users if 'gtp' in item]
 
     def checkprocess(self, processname):
         # --获取进程信息--
