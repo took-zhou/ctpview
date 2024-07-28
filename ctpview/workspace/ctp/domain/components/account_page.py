@@ -42,7 +42,7 @@ class account():
             conn.close()
 
             if last_info != []:
-                message = 'account`%s|%f|%f|%s`' % (item, last_info[1], last_info[2], last_info[3])
+                message = 'account`%s|%.15g|%.15g|%s`' % (item, last_info[1], last_info[2], last_info[3])
                 st.write(message)
                 self.show_capital(item)
                 self.show_position(item)

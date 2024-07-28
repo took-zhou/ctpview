@@ -67,6 +67,27 @@ services:
   #     xizhou:
   #       ipv4_address: 192.168.16.13
 
+  # gtp_tickdata:
+  #   restart: always
+  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
+  #   container_name: gtp_tickdata
+  #   devices:
+  #     - /dev/mem:/dev/mem
+  #   environment:
+  #     - base_url=gtp_tickdata
+  #     - run_mode=release
+  #   ports:
+  #     - "8201:8888"
+  #   volumes:
+  #     - /data/marktrade_gtp_tickdata:/home/tsaodai
+  #     - /run/udev:/run/udev
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   networks:
+  #     xizhou:
+  #       ipv4_address: 192.168.16.11
+
   # xtp_tickdata:
   #   restart: always
   #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"

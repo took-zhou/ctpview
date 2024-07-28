@@ -359,7 +359,7 @@ class manual():
         temp_dir = jsonconfig.get_config('trader', 'ControlParaFilePath')
         control_db_path = '%s/backtest.db' % temp_dir
         conn = sqlite3.connect(control_db_path)
-        command = "update virtual_account set balance = %f, available = %f, rspmode = %d, updated = 1 where user_id = '%s';" % (
+        command = "update virtual_account set balance = %.15g, available = %.15g, rspmode = %d, updated = 1 where user_id = '%s';" % (
             updated_para[1], updated_para[2], updated_para[3], updated_para[0])
         conn.execute(command)
         conn.commit()

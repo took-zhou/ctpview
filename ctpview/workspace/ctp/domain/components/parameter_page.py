@@ -81,8 +81,12 @@ class parameter():
                     else:
                         title = st.selectbox(item, api_users, 0, key='marketuserid')
                     self.read_json["market"][item] = [title]
+                elif item == 'LogInTimeList':
+                    login_time_list = ['08:06-15:15;20:06-02:30', '07:00-05:00']
+                    title = st.selectbox(item, login_time_list, login_time_list.index(market_json[item]), key='market_login_time')
+                    self.read_json["market"][item] = title
                 else:
-                    title = st.text_input('market(%s)' % item, market_json[item])
+                    title = st.text_input('Market%s' % item, market_json[item])
                     self.read_json["market"][item] = title
 
     def update_trader_para(self):
@@ -110,8 +114,12 @@ class parameter():
                     assign_mode = ['cycle', 'share']
                     title = st.selectbox(item, assign_mode, assign_mode.index(trader_json[item]), key='assign_mode')
                     self.read_json["trader"][item] = title
+                elif item == 'LogInTimeList':
+                    login_time_list = ['08:05-15:16;20:05-02:31', '06:59-05:01']
+                    title = st.selectbox(item, login_time_list, login_time_list.index(trader_json[item]), key='trader_login_time')
+                    self.read_json["trader"][item] = title
                 else:
-                    title = st.text_input('trader%s' % item, trader_json[item])
+                    title = st.text_input('Trader%s' % item, trader_json[item])
                     self.read_json["trader"][item] = title
 
     def write_para(self):
