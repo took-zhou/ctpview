@@ -85,7 +85,7 @@ class account():
         conn = sqlite3.connect(control_db_path)
         position_info = []
         try:
-            command = 'select order_index, yesterday_volume, today_volume from order_lookup where user_id="%s";' % (user_id)
+            command = 'select order_index, yesterday_volume, today_volume from order_lookup where user_id like "%%%s";' % (user_id)
             position_info = conn.execute(command).fetchall()
         except:
             # error_msg = traceback.format_exc()
@@ -125,17 +125,17 @@ class account():
         account_info = []
         try:
             command = 'select account from group_info where group_id="%s";' % (self.select_group)
-            account_info = conn.execute(command).fetchall()[0]
+            account_info = conn.execute(command).fetchall()
         except:
             # error_msg = traceback.format_exc()
             # print(error_msg)
             pass
         conn.close()
         for item in account_info:
-            if item in self.now_user:
-                exist_accounts.append(item)
+            if item[0] in self.now_user:
+                exist_accounts.append(item[0])
 
-        self.select_accounts = col2.multiselect('account list %s' % (self.select_group), self.now_user, exist_accounts)
+        self.select_accounts = col2.multiselect('account list', self.now_user, exist_accounts, key=self.select_group)
 
     def update_group(self):
         if st.button('update group'):
