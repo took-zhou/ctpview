@@ -387,7 +387,8 @@ class manual():
         ins = st.text_input('Ins', 'TA401')
         index = st.text_input('Index', '0001')
         limit_price = st.number_input('Limit price')
-        volume = st.number_input('Number', step=1)
+        once_volume = st.number_input('Once volume', step=1)
+        hold_volume = st.number_input('Hold volume', step=1)
         direction = st.selectbox('Direction', ['buy', 'sell'], key='order test direction')
         comb_offset_flag = st.selectbox('Comb offset flag', ['open', 'close'], key='order test comb_offset_flag')
         order_dict = {'limit limit': 1, 'limit fak': 2, 'limit fok': 3, 'anyprice fok': 4, 'anyprice fak': 5}
@@ -406,8 +407,9 @@ class manual():
                 order = oims.order
                 order.exchangeId = exch
                 order.instrument = ins
-                order.limitPrice = limit_price
-                order.volume_total_original = int(volume)
+                order.limit_price = limit_price
+                order.once_volume = int(once_volume)
+                order.hold_volume = int(hold_volume)
 
                 if direction == 'buy':
                     order.direction = stp.Direction.BUY

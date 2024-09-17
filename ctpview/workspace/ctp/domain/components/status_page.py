@@ -27,13 +27,6 @@ class status():
         return ret
 
     def update(self):
-        process_list = self.getprocessid(['proxy', 'market', 'trader', 'streamlit'])
-        for item in process_list:
-            name = psutil.Process(item).name()
-            cpu_percent = psutil.Process(item).cpu_percent(interval=1)
-            memory_percent = psutil.Process(item).memory_percent()
-            st.write('{}`start` cup`{:.2}` memory`{:.2}`'.format(name, cpu_percent, memory_percent))
-
         count = 0
         for item in psutil.cpu_percent(interval=1, percpu=True):
             name = 'core%d' % (count)
