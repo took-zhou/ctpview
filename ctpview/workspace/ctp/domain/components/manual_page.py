@@ -383,16 +383,21 @@ class manual():
         return [account_para[0], float(balance), float(available), rspmode]
 
     def order_test(self):
-        exch = st.text_input('Exch', 'CZCE')
-        ins = st.text_input('Ins', 'TA401')
-        index = st.text_input('Index', '0001')
-        limit_price = st.number_input('Limit price')
-        once_volume = st.number_input('Once volume', step=1)
-        hold_volume = st.number_input('Hold volume', step=1)
-        direction = st.selectbox('Direction', ['buy', 'sell'], key='order test direction')
-        comb_offset_flag = st.selectbox('Comb offset flag', ['open', 'close'], key='order test comb_offset_flag')
+        if 'order_test' not in st.session_state:
+            st.session_state['order_test'] = ['CZCE', 'TA401', '0001', '0', 0, 0, 'buy', 'open', 'limit limit']
+        order_para = st.session_state['order_test']
+        exch = st.text_input('Exch', order_para[0])
+        ins = st.text_input('Ins', order_para[1])
+        index = st.text_input('Index', order_para[2])
+        limit_price = st.text_input('Limit price', order_para[3])
+        once_volume = st.number_input('Once volume', order_para[4], step=1)
+        hold_volume = st.number_input('Hold volume', order_para[5], step=1)
+        para_list =  ['buy', 'sell']
+        direction = st.selectbox('Direction', para_list, para_list.index(order_para[6]), key='order test direction')
+        para_list = ['open', 'close']
+        comb_offset_flag = st.selectbox('Comb offset flag', para_list, para_list.index(order_para[7]), key='order test comb_offset_flag')
         order_dict = {'limit limit': 1, 'limit fak': 2, 'limit fok': 3, 'anyprice fok': 4, 'anyprice fak': 5}
-        order_type = st.selectbox('Order type', list(order_dict.keys()), key='open_type')
+        order_type = st.selectbox('Order type', list(order_dict.keys()), list(order_dict.keys()).index(order_para[8]),  key='open_type')
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('insert order'):
@@ -407,7 +412,7 @@ class manual():
                 order = oims.order
                 order.exchangeId = exch
                 order.instrument = ins
-                order.limit_price = limit_price
+                order.limit_price = float(limit_price)
                 order.once_volume = int(once_volume)
                 order.hold_volume = int(hold_volume)
 
@@ -442,6 +447,8 @@ class manual():
                 msg_bytes = msg.SerializeToString()
                 directsender.send_msg(topic, msg_bytes)
                 st_status.update(label="cancle order send complete", state="complete")
+
+        st.session_state['order_test'] = [exch, ins, index, limit_price, once_volume, hold_volume, direction, comb_offset_flag, order_type]
 
     def subscribe_instrument(self):
         exch = st.text_input('Exch', 'CZCE')
