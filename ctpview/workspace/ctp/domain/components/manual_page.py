@@ -390,14 +390,14 @@ class manual():
         ins = st.text_input('Ins', order_para[1])
         index = st.text_input('Index', order_para[2])
         limit_price = st.text_input('Limit price', order_para[3])
-        once_volume = st.number_input('Once volume', order_para[4], step=1)
-        hold_volume = st.number_input('Hold volume', order_para[5], step=1)
-        para_list =  ['buy', 'sell']
+        once_volume = st.number_input('Once volume', value=order_para[4], step=-1)
+        hold_volume = st.number_input('Hold volume', value=order_para[5], step=-1)
+        para_list = ['buy', 'sell']
         direction = st.selectbox('Direction', para_list, para_list.index(order_para[6]), key='order test direction')
         para_list = ['open', 'close']
         comb_offset_flag = st.selectbox('Comb offset flag', para_list, para_list.index(order_para[7]), key='order test comb_offset_flag')
         order_dict = {'limit limit': 1, 'limit fak': 2, 'limit fok': 3, 'anyprice fok': 4, 'anyprice fak': 5}
-        order_type = st.selectbox('Order type', list(order_dict.keys()), list(order_dict.keys()).index(order_para[8]),  key='open_type')
+        order_type = st.selectbox('Order type', list(order_dict.keys()), list(order_dict.keys()).index(order_para[8]), key='open_type')
         contain = st.container()
         col1, col2 = contain.columns(2)
         if col1.button('insert order'):
