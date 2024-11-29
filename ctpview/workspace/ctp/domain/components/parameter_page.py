@@ -26,7 +26,7 @@ class parameter():
 
         st.write('____')
 
-        self.write_para()
+        self.update_and_reset_para()
 
     def read_para(self):
         with open('/etc/marktrade/config.json', 'r', encoding='utf8') as fp:
@@ -79,11 +79,12 @@ class parameter():
                     if now_user in api_users:
                         title = st.selectbox(item, api_users, api_users.index(now_user), key='marketuserid')
                     else:
-                        title = st.selectbox(item, api_users, 0, key='marketuserid')
+                        title = st.selectbox(item, api_users, index=None, key='marketuserid')
                     self.read_json["market"][item] = [title]
                 elif item == 'LogInTimeList':
                     login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00']
-                    title = st.selectbox(item, login_time_list, login_time_list.index(market_json[item]), key='market_login_time')
+                    login_time = self.get_login_time('market', self.read_json['common']['ApiType'])
+                    title = st.selectbox(item, login_time_list, login_time_list.index(login_time), key='market_login_time')
                     self.read_json["market"][item] = title
                 else:
                     title = st.text_input('Market%s' % item, market_json[item])
@@ -116,22 +117,30 @@ class parameter():
                     self.read_json["trader"][item] = title
                 elif item == 'LogInTimeList':
                     login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01']
-                    title = st.selectbox(item, login_time_list, login_time_list.index(trader_json[item]), key='trader_login_time')
+                    login_time = self.get_login_time('trader', self.read_json['common']['ApiType'])
+                    title = st.selectbox(item, login_time_list, login_time_list.index(login_time), key='trader_login_time')
                     self.read_json["trader"][item] = title
                 else:
                     title = st.text_input('Trader%s' % item, trader_json[item])
                     self.read_json["trader"][item] = title
 
-    def write_para(self):
+    def update_and_reset_para(self):
         if not ('name' in st.session_state and st.session_state['name'] == 'admin'):
             return
 
-        if st.button('update para'):
+        contain = st.container()
+        col1, col2 = contain.columns(2)
+        if col1.button('update para'):
             with st.status("update para...") as st_status:
-                self.write_para_click()
+                self.update_para_click()
                 st_status.update(label="update para complete", state="complete")
 
-    def write_para_click(self):
+        if col2.button('reset para'):
+            with st.status("reset para...") as st_status:
+                self.reset_para_click()
+                st_status.update(label="reset para complete", state="complete")
+
+    def update_para_click(self):
         f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
         json.dump(self.read_json, f_d, indent=4)
         f_d.close()
@@ -151,6 +160,13 @@ class parameter():
             msg_bytes = msg.SerializeToString()
             proxysender.send_msg(topic, msg_bytes)
 
+    def reset_para_click(self):
+        f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
+        self.read_json['emailbox']['redipients'] = []
+        self.read_json['trader']['User'] = []
+        json.dump(self.read_json, f_d, indent=4)
+        f_d.close()
+
     def get_users(self, users, key):
         if key == 'ctp':
             return [item for item in users if 'simnow' in item or 'citic' in item or 'zhonghui' in item]
@@ -164,6 +180,24 @@ class parameter():
             return [item for item in users if 'ftp' in item]
         elif key == 'gtp':
             return [item for item in users if 'gtp' in item]
+
+    def get_login_time(self, user_type, key):
+        ret = ''
+        if user_type == 'market':
+            if key in ['gtp']:
+                ret = '08:00-07:00'
+            elif key in ['ctp']:
+                ret = '08:06-15:15;20:06-02:30'
+            else:
+                ret = '08:06-15:15;20:06-02:30'
+        elif user_type == 'trader':
+            if key in ['gtp']:
+                ret = '07:59-07:01'
+            elif key in ['ctp']:
+                ret = '08:05-15:16;20:05-02:31'
+            else:
+                ret = '08:05-15:16;20:05-02:31'
+        return ret
 
     def checkprocess(self, processname):
         # --获取进程信息--

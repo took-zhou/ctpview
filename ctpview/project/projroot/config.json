@@ -2,12 +2,12 @@
     "credentials": {
         "usernames": {
             "zhoufan": {
-                "email": "zhoufan@cdsslh.com",
+                "email": "zhoufan@tsaodai.com",
                 "name": "zhoufan",
                 "password": "$2b$12$LXgMnQb1Ssmi2Uujr.wek.xwKD1fexXCAezFSFZs.wB33/Ppl1gHy"
             },
             "admin": {
-                "email": "admin@cdsslh.com",
+                "email": "admin@tsaodai.com",
                 "name": "admin",
                 "password": "$2b$12$LXgMnQb1Ssmi2Uujr.wek.xwKD1fexXCAezFSFZs.wB33/Ppl1gHy"
             }
@@ -19,6 +19,6 @@
         "name": "sdsd"
     },
     "preauthorized": {
-        "emails": "admin@cdsslh.com"
+        "emails": "admin@tsaodai.com"
     }
 }

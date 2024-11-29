@@ -47,7 +47,7 @@ class control():
             st.session_state['%s_id' % (_name)] = process_id
             process_status = 'start'
         else:
-            process_status = 'not start'
+            process_status = 'stop'
 
         if col1.button('%s start' % (_name), key='%s1' % (_name)) and not (isinstance(process_id, int)):
             command = 'nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &' % (_name, os.environ.get('HOME'), _name, _name)
@@ -64,7 +64,7 @@ class control():
         if process_status == 'start':
             st.write('%s status`start, %s`' % (_name, login_logout))
         else:
-            st.write('%s status`no start, %s`' % (_name, coredump_status))
+            st.write('%s status`stop, %s`' % (_name, coredump_status))
 
     def get_login_status(self, _name):
         login_logout = "exit"

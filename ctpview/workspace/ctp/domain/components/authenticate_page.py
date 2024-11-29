@@ -21,7 +21,7 @@ class authenticate():
             self.authenticator = stauth.Authenticate(json_data['credentials'], json_data['cookie']['name'], json_data['cookie']['key'],
                                                      json_data['cookie']['expiry_days'], json_data['preauthorized'])
 
-            name, status, username = self.authenticator.login('Login', 'main')
+            name, status, username = self.authenticator.login()
             if status == False:
                 st.error('username/password is incorrect')
             elif status == None:

@@ -13,5 +13,5 @@ psutil==5.9.1
 pyzmq==23.2.1
 setuptools==39.0.1
 streamlit==1.28.1
-streamlit_authenticator==0.2.3
+streamlit_authenticator==0.3.1
 streamlit_autorefresh==1.0.1
