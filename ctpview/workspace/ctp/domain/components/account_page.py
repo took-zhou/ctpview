@@ -39,7 +39,7 @@ class account():
 
         st.subheader('operation')
         self.show_group()
-        self.update_group()
+        self.update_and_reset_group()
 
     def show_info(self, user_id):
         control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
@@ -137,8 +137,10 @@ class account():
 
         self.select_accounts = col2.multiselect('account list', self.now_user, exist_accounts, key=self.select_group)
 
-    def update_group(self):
-        if st.button('update group'):
+    def update_and_reset_group(self):
+        contain = st.container()
+        col1, col2 = contain.columns(2)
+        if col1.button('update group'):
             with st.status("update group...") as st_status:
                 topic = "ctpview_trader.UpdateAccountGroup"
                 msg = ctp.message()
@@ -149,3 +151,13 @@ class account():
                 msg_bytes = msg.SerializeToString()
                 proxysender.send_msg(topic, msg_bytes)
                 st_status.update(label="update group complete", state="complete")
+
+        if col2.button('reset group'):
+            with st.status("update group...") as st_status:
+                topic = "ctpview_trader.UpdateAccountGroup"
+                msg = ctp.message()
+                muag = msg.update_account_group
+                muag.group_id = self.select_group
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="reset group complete", state="complete")
