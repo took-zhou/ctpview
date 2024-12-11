@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="ctpview",
-    version="1.8.3",
+    version="1.8.4",
     author="zhoufan",
     author_email="zhoufan@tsaodai.com",
     keywords="presentation layer",
@@ -21,7 +21,7 @@ setup(
         "pyzmq>=23.2.1",
         "setuptools>=39.0.1",
         "streamlit>=1.28.1",
-        "streamlit_authenticator>=0.2.3",
+        "streamlit_authenticator>=0.3.1",
         "streamlit_autorefresh>=1.0.1",
     ],
     # 项目主页

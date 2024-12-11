@@ -232,36 +232,36 @@ class manual():
     def backtest_control(self):
         control_para = []
         usernames = jsonconfig.get_config('market', 'User')
-        if len(usernames) > 0:
-            if 'ftp' not in usernames[0]:
-                st.info('need in ftp api')
-                return
-            temp_dir = '%s/%s/' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
-            if not os.path.exists(temp_dir):
-                os.makedirs(temp_dir)
-            control_db_path = '%s/backtest.db' % temp_dir
-            conn = sqlite3.connect(control_db_path)
-            command = "create table if not exists backtest_control(begin TEXT, end TEXT, now TEXT, speed INT, source INT, indication INT);"
-            conn.execute(command)
-            if 'backtest_control' in st.session_state:
-                backtest_para = st.session_state['backtest_control']
-                command = "insert into backtest_control(begin, end, now, speed, source, indication) select '%s', '%s', '', %d, %d, 0 where not exists (select * from backtest_control);" % (
-                    backtest_para[0], backtest_para[1], backtest_para[2], backtest_para[3])
-            else:
-                command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
-            conn.execute(command)
-            command = 'select begin, end, now, speed, source, indication from backtest_control;'
-            control_para = conn.execute(command).fetchall()[0]
-            conn.commit()
-            conn.close()
+        if len(usernames) == 0 or usernames[0] == None or 'ftp' not in usernames[0]:
+            st.info('need in ftp api and select account')
+            return
 
-            if len(control_para) > 0:
-                updated_para = self.hand_backtest_operation(control_para)
+        temp_dir = '%s/%s/' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        control_db_path = '%s/backtest.db' % temp_dir
+        conn = sqlite3.connect(control_db_path)
+        command = "create table if not exists backtest_control(begin TEXT, end TEXT, now TEXT, speed INT, source INT, indication INT);"
+        conn.execute(command)
+        if 'backtest_control' in st.session_state:
+            backtest_para = st.session_state['backtest_control']
+            command = "insert into backtest_control(begin, end, now, speed, source, indication) select '%s', '%s', '', %d, %d, 0 where not exists (select * from backtest_control);" % (
+                backtest_para[0], backtest_para[1], backtest_para[2], backtest_para[3])
+        else:
+            command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
+        conn.execute(command)
+        command = 'select begin, end, now, speed, source, indication from backtest_control;'
+        control_para = conn.execute(command).fetchall()[0]
+        conn.commit()
+        conn.close()
 
-            if st.button("update backtest control"):
-                with st.status("update backtest control...") as st_status:
-                    self.backtest_control_click(updated_para)
-                    st_status.update(label="update backtest control complete", state="complete")
+        if len(control_para) > 0:
+            updated_para = self.hand_backtest_operation(control_para)
+
+        if st.button("update backtest control"):
+            with st.status("update backtest control...") as st_status:
+                self.backtest_control_click(updated_para)
+                st_status.update(label="update backtest control complete", state="complete")
 
     def hand_backtest_operation(self, control_para):
         source_dict = {}
@@ -303,7 +303,7 @@ class manual():
         process = int((now_date.timestamp() - begin_date.timestamp()) / (end_date.timestamp() - begin_date.timestamp()) * 100)
         process = 0 if process < 0 else process
         process = 100 if process > 100 else process
-        level1_iteration1.text(f'iteration {process}, now time {now_date}, status {indication_dict[indication]}')
+        level1_iteration1.text(f'Iteration {process}, now time {now_date}, status {indication_dict[indication]}')
         level1_bar.progress(process)
 
         return [begin, end, speed, source, indication]

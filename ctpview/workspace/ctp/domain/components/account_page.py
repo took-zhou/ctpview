@@ -85,7 +85,7 @@ class account():
         conn = sqlite3.connect(control_db_path)
         position_info = []
         try:
-            command = 'select order_index, yesterday_volume, today_volume from order_lookup where user_id like "%%%s";' % (user_id)
+            command = 'select order_index, user_id, yesterday_volume, today_volume from order_lookup where user_id like "%%%s";' % (user_id)
             position_info = conn.execute(command).fetchall()
         except:
             # error_msg = traceback.format_exc()
@@ -96,18 +96,21 @@ class account():
         if position_info != []:
             index_list = []
             ins_list = []
+            group_list = []
             yesterday_volume_list = []
             today_volume_list = []
             for item in position_info:
-                if item[1] != 0 or item[2] != 0:
+                if item[2] != 0 or item[3] != 0:
                     index_list.append(item[0].split('.')[1])
                     ins_list.append(item[0].split('.')[0])
-                    yesterday_volume_list.append(item[1])
-                    today_volume_list.append(item[2])
+                    group_list.append(item[1].split('.')[0])
+                    yesterday_volume_list.append(item[2])
+                    today_volume_list.append(item[3])
 
             pisition_dict = {
                 'index': index_list,
                 'ins': ins_list,
+                'group': group_list,
                 'yesterday volume': yesterday_volume_list,
                 'today volume': today_volume_list
             }
