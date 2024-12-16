@@ -149,7 +149,8 @@ class setting():
         trader_db_path = '%s/data/trader/control.db' % (os.environ.get('HOME'))
         market_path = '%s/data/market/%s' % (os.environ.get('HOME'), user_name)
         config_path = '/etc/marktrade/config.json'
-        command = 'tar -czvf %s %s %s %s' % (binary_file, trader_db_path, market_path, config_path)
+        log_path = '%s/log/' % (os.environ.get('HOME'))
+        command = 'tar -czvf %s %s %s %s %s' % (binary_file, trader_db_path, market_path, config_path, log_path)
         os.system(command)
 
     def distribute_history_record(self, file):

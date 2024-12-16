@@ -300,7 +300,7 @@ class manual():
             now_date = begin_date
         level1_iteration1 = st.empty()
         level1_bar = st.progress(0)
-        process = int((now_date.timestamp() - begin_date.timestamp()) / (end_date.timestamp() - begin_date.timestamp()) * 100)
+        process = int((now_date.timestamp() - begin_date.timestamp()) / (end_date.timestamp() - begin_date.timestamp()) * 100 + 0.5)
         process = 0 if process < 0 else process
         process = 100 if process > 100 else process
         level1_iteration1.text(f'Iteration {process}, now time {now_date}, status {indication_dict[indication]}')

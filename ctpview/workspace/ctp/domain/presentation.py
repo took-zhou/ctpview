@@ -49,7 +49,8 @@ class ctpview():
             manual().update()
 
         self.authenticate_page.logout()
-        st_autorefresh(interval=10000, limit=10000, key="auto_update")
+        if module_option not in ['update', 'setting']:
+            st_autorefresh(interval=10000, limit=10000, key="auto_update")
 
 
 app = ctpview()
