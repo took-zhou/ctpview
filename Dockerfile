@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install -y libstdc++6 --no-install-recommends && a
   apt-get install -y sudo --no-install-recommends && echo $user 'ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers && \
   apt-get install -y iputils-ping --no-install-recommends && apt-get install -y udev --no-install-recommends && \
   apt-get install -y dmidecode --no-install-recommends && apt-get install -y wget --no-install-recommends && \
-  apt-get install -y iproute2 --no-install-recommends && rm -rf /var/lib/apt/lists/*
+  apt-get install -y iproute2 --no-install-recommends && sudo apt-get install -y libboost-system1.65.1 --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
 
 RUN echo "deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
     apt-get update

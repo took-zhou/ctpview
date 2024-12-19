@@ -83,8 +83,8 @@ class parameter():
                     self.read_json["market"][item] = [title]
                 elif item == 'LogInTimeList':
                     login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00']
-                    login_time = self.get_login_time('market', self.read_json['common']['ApiType'])
-                    title = st.selectbox(item, login_time_list, login_time_list.index(login_time), key='market_login_time')
+                    login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['market']['User'])
+                    title = st.selectbox(item, login_time_list, login_index, key='market_login_time')
                     self.read_json["market"][item] = title
                 else:
                     title = st.text_input('Market%s' % item, market_json[item])
@@ -117,8 +117,8 @@ class parameter():
                     self.read_json["trader"][item] = title
                 elif item == 'LogInTimeList':
                     login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01']
-                    login_time = self.get_login_time('trader', self.read_json['common']['ApiType'])
-                    title = st.selectbox(item, login_time_list, login_time_list.index(login_time), key='trader_login_time')
+                    login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['trader']['User'])
+                    title = st.selectbox(item, login_time_list, login_index, key='trader_login_time')
                     self.read_json["trader"][item] = title
                 else:
                     title = st.text_input('Trader%s' % item, trader_json[item])
@@ -181,22 +181,28 @@ class parameter():
         elif key == 'gtp':
             return [item for item in users if 'gtp' in item]
 
-    def get_login_time(self, user_type, key):
-        ret = ''
-        if user_type == 'market':
-            if key in ['gtp']:
-                ret = '08:00-07:00'
-            elif key in ['ctp']:
-                ret = '08:06-15:15;20:06-02:30'
-            else:
-                ret = '08:06-15:15;20:06-02:30'
-        elif user_type == 'trader':
-            if key in ['gtp']:
-                ret = '07:59-07:01'
-            elif key in ['ctp']:
-                ret = '08:05-15:16;20:05-02:31'
-            else:
-                ret = '08:05-15:16;20:05-02:31'
+    def get_login_index(self, api_type, users):
+        ret = 0
+        if api_type in ['gtp']:
+            ret = 1
+        elif api_type in ['ctp']:
+            ret = 0
+        elif api_type in ['btp']:
+            for user in users:
+                if user != None and user.split('_')[0] >= '100004':
+                    ret = 1
+                else:
+                    ret = 0
+                break
+        elif api_type in ['ftp']:
+            for user in users:
+                if user != None and user.split('_')[0] >= '200004':
+                    ret = 1
+                else:
+                    ret = 0
+                break
+        else:
+            ret = 0
         return ret
 
     def checkprocess(self, processname):
