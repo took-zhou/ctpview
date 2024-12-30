@@ -285,7 +285,7 @@ class manual():
             begin = col1.text_input('Begin time', control_para[0])
             end = col2.text_input('End time', control_para[1])
         col1, col2, col3 = contain.columns(3)
-        speed = col1.number_input('Speed', 1, 1000, control_para[3], 10)
+        speed = col1.number_input('Speed', 1, 2000, control_para[3], 10)
         source = col2.selectbox('Source', source_list, source_list.index(source_dict[control_para[4]]))
         indication = col3.selectbox('Indication', indication_list, indication_list.index(indication_dict[control_para[5]]))
         source = source_list.index(source)
