@@ -169,7 +169,7 @@ class parameter():
 
     def get_users(self, users, key):
         if key == 'ctp':
-            return [item for item in users if 'simnow' in item or 'citic' in item or 'zhonghui' in item]
+            return [item for item in users if 'simnow' in item or 'citic' in item or 'zhonghui' in item or 'minsheng' in item]
         elif key == 'xtp':
             return [item for item in users if 'xtp' in item]
         elif key == 'btp':
