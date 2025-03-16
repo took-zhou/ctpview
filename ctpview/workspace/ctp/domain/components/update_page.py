@@ -10,14 +10,14 @@ class update():
     def __init__(self):
         self.package_list = ["tickmine", "ticknature", "ctpview"]
         self.apt_source_dict = {}
-        self.apt_source_dict['http://192.168.0.106:8095/debian'] = 'deb [trusted=yes] http://192.168.0.106:8095/debian/ ./\n'
-        self.apt_source_dict['http://aptserver.tsaodai.com/debian'] = 'deb [trusted=yes] http://aptserver.tsaodai.com/debian/ ./\n'
+        self.apt_source_dict['https://192.168.0.106:8095/debian'] = 'deb [trusted=yes] https://192.168.0.106:8095/debian/ ./\n'
+        self.apt_source_dict['https://selfdeb.tsaodai.com/debian'] = 'deb [trusted=yes] https://selfdeb.tsaodai.com/debian/ ./\n'
         self.pip_source_dict = {}
-        self.pip_source_dict['http://192.168.0.106:3141/root/temp'] = [
-            '[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/temp\n'
+        self.pip_source_dict['http://192.168.0.106:8042/root/temp'] = [
+            '[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:8042/root/temp\n'
         ]
-        self.pip_source_dict['http://192.168.0.106:3141/root/dev'] = [
-            '[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:3141/root/dev\n'
+        self.pip_source_dict['http://192.168.0.106:8042/root/dev'] = [
+            '[global]\n', 'trusted-host = 192.168.0.106\n', 'index-url = http://192.168.0.106:8042/root/dev\n'
         ]
         self.pip_source_dict['http://devpi.tsaodai.com/root/temp'] = [
             '[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/temp\n'
@@ -25,8 +25,8 @@ class update():
         self.pip_source_dict['http://devpi.tsaodai.com/root/dev'] = [
             '[global]\n', 'trusted-host = devpi.tsaodai.com\n', 'index-url = http://devpi.tsaodai.com/root/dev\n'
         ]
-        self.apt_source = 'http://192.168.0.106:8095/debian'
-        self.pip_source = 'http://192.168.0.106:3141/root/dev'
+        self.apt_source = 'https://192.168.0.106:8095/debian'
+        self.pip_source = 'http://192.168.0.106:8042/root/dev'
 
     def update(self):
         self.read_para()
