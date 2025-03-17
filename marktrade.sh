@@ -18,9 +18,9 @@ pip install --no-deps tickmine;
 pip install --no-deps ticknature;
 pip install --no-deps ctpview;
 else
-pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev tickmine --trusted-host devpi.tsaodai.com;
-pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev ticknature --trusted-host devpi.tsaodai.com;
-pip install --no-deps --index-url http://devpi.tsaodai.com/root/dev ctpview --trusted-host devpi.tsaodai.com;
+pip install --no-deps --index-url https://devpi.tsaodai.com/root/dev tickmine --trusted-host devpi.tsaodai.com;
+pip install --no-deps --index-url https://devpi.tsaodai.com/root/dev ticknature --trusted-host devpi.tsaodai.com;
+pip install --no-deps --index-url https://devpi.tsaodai.com/root/dev ctpview --trusted-host devpi.tsaodai.com;
 fi
 fi
 
@@ -39,6 +39,7 @@ if [ -e $HOME/.streamlit/config.toml ];
          echo enableXsrfProtection=false >> $HOME/.streamlit/config.toml;
 fi
 
+sudo apt-get update
 sudo apt-get install -y marktrade
 
 sudo chmod 777 /dev/mem

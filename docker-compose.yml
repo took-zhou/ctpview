@@ -3,7 +3,7 @@ services:
 
   debug:
     restart: always
-    image: "192.168.0.106:8098/tsaodai/marktrade:latest"
+    image: "tsaodai/marktrade:latest"
     container_name: marktrade_debug
     devices:
       - /dev/mem:/dev/mem
@@ -22,147 +22,10 @@ services:
     cap_add:
       - NET_ADMIN
     networks:
-      xizhou:
+      rujia:
         ipv4_address: 192.168.16.3
 
-  # citic_103201203:
-  #   restart: always
-  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
-  #   container_name: marktrade_citic_103201203
-  #   devices:
-  #     - /dev/mem:/dev/mem
-  #   environment:
-  #     - base_url=citic_103201203
-  #     - run_mode=release
-  #   ports:
-  #     - "8107:8888"
-  #   volumes:
-  #     - /data/marktrade_citic_103201203:/home/tsaodai
-  #     - /run/udev:/run/udev
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.7
-
-  # ctp_tickdata:
-  #   restart: always
-  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
-  #   container_name: ctp_tickdata
-  #   devices:
-  #     - /dev/mem:/dev/mem
-  #   environment:
-  #     - base_url=ctp_tickdata
-  #     - run_mode=release
-  #   ports:
-  #     - "8203:8888"
-  #   volumes:
-  #     - /data/marktrade_ctp_tickdata:/home/tsaodai
-  #     - /run/udev:/run/udev
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.13
-
-  # gtp_tickdata:
-  #   restart: always
-  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
-  #   container_name: gtp_tickdata
-  #   devices:
-  #     - /dev/mem:/dev/mem
-  #   environment:
-  #     - base_url=gtp_tickdata
-  #     - run_mode=release
-  #   ports:
-  #     - "8201:8888"
-  #   volumes:
-  #     - /data/marktrade_gtp_tickdata:/home/tsaodai
-  #     - /run/udev:/run/udev
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.11
-
-  # xtp_tickdata:
-  #   restart: always
-  #   image: "192.168.0.106:8098/tsaodai/marktrade:latest"
-  #   container_name: xtp_tickdata
-  #   devices:
-  #     - /dev/mem:/dev/mem
-  #   environment:
-  #     - base_url=xtp_tickdata
-  #     - run_mode=release
-  #   ports:
-  #     - "8109:8888"
-  #   volumes:
-  #     - /data/marktrade_xtp_tickdata:/home/tsaodai
-  #     - /run/udev:/run/udev
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.9
-
-  # sina_anonymous:
-  #   restart: always
-  #   image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
-  #   container_name: marktrade_sina_anonymous
-  #   environment:
-  #     - base_url=sina_anonymous
-  #   ports:
-  #     - "8205:8888"
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.13
-
-  # akshare_debug:
-  #   restart: always
-  #   image: "registry.cn-hangzhou.aliyuncs.com/akshare/akdocker:latest"
-  #   container_name: marktrade_akshare_debug
-  #   environment:
-  #     - base_url=akshare_debug
-  #   ports:
-  #     - "8207:8888"
-  #   tty: true
-  #   stdin_open: true
-  #   privileged: true
-  #   networks:
-  #     xizhou:
-  #       ipv4_address: 192.168.16.15
-
-  integration_test:
-    restart: always
-    image: "192.168.0.106:8098/tsaodai/marktrade:latest"
-    container_name: marktrade_integration_test
-    devices:
-      - /dev/mem:/dev/mem
-    environment:
-      - base_url=integration_test
-      - run_mode=release
-    ports:
-      - "8209:8888"
-    volumes:
-      - /data/marktrade_integration_test:/home/tsaodai
-      - /run/udev:/run/udev
-    tty: true
-    stdin_open: true
-    privileged: true
-    cap_add:
-      - NET_ADMIN
-    networks:
-      xizhou:
-        ipv4_address: 192.168.16.17
-
-#docker network create --subnet=192.168.16.0/24 xizhou
+#docker network create --subnet=192.168.16.0/24 rujia
 networks:
-  xizhou:
+  rujia:
     external: true

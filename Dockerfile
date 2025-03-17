@@ -1,5 +1,5 @@
-#基于192.168.0.106:8098/tsaodai/ubuntu1804镜像
-FROM 192.168.0.106:8098/tsaodai/ubuntu1804:latest
+#基于tsaodai/ubuntu1804镜像
+FROM tsaodai/ubuntu1804:latest
 
 #维护个人信息
 MAINTAINER The run Project <zhoufan@cdsslh.com>
@@ -17,8 +17,6 @@ RUN mkdir -p $TSAODAI_HOME \
   && groupadd -g ${gid} ${group} \
   && useradd -d "$TSAODAI_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
-VOLUME $TSAODAI_HOME
-
 #构建环境目录
 RUN mkdir -p /usr/lib/$process && echo "/usr/lib/$process/" >> /etc/ld.so.conf.d/$process.conf && ldconfig
 
@@ -32,7 +30,7 @@ RUN apt-get update && apt-get install -y libstdc++6 --no-install-recommends && a
   rm -rf /var/lib/apt/lists/*
 
 RUN echo "deb [trusted=yes] https://selfdeb.tsaodai.com/debian/ ./" | sudo tee -a /etc/apt/sources.list > /dev/null && \
-    apt-get update
+  ln -s $TSAODAI_HOME/.netrc /etc/apt/auth.conf
 
 #设置环境变量
 ENV LC_ALL C.UTF-8

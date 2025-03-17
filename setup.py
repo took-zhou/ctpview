@@ -25,7 +25,7 @@ setup(
         "streamlit_autorefresh>=1.0.1",
     ],
     # 项目主页
-    url="http://192.168.0.106:8042",
+    url="https://devpi.tsaodai.com",
     # 你要安装的包，通过 setuptools.find_packages 找到当前目录下有哪些包
     packages=find_packages(),
 )
