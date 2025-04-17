@@ -27,11 +27,8 @@ class status():
         return ret
 
     def update(self):
-        count = 0
-        for item in psutil.cpu_percent(interval=1, percpu=True):
-            name = 'core%d' % (count)
-            st.write('{} utilization rate`{:.2}`'.format(name, item))
-            count = count + 1
+        cpu_usage = psutil.cpu_percent(interval=1, percpu=True)
+        st.write('cpu utilization rate`{:.2}`'.format(sum(cpu_usage) / len(cpu_usage)))
 
         memory_msg = psutil.virtual_memory()
         st.write('mem total`{}` mem used`{}` mem free`{}`'.format(int(memory_msg.total/1024/1024), \
