@@ -272,7 +272,8 @@ class manual():
         indication_dict[0] = 'idle'
         indication_dict[1] = 'start'
         indication_dict[2] = 'stop'
-        indication_dict[3] = 'finish'
+        indication_dict[3] = 'step'
+        indication_dict[4] = 'finish'
         source_list = [source_dict[item] for item in source_dict]
         indication_list = [indication_dict[item] for item in indication_dict]
 
