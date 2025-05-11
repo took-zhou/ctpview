@@ -39,6 +39,12 @@ if [ -e $HOME/.streamlit/config.toml ];
          echo enableXsrfProtection=false >> $HOME/.streamlit/config.toml;
 fi
 
+mkdir -p "$HOME/.ssh"
+
+if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+    ssh-keygen -t rsa -b 4096 -f "$HOME/.ssh/id_rsa" -N "" -q
+fi
+
 sudo apt-get update
 sudo apt-get install -y marktrade
 

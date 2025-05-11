@@ -6,7 +6,6 @@ import psutil
 import streamlit as st
 
 from ctpview.workspace.common.file_util import jsonconfig
-from ctpview.workspace.ctp.domain.components.control_page import control
 
 
 class setting():
@@ -67,6 +66,54 @@ class setting():
             with st.status("package...") as st_status:
                 self.pack_history_record()
                 st_status.update(label="package complete", state="complete")
+        st.write('____')
+
+        source_ip = ''
+        source_port = 22
+        source_path = ''
+        if 'source_address' not in st.session_state:
+            st.session_state['source_address'] = 'tsaodai.com:22:/data/marktrade_stable1'
+        source_address = st.text_input('SourceAddress', st.session_state['source_address'])
+        source_split = source_address.split(":")
+        st.session_state['source_address'] = source_address
+
+        if len(source_split) == 3:
+            source_ip = source_split[0]
+            source_port = int(source_split[1])
+            source_path = source_split[2]
+
+        if st.button('test connect'):
+            with st.status("test connect...") as st_status:
+                command = 'ssh tsaodai@%s -p %d -o StrictHostKeyChecking=no "ls %s"' % (source_ip, source_port, source_path)
+                st.info(command)
+                ret = os.system(command)
+                if ret == 0:
+                    st_status.update(label="test connect complete", state="complete")
+                else:
+                    st_status.update(label="test connect error", state="error")
+        if st.button('sync data'):
+            with st.status("sync data...") as st_status:
+                command = 'rsync -av --delete -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/data/ ~/data/' % (
+                    source_port, source_ip, source_path)
+                st.info(command)
+                ret1 = os.system(command)
+                command = 'rsync -av --delete -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/.local/marktrade/ ~/.local/marktrade/' % (
+                    source_port, source_ip, source_path)
+                st.info(command)
+                ret2 = os.system(command)
+                if ret1 == 0 and ret2 == 0:
+                    st_status.update(label="sync data complete", state="complete")
+                else:
+                    st_status.update(label="sync data error", state="error")
+        if st.button('correct data'):
+            with st.status("correct data...") as st_status:
+                command = 'python ../../common/database_correct.py'
+                st.info(command)
+                ret = os.system(command)
+                if ret == 0:
+                    st_status.update(label="correct data complete", state="complete")
+                else:
+                    st_status.update(label="correct data error", state="error")
         st.write('____')
 
         uploaded_file = st.file_uploader("Choose a file", key='setting1')

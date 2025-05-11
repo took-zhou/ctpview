@@ -129,7 +129,7 @@ class parameter():
             return
 
         contain = st.container()
-        col1, col2 = contain.columns(2)
+        col1, col2, col3 = contain.columns(3)
         if col1.button('update para'):
             with st.status("update para...") as st_status:
                 self.update_para_click()
@@ -140,10 +140,18 @@ class parameter():
                 self.reset_para_click()
                 st_status.update(label="reset para complete", state="complete")
 
+        if col3.button('restore para'):
+            with st.status('restore para...') as st_status:
+                self.restore_para_click()
+                st_status.update(label='restore para complete', state="complete")
+
     def update_para_click(self):
         f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
         json.dump(self.read_json, f_d, indent=4)
         f_d.close()
+
+        command = 'mkdir -p ~/.local/marktrade/; cp /etc/marktrade/config.json ~/.local/marktrade/config.json'
+        os.system(command)
 
         if self.checkprocess('market') != '' or self.checkprocess('trader') != '':
             topic = "ctpview_market.UpdatePara"
@@ -166,6 +174,10 @@ class parameter():
         self.read_json['trader']['User'] = []
         json.dump(self.read_json, f_d, indent=4)
         f_d.close()
+
+    def restore_para_click(self):
+        command = 'cp ~/.local/marktrade/config.json /etc/marktrade/config.json'
+        os.system(command)
 
     def get_users(self, users, key):
         if key == 'ctp':
