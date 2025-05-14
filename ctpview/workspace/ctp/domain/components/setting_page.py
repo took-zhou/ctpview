@@ -107,7 +107,7 @@ class setting():
                     st_status.update(label="sync data error", state="error")
         if st.button('correct data'):
             with st.status("correct data...") as st_status:
-                command = 'python ../../common/database_correct.py'
+                command = 'ctpview_path=` python -c "import ctpview;print(ctpview.__path__[0])" `;python $ctpview_path/workspace/common/database_correct.py'
                 st.info(command)
                 ret = os.system(command)
                 if ret == 0:
