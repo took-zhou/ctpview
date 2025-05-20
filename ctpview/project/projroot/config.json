@@ -14,9 +14,9 @@
         }
     },
     "cookie": {
-        "expiry_days": 10,
-        "key": "1212121",
-        "name": "sdsd"
+        "expiry_days": 1,
+        "key": "rK5|iB7$zJ8{",
+        "name": "ctpview"
     },
     "preauthorized": {
         "emails": "admin@tsaodai.com"
