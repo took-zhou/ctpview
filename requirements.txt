@@ -1,6 +1,6 @@
 # tickmine
 pytest==7.1.2
-zerorpc==0.6.3
+grpcio==1.60.0
 
 # ticknature
 statsmodels==0.13.2
@@ -8,7 +8,7 @@ statsmodels==0.13.2
 # ctpview
 pandas==1.4.3
 plotly==5.15.0
-protobuf==3.20.1
+protobuf==4.25.8
 psutil==5.9.1
 pyzmq==23.2.1
 setuptools==39.0.1
