@@ -1,7 +1,7 @@
 import datetime
 import os
 import sqlite3
-import time
+import pandas as pd
 
 import streamlit as st
 from ticknature.instrument_info import instrumentinfo
@@ -25,7 +25,7 @@ class manual():
     def update(self):
         mode_str = [
             'login control', 'block quotation', 'bug injection', 'profiler control', 'backtest control', 'virtual account set',
-            'order test', 'subscribe instrument', 'send test email', 'market state'
+            'order test', 'subscribe instrument', 'send test email', 'market state', 'update instrument'
         ]
         manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
@@ -49,6 +49,8 @@ class manual():
             self.send_test_email()
         elif manual_mode == 'market state':
             self.market_state()
+        elif manual_mode == 'update instrument':
+            self.update_instrument()
 
     def login_control(self):
         contain = st.container()
@@ -560,3 +562,41 @@ class manual():
                 msg_bytes = msg.SerializeToString()
                 proxysender.send_msg(topic, msg_bytes)
                 st_status.update(label="market state send complete", state="complete")
+
+    def update_instrument(self):
+        instrumentinfo_list = []
+        try:
+            username = jsonconfig.get_config('market', 'User')[0]
+            control_db_path = '%s/%s/control.db' % (jsonconfig.get_config('market', 'ControlParaFilePath'), username)
+            conn = sqlite3.connect(control_db_path)
+            try:
+                command = 'select exch, ins, ticksize, tradeuint from instrument_info;'
+                instrumentinfo_list = [item for item in conn.execute(command).fetchall()]
+            except:
+                # error_msg = traceback.format_exc()
+                # print(error_msg)
+                pass
+            conn.close()
+        except:
+            pass
+
+        group_info = {}
+        for item in instrumentinfo_list:
+            group = instrumentinfo.find_group(item[0], item[1])
+            group_info[group] = [item[0], group, item[2], item[3]]
+
+        df = pd.DataFrame.from_dict(group_info, orient='index', columns=['exch', 'group', 'ticksize', 'tradeuint'])
+
+        df = df.sort_values(by=['exch', 'group']).reset_index(drop=True)
+        st.write(df)
+
+        if st.button('update'):
+            with st.status("update instrument send...") as st_status:
+                topic = "ctpview_market.UpdateInstrumentInfo"
+                msg = cmp.message()
+                muii = msg.update_instrument_info
+                muii.update_action = cmp.UpdateInstrumentInfo.UpdateAction.update
+
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="update instrument send complete", state="complete")
