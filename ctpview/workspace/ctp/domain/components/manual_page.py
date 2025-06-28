@@ -582,7 +582,7 @@ class manual():
 
         group_info = {}
         for item in instrumentinfo_list:
-            group = instrumentinfo.find_group(item[0], item[1])
+            group = instrumentinfo.get_ins_group(item[0], item[1])
             group_info[group] = [item[0], group, item[2], item[3]]
 
         df = pd.DataFrame.from_dict(group_info, orient='index', columns=['exch', 'group', 'ticksize', 'tradeuint'])
