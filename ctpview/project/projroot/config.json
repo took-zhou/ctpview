@@ -4,18 +4,18 @@
             "zhoufan": {
                 "email": "zhoufan@tsaodai.com",
                 "name": "zhoufan",
-                "password": "$2b$12$LXgMnQb1Ssmi2Uujr.wek.xwKD1fexXCAezFSFZs.wB33/Ppl1gHy"
+                "password": "$2b$12$YAiK1rFGblkjjckkk1CykOWwJKlQrda9WyzT8u5ZI/xYbL/sfTys."
             },
             "admin": {
                 "email": "admin@tsaodai.com",
                 "name": "admin",
-                "password": "$2b$12$LXgMnQb1Ssmi2Uujr.wek.xwKD1fexXCAezFSFZs.wB33/Ppl1gHy"
+                "password": "$2b$12$YAiK1rFGblkjjckkk1CykOWwJKlQrda9WyzT8u5ZI/xYbL/sfTys."
             }
         }
     },
     "cookie": {
         "expiry_days": 1,
-        "key": "rK5|iB7$zJ8{",
+        "key": "qS4|kY4:pU6~",
         "name": "ctpview"
     },
     "preauthorized": {

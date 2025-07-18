@@ -82,7 +82,7 @@ class parameter():
                         title = st.selectbox(item, api_users, index=None, key='marketuserid')
                     self.read_json["market"][item] = [title]
                 elif item == 'LogInTimeList':
-                    login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00', '08:36-16:00', '20:36-05:00']
+                    login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00']
                     login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['market']['User'])
                     title = st.selectbox(item, login_time_list, login_index, key='market_login_time')
                     self.read_json["market"][item] = title
@@ -116,7 +116,7 @@ class parameter():
                     title = st.selectbox(item, assign_mode, assign_mode.index(trader_json[item]), key='assign_mode')
                     self.read_json["trader"][item] = title
                 elif item == 'LogInTimeList':
-                    login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01', '08:35-16:01', '20:35-05:01']
+                    login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01']
                     login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['trader']['User'])
                     title = st.selectbox(item, login_time_list, login_index, key='trader_login_time')
                     self.read_json["trader"][item] = title
@@ -199,7 +199,7 @@ class parameter():
 
     def get_login_index(self, api_type, users):
         ret = 0
-        if api_type in ['gtp', 'ltp']:
+        if api_type in ['gtp', 'ltp', 'ytp']:
             ret = 1
         elif api_type in ['ctp']:
             ret = 0
@@ -216,13 +216,6 @@ class parameter():
                     ret = 1
                 else:
                     ret = 0
-                break
-        elif api_type in ['ytp']:
-            for user in users:
-                if user != None and user.split('_')[0] >= '300004':
-                    ret = 3
-                else:
-                    ret = 2
                 break
         else:
             ret = 0
