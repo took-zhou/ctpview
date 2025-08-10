@@ -82,7 +82,7 @@ class parameter():
                         title = st.selectbox(item, api_users, index=None, key='marketuserid')
                     self.read_json["market"][item] = [title]
                 elif item == 'LogInTimeList':
-                    login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00']
+                    login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00', '20:30-04:30', '08:30-16:30']
                     login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['market']['User'])
                     title = st.selectbox(item, login_time_list, login_index, key='market_login_time')
                     self.read_json["market"][item] = title
@@ -116,7 +116,7 @@ class parameter():
                     title = st.selectbox(item, assign_mode, assign_mode.index(trader_json[item]), key='assign_mode')
                     self.read_json["trader"][item] = title
                 elif item == 'LogInTimeList':
-                    login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01']
+                    login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01', '20:29-04:31', '08:29-16:31']
                     login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['trader']['User'])
                     title = st.selectbox(item, login_time_list, login_index, key='trader_login_time')
                     self.read_json["trader"][item] = title
@@ -199,23 +199,45 @@ class parameter():
 
     def get_login_index(self, api_type, users):
         ret = 0
-        if api_type in ['gtp', 'ltp', 'ytp']:
+        if api_type in ['gtp', 'ltp']:
             ret = 1
         elif api_type in ['ctp']:
             ret = 0
         elif api_type in ['btp']:
             for user in users:
-                if user != None and user.split('_')[0] >= '100004':
+                if user != None and user.split('_')[0] >= '100010':
+                    ret = 3
+                elif user != None and user.split('_')[0] >= '100007':
+                    ret = 2
+                elif user != None and user.split('_')[0] >= '100004':
                     ret = 1
                 else:
                     ret = 0
                 break
         elif api_type in ['ftp']:
             for user in users:
-                if user != None and user.split('_')[0] >= '200004':
+                if user != None and user.split('_')[0] >= '200010':
+                    ret = 3
+                elif user != None and user.split('_')[0] >= '200007':
+                    ret = 2
+                elif user != None and user.split('_')[0] >= '200004':
                     ret = 1
                 else:
                     ret = 0
+                break
+        elif api_type in ['ytp']:
+            for user in users:
+                if user != None and 'U129' in user:
+                    ret = 3
+                elif user != None and 'U128' in user:
+                    ret = 2
+                elif user != None and 'DUK495' in user:
+                    if 8 < time.localtime().tm_hour < 20:
+                        ret = 3
+                    else:
+                        ret = 2
+                else:
+                    ret = 3
                 break
         else:
             ret = 0
