@@ -237,6 +237,16 @@ class manual():
             st.info('need in ftp api and select account')
             return
 
+        temp_time = jsonconfig.get_config('market', 'LogInTimeList')
+        time_split = temp_time.split(';')
+        begin_time = '09:00'
+        end_time = '15:00'
+        if len(time_split) == 1:
+            begin_time = time_split[0].split('-')[0]
+            end_time = time_split[0].split('-')[1]
+        elif len(time_split) == 2:
+            begin_time = time_split[1].split('-')[0]
+            end_time = time_split[0].split('-')[1]
         temp_dir = '%s/%s/' % (jsonconfig.get_config('market', 'ControlParaFilePath'), usernames[0])
         if not os.path.exists(temp_dir):
             os.makedirs(temp_dir)
@@ -249,7 +259,8 @@ class manual():
             command = "insert into backtest_control(begin, end, now, speed, source, indication) select '%s', '%s', '', %d, %d, 0 where not exists (select * from backtest_control);" % (
                 backtest_para[0], backtest_para[1], backtest_para[2], backtest_para[3])
         else:
-            command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 09:00:00', '2020-12-31 15:00:00', '', 1, 0, 0 where not exists (select * from backtest_control);"
+            command = "insert into backtest_control(begin, end, now, speed, source, indication) select '2015-01-01 %s:00', '2020-12-31 %s:00', '', 1, 0, 0 where not exists (select * from backtest_control);" % (
+                begin_time, end_time)
         conn.execute(command)
         command = 'select begin, end, now, speed, source, indication from backtest_control;'
         control_para = conn.execute(command).fetchall()[0]
