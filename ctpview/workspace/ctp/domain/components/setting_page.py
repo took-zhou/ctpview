@@ -1,6 +1,6 @@
 import os
 import time
-from datetime import date
+from datetime import datetime
 
 import psutil
 import streamlit as st
@@ -187,7 +187,7 @@ class setting():
         return ret
 
     def pack_history_record(self):
-        file_name = 'history_marktrade_%s.tar.gz' % (date.today())
+        file_name = 'history_marktrade_%s.tar.gz' % (datetime.now().strftime('%Y-%m-%d_%H'))
         binary_file = '%s/%s' % (self.history_record_path, file_name)
         if os.path.exists(binary_file):
             os.remove(binary_file)
