@@ -227,15 +227,10 @@ class parameter():
                 break
         elif api_type in ['ytp']:
             for user in users:
-                if user != None and 'U129' in user:
+                if user != None and ('U129' in user or 'DUM4252' in user):
                     ret = 3
-                elif user != None and 'U128' in user:
+                elif user != None and ('U128' in user or 'DUK495' in user):
                     ret = 2
-                elif user != None and 'DUK495' in user:
-                    if 8 < time.localtime().tm_hour < 20:
-                        ret = 3
-                    else:
-                        ret = 2
                 else:
                     ret = 3
                 break
