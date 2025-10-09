@@ -25,7 +25,7 @@ class manual():
     def update(self):
         mode_str = [
             'login control', 'block quotation', 'bug injection', 'profiler control', 'backtest control', 'virtual account set',
-            'order test', 'subscribe instrument', 'send test email', 'market state', 'update instrument'
+            'order test', 'subscribe instrument', 'send test email', 'market state', 'share split'
         ]
         manual_mode = st.selectbox('Manual mode', mode_str, key='manual_mode')
 
@@ -49,8 +49,8 @@ class manual():
             self.send_test_email()
         elif manual_mode == 'market state':
             self.market_state()
-        elif manual_mode == 'update instrument':
-            self.update_instrument()
+        elif manual_mode == 'share split':
+            self.share_split()
 
     def login_control(self):
         contain = st.container()
@@ -574,15 +574,15 @@ class manual():
                 proxysender.send_msg(topic, msg_bytes)
                 st_status.update(label="market state send complete", state="complete")
 
-    def update_instrument(self):
-        instrumentinfo_list = []
+    def share_split(self):
+        subscribe_list = []
         try:
             username = jsonconfig.get_config('market', 'User')[0]
             control_db_path = '%s/%s/control.db' % (jsonconfig.get_config('market', 'ControlParaFilePath'), username)
             conn = sqlite3.connect(control_db_path)
             try:
-                command = 'select exch, ins, ticksize, tradeuint from instrument_info;'
-                instrumentinfo_list = [item for item in conn.execute(command).fetchall()]
+                command = 'select ins from publish_control;'
+                subscribe_list = [item[0] for item in conn.execute(command).fetchall()]
             except:
                 # error_msg = traceback.format_exc()
                 # print(error_msg)
@@ -591,23 +591,31 @@ class manual():
         except:
             pass
 
-        group_info = {}
-        for item in instrumentinfo_list:
-            group = instrumentinfo.get_ins_group(item[0], item[1])
-            group_info[group] = [item[0], group, item[2], item[3]]
+        select_ins_list = st.multiselect('Select ins', subscribe_list)
 
-        df = pd.DataFrame.from_dict(group_info, orient='index', columns=['exch', 'group', 'ticksize', 'tradeuint'])
+        contain = st.container()
+        col1, col2 = contain.columns(2)
 
-        df = df.sort_values(by=['exch', 'group']).reset_index(drop=True)
-        st.write(df)
-
-        if st.button('update'):
-            with st.status("update instrument send...") as st_status:
-                topic = "ctpview_market.UpdateInstrumentInfo"
+        if col1.button('split'):
+            with st.status("split send...") as st_status:
+                topic = "ctpview_market.ShareSplit"
                 msg = cmp.message()
-                muii = msg.update_instrument_info
-                muii.update_action = cmp.UpdateInstrumentInfo.UpdateAction.update
-
+                mss = msg.share_split
+                mss.command = cmp.ShareSplit.Command.split
+                for item in select_ins_list:
+                    mss.instrument.append(item)
                 msg_bytes = msg.SerializeToString()
                 proxysender.send_msg(topic, msg_bytes)
-                st_status.update(label="update instrument send complete", state="complete")
+                st_status.update(label="share split send complete", state="complete")
+
+        if col2.button('unsplit'):
+            with st.status("unsplit send...") as st_status:
+                topic = "ctpview_market.ShareSplit"
+                msg = cmp.message()
+                mss = msg.share_split
+                mss.command = cmp.ShareSplit.Command.unsplit
+                for item in select_ins_list:
+                    mss.instrument.append(item)
+                msg_bytes = msg.SerializeToString()
+                proxysender.send_msg(topic, msg_bytes)
+                st_status.update(label="unsplit send complete", state="complete")
