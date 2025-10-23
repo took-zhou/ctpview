@@ -481,8 +481,8 @@ class manual():
                 proxysender.send_msg(topic, msg_bytes)
                 st_status.update(label="subscribe send complete", state="complete")
 
-        if col2.button('unsubcribe'):
-            with st.status("unsubcribe send...") as st_status:
+        if col2.button('unsubscribe'):
+            with st.status("unsubscribe send...") as st_status:
                 topic = "strategy_market.TickSubscribeReq"
                 msg = smp.message()
                 tsr = msg.tick_sub_req
@@ -492,7 +492,7 @@ class manual():
                 tsr.action = smp.TickSubscribeReq.Action.unsub
                 msg_bytes = msg.SerializeToString()
                 proxysender.send_msg(topic, msg_bytes)
-                st_status.update(label="unsubcribe send complete", state="complete")
+                st_status.update(label="unsubscribe send complete", state="complete")
 
     def send_test_email(self):
         contain = st.container()
