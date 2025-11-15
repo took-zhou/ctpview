@@ -142,8 +142,10 @@ class parameter():
 
         if col3.button('restore para'):
             with st.status('restore para...') as st_status:
-                self.restore_para_click()
-                st_status.update(label='restore para complete', state="complete")
+                if self.restore_para_click() == 0:
+                    st_status.update(label='restore para complete', state="complete")
+                else:
+                    st_status.update(label="restore para error", state="error")
 
     def update_para_click(self):
         f_d = open('/etc/marktrade/config.json', 'w', encoding="utf-8")
@@ -176,8 +178,30 @@ class parameter():
         f_d.close()
 
     def restore_para_click(self):
-        command = 'cp ~/.local/marktrade/config.json /etc/marktrade/config.json'
-        os.system(command)
+        ret = 0
+        remote_config_path = '%s/.local/marktrade/config.json' % (os.environ.get('HOME'))
+        local_config_path = '/etc/marktrade/config.json'
+
+        with open(remote_config_path, 'r', encoding='utf-8') as f1:
+            remote_config = json.load(f1)
+        with open(local_config_path, 'r', encoding='utf-8') as f2:
+            local_config = json.load(f2)
+
+        remote_keys = set(self.get_all_keys(remote_config))
+        local_keys = set(self.get_all_keys(local_config))
+        only_in_remote = remote_keys - local_keys
+        only_in_local = local_keys - remote_keys
+
+        if len(only_in_remote) == 0 and len(only_in_local) == 0:
+            command = 'cp %s %s' % (remote_config_path, local_config_path)
+            os.system(command)
+        else:
+            st.info(only_in_remote)
+            st.info(only_in_local)
+            st.warning('remote and local config keys is not same!')
+            ret = -1
+
+        return ret
 
     def get_users(self, users, key):
         if key == 'ctp':
@@ -250,3 +274,16 @@ class parameter():
                 continue
 
         return ''
+
+    def get_all_keys(self, obj, parent_key='', separator='.'):
+        keys = []
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                full_key = f"{parent_key}{separator}{key}" if parent_key else key
+                keys.append(full_key)
+                keys.extend(self.get_all_keys(value, full_key, separator))
+        elif isinstance(obj, list):
+            for i, item in enumerate(obj):
+                full_key = f"{parent_key}{separator}[{i}]" if parent_key else f"[{i}]"
+                keys.extend(self.get_all_keys(item, full_key, separator))
+        return keys
