@@ -84,7 +84,8 @@ class setting():
 
         if st.button('test connect'):
             with st.status("test connect...") as st_status:
-                command = 'timeout 10s ssh tsaodai@%s -p %d -o StrictHostKeyChecking=no "cd %s"' % (source_ip, source_port, source_path)
+                command = 'timeout 10s rsync --list-only -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/data/' % (
+                    source_port, source_ip, source_path)
                 st.info(command)
                 ret = os.system(command)
                 if ret == 0:
