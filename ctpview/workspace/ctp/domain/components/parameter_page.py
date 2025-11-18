@@ -82,7 +82,7 @@ class parameter():
                         title = st.selectbox(item, api_users, index=None, key='marketuserid')
                     self.read_json["market"][item] = [title]
                 elif item == 'LogInTimeList':
-                    login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00', '20:30-05:30', '08:30-16:30']
+                    login_time_list = ['08:06-15:15;20:06-02:30', '08:00-07:00', '21:00-05:30', '09:00-16:30']
                     login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['market']['User'])
                     title = st.selectbox(item, login_time_list, login_index, key='market_login_time')
                     self.read_json["market"][item] = title
@@ -116,7 +116,7 @@ class parameter():
                     title = st.selectbox(item, assign_mode, assign_mode.index(trader_json[item]), key='assign_mode')
                     self.read_json["trader"][item] = title
                 elif item == 'LogInTimeList':
-                    login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01', '20:29-05:31', '08:29-16:31']
+                    login_time_list = ['08:05-15:16;20:05-02:31', '07:59-07:01', '20:59-05:31', '08:59-16:31']
                     login_index = self.get_login_index(self.read_json['common']['ApiType'], self.read_json['trader']['User'])
                     title = st.selectbox(item, login_time_list, login_index, key='trader_login_time')
                     self.read_json["trader"][item] = title
