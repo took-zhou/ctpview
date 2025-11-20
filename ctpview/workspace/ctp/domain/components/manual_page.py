@@ -618,4 +618,4 @@ class manual():
                     mss.instrument.append(item)
                 msg_bytes = msg.SerializeToString()
                 proxysender.send_msg(topic, msg_bytes)
-                st_status.update(label="unsplit send complete", state="complete")
+                st_status.update(label="share unsplit send complete", state="complete")
