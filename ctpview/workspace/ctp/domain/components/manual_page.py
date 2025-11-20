@@ -134,6 +134,7 @@ class manual():
             pass
 
         select_ins_list = st.multiselect('Select ins', subscribe_list)
+        st.write(' ')
 
         contain = st.container()
         col1, col2 = contain.columns(2)
@@ -592,6 +593,7 @@ class manual():
             pass
 
         select_ins_list = st.multiselect('Select ins', subscribe_list)
+        st.write(' ')
 
         contain = st.container()
         col1, col2 = contain.columns(2)
