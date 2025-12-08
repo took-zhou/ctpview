@@ -112,7 +112,7 @@ class parameter():
                     title = st.selectbox(item, action_list, action_list.index(trader_json[item]), key='send_email')
                     self.read_json["trader"][item] = title
                 elif item == 'AccountAssignMode':
-                    assign_mode = ['cycle', 'share']
+                    assign_mode = ['first', 'cycle', 'share']
                     title = st.selectbox(item, assign_mode, assign_mode.index(trader_json[item]), key='assign_mode')
                     self.read_json["trader"][item] = title
                 elif item == 'LogInTimeList':
