@@ -4,12 +4,12 @@
             "zhoufan": {
                 "email": "zhoufan@tsaodai.com",
                 "name": "zhoufan",
-                "password": "$2b$12$YAiK1rFGblkjjckkk1CykOWwJKlQrda9WyzT8u5ZI/xYbL/sfTys."
+                "password": "$2b$12$tOe6GDukon3PCGjP/aJc0.a8SHbOLFCHtT09TJpFhep.uCuK3O/qy"
             },
             "admin": {
                 "email": "admin@tsaodai.com",
                 "name": "admin",
-                "password": "$2b$12$YAiK1rFGblkjjckkk1CykOWwJKlQrda9WyzT8u5ZI/xYbL/sfTys."
+                "password": "$2b$12$tOe6GDukon3PCGjP/aJc0.a8SHbOLFCHtT09TJpFhep.uCuK3O/qy"
             }
         }
     },
