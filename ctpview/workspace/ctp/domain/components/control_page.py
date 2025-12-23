@@ -50,12 +50,24 @@ class control():
             process_status = 'stop'
 
         if col1.button('%s start' % (_name), key='%s1' % (_name)) and not (isinstance(process_id, int)):
+            st.session_state['%s_stop_count' % (_name)] = 1e12
             command = 'nohup %s </dev/null 1>/dev/null 2> %s/log/%s/%s_exception.log &' % (_name, os.environ.get('HOME'), _name, _name)
             os.system(command)
             time.sleep(0.1)
 
         if col2.button('%s stop' % (_name), key='%s2' % (_name)) and isinstance(process_id, int):
+            st.session_state['%s_stop_count' % (_name)] = 1e1
             os.system('kill -2 %d' % (process_id))
+            time.sleep(0.1)
+
+        if '%s_stop_count' % (_name) not in st.session_state or process_status != 'start':
+            st.session_state['%s_stop_count' % (_name)] = 1e12
+        else:
+            st.session_state['%s_stop_count' % (_name)] = st.session_state['%s_stop_count' % (_name)] - 1
+
+        if abs(st.session_state['%s_stop_count' % (_name)]) < 1e-12:
+            command = 'kill -9 %s' % (st.session_state['%s_id' % (_name)])
+            os.system(command)
             time.sleep(0.1)
 
         login_logout = self.get_login_status(_name)
