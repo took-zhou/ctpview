@@ -126,6 +126,7 @@ class setting():
             st.status("choose a file complete", state="complete")
 
         package_list = os.listdir(self.history_record_path)
+        package_list.sort(reverse=True)
         package = st.selectbox('Package', package_list)
 
         binary_file = '%s/%s' % (self.history_record_path, package)
