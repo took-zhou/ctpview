@@ -72,7 +72,7 @@ class setting():
         source_port = 22
         source_path = ''
         if 'source_address' not in st.session_state:
-            st.session_state['source_address'] = 'tsaodai.com:22:/data/marktrade_stable1'
+            st.session_state['source_address'] = 'tsaodai.com:22:/data/marktrade_release1'
         source_address = st.text_input('SourceAddress', st.session_state['source_address'])
         source_split = source_address.split(":")
         st.session_state['source_address'] = source_address
@@ -98,11 +98,19 @@ class setting():
                     source_port, source_ip, source_path)
                 st.info(command)
                 ret1 = os.system(command)
-                command = 'rsync -av --delete -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/.local/marktrade/ ~/.local/marktrade/' % (
+                command = 'rsync -av --delete -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/log/ ~/log/' % (
                     source_port, source_ip, source_path)
                 st.info(command)
                 ret2 = os.system(command)
-                if ret1 == 0 and ret2 == 0:
+                command = 'rsync -av --delete -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/.local/marktrade/ ~/.local/marktrade/' % (
+                    source_port, source_ip, source_path)
+                st.info(command)
+                ret3 = os.system(command)
+                command = 'rsync -av --delete -e "ssh -p %d -o StrictHostKeyChecking=no" tsaodai@%s:%s/.local/coredump/ ~/.local/coredump/' % (
+                    source_port, source_ip, source_path)
+                st.info(command)
+                ret4 = os.system(command)
+                if ret1 == 0 and ret2 == 0 and ret3 == 0 and ret4 == 0:
                     st_status.update(label="sync data complete", state="complete")
                 else:
                     st_status.update(label="sync data error", state="error")
@@ -194,12 +202,11 @@ class setting():
         if os.path.exists(binary_file):
             os.remove(binary_file)
 
-        user_name = jsonconfig.get_config('market', 'User')[0]
-        trader_db_path = '%s/data/trader/control.db' % (os.environ.get('HOME'))
-        market_path = '%s/data/market/%s' % (os.environ.get('HOME'), user_name)
-        config_path = '/etc/marktrade/config.json'
+        data_path = '%s/data/' % (os.environ.get('HOME'))
         log_path = '%s/log/' % (os.environ.get('HOME'))
-        command = 'tar -czvf %s %s %s %s %s' % (binary_file, trader_db_path, market_path, config_path, log_path)
+        config_path = '%s/.local/marktrade/' % (os.environ.get('HOME'))
+        coredump_path = '%s/.local/coredump/' % (os.environ.get('HOME'))
+        command = 'tar -czvf %s %s %s %s %s' % (binary_file, data_path, log_path, config_path, coredump_path)
         os.system(command)
 
     def distribute_history_record(self, file):
