@@ -116,12 +116,15 @@ class account():
             }
 
             position_df = pd.DataFrame(pisition_dict)
+            position_df = position_df.sort_values(by=['index', 'ins']).reset_index(drop=True)
             st.table(position_df)
 
     def show_group(self):
         contain = st.container()
         col1, col2 = contain.columns([1, 4])
-        self.select_group = col1.selectbox('group name', [item for item in ['name%02d' % (i + 1) for i in range(32)]])
+        name_groups = [item for item in ['name%02d' % (i + 1) for i in range(16)]]
+        special_groups = [item for item in ['special%02d' % (i + 1) for i in range(4)]]
+        self.select_group = col1.selectbox('group name', name_groups + special_groups)
         control_db_path = '%s/control.db' % (jsonconfig.get_config('trader', 'ControlParaFilePath'))
         conn = sqlite3.connect(control_db_path)
         exist_accounts = []
